@@ -23,6 +23,18 @@ mod_logging.basicConfig( level = mod_logging.DEBUG, format = '%(asctime)s %(name
 class Tests( mod_unittest.TestCase ):
 	""" Tests only for simple functionalities, not the image creation """
 
+	def test_conversion( self ):
+		bounds = mod_cartesius.Bounds( left = -1, right = 1, top = 1, bottom = -1, image_width = 100, image_height = 100 )
+		x, y = mod_cartesius.cartesisus_to_image_coord( 0.5, 0.5, bounds )
+
+		self.assertEquals( x, 75 )
+		self.assertEquals( y, 75 )
+
+		x, y = mod_cartesius.cartesisus_to_image_coord( -0.5, 0, bounds )
+
+		self.assertEquals( x, 25 )
+		self.assertEquals( y, 50 )
+
 	def test_min_max( self ):
 		min_value, max_value = mod_cartesius.min_max( None, 3 )
 

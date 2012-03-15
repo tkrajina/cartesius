@@ -6,7 +6,7 @@ import Image as mod_image
 import ImageDraw as mod_imagedraw
 
 def cartesisus_to_image_coord( x, y, bounds ):
-	assert bounds
+	assert bounds.is_set()
 	assert bounds.image_width
 	assert bounds.image_height
 	assert x != None
@@ -38,13 +38,6 @@ def min_max( *n ):
 				
 	return min_result, max_result
 			
-def image_to_cartesisus_coord( x, y, bounds ):
-	assert bounds
-	assert bounds.image_width
-	assert bounds.image_height
-	assert x != None
-	assert y != None
-
 class Bounds:
 	""" Bounds for coordinate system and image size. """
 
@@ -56,8 +49,16 @@ class Bounds:
 	bottom = None
 	top = None
 
-	def __init__( self ):
+	def __init__( self, left = None, right = None, bottom = None, top = None, image_width = None, image_height = None ):
 		self.reset()
+
+		self.left = left
+		self.right = right
+		self.bottom = bottom
+		self.top = top
+
+		self.image_width = image_width
+		self.image_height = image_height
 
 	def reset( self ):
 		self.left_bound, self.right_bound, self.lower_bound, self.upper_bound = None, None, None, None
