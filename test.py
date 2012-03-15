@@ -14,13 +14,97 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import logging as mod_logging
 import unittest as mod_unittest
+import cartesius as mod_cartesius
+
+mod_logging.basicConfig( level = mod_logging.DEBUG, format = '%(asctime)s %(name)-12s %(levelname)-8s %(message)s' )
 
 class Tests( mod_unittest.TestCase ):
 	""" Tests only for simple functionalities, not the image creation """
 
-	def test_1( self ):
-		self.assertTrue( True )
+	def test_min_max( self ):
+		min_value, max_value = mod_cartesius.min_max( None, 3 )
+
+		self.assertEquals( min_value, 3 )
+		self.assertEquals( max_value, 3 )
+
+		min_value, max_value = mod_cartesius.min_max( 1, None, 3 )
+
+		self.assertEquals( min_value, 1 )
+		self.assertEquals( max_value, 3 )
+
+		min_value, max_value = mod_cartesius.min_max( None, 1, 1.5, 3 )
+
+		self.assertEquals( min_value, 1 )
+		self.assertEquals( max_value, 3 )
+
+	def test_bounds_reset( self ):
+		bounds = mod_cartesius.Bounds()
+
+		self.assertFalse( bounds.is_set() )
+
+		bounds.left = 1
+		self.assertFalse( bounds.is_set() )
+
+		bounds.right = 1
+		self.assertFalse( bounds.is_set() )
+
+		bounds.bottom = 1
+		self.assertFalse( bounds.is_set() )
+
+		bounds.top = 1
+		self.assertTrue( bounds.is_set() )
+
+	def test_bounds( self ):
+		bounds = mod_cartesius.Bounds()
+
+		self.assertFalse( bounds.is_set() )
+
+		bounds.update( left = 2 )
+		self.assertEquals( bounds.left, 2 )
+
+		bounds.update( left = 12 )
+		self.assertEquals( bounds.left, 2 )
+
+		bounds.update( left = -12 )
+		self.assertEquals( bounds.left, -12 )
+
+		bounds.update( right = 2 )
+		self.assertEquals( bounds.right, 2 )
+
+		bounds.update( right = 2 )
+		self.assertEquals( bounds.right, 2 )
+
+		bounds.update( right = 12 )
+		self.assertEquals( bounds.right, 12 )
+
+		bounds.update( bottom = 2 )
+		self.assertEquals( bounds.bottom, 2 )
+
+		bounds.update( bottom = 3 )
+		self.assertEquals( bounds.bottom, 2 )
+
+		bounds.update( bottom = -100 )
+		self.assertEquals( bounds.bottom, -100 )
+
+		bounds.update( top = 2 )
+		self.assertEquals( bounds.top, 2 )
+
+		bounds.update( top = 3 )
+		self.assertEquals( bounds.top, 3 )
+
+		bounds.update( top = -100 )
+		self.assertEquals( bounds.top, 3 )
+
+	def test_line_bounds( self ):
+		line = mod_cartesius.Line( ( 1, 2 ), ( -5, 4 ) )
+
+		self.assertTrue( line.bounds )
+		self.assertEquals( line.bounds.left, -5 )
+		self.assertEquals( line.bounds.right, 1 )
+		self.assertEquals( line.bounds.bottom, 2 )
+		self.assertEquals( line.bounds.top, 4 )
 
 if __name__ == '__main__':
 	mod_unittest.main()

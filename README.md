@@ -35,7 +35,7 @@ Cartesius is an simple library for drawing things (graphs, histograms) in the ca
     coordinate_system.add( graph_function )
     
     # Line:
-    line = cartesius.line( ( 2, 3 ), ( 5, 5.3 ) )
+    line = cartesius.Line( ( 2, 3 ), ( 5, 5.3 ) )
     coordinate_system.add( line )
     
     # By default, the CoordinateSystem will detect the lower/upper/left/right bounds, but you can force yours with:

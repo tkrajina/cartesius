@@ -22,6 +22,22 @@ def cartesisus_to_image_coord( x, y, bounds ):
 
 	return ( x_ratio * bounds.image_width, y_ratio * bounds.image_height )
 
+def min_max( *n ):
+	mod_logging.debug( 'n = {0}'.format( n ) )
+	if not n:
+		return None
+
+	min_result = n[ 0 ]
+	max_result = n[ 0 ]
+	for i in n:
+		if i != None:
+			if min_result == None or i < min_result:
+				min_result = i
+			if max_result == None or i > max_result:
+				max_result = i
+				
+	return min_result, max_result
+			
 def image_to_cartesisus_coord( x, y, bounds ):
 	assert bounds
 	assert bounds.image_width
@@ -47,22 +63,24 @@ class Bounds:
 		self.left_bound, self.right_bound, self.lower_bound, self.upper_bound = None, None, None, None
 
 	def update( self, bounds = None, left = None, right = None, top = None, bottom = None ):
-		if self.left == None or ( left != None and left < self.left ):
-			self.left = float( left )
-		if self.right == None or ( right != None and right > self.right ):
-			self.right = float( right )
-		if self.bottom == None or ( bottom != None and bottom < self.bottom ):
-			self.bottom = float( bottom )
-		if self.top == None or ( top != None and top > self.top ):
-			self.top = float( top )
+		if left != None:
+			self.left = min_max( left, self.left, self.right )[ 0 ]
+		if right != None:
+			self.right  = min_max( right, self.left, self.right )[ 1 ]
+		if bottom != None:
+			self.bottom = min_max( bottom, self.bottom, self.top )[ 0 ]
+		if top != None:
+			self.top = min_max( top, self.bottom, self.top )[ 1 ]
 
 		if bounds:
 			self.update( left = bounds.left, right = bounds.right, bottom = bounds.bottom, top = bounds.top )
 
-		assert self.bottom < self.top
-		assert self.left < self.right
+		if self.bottom != None and self.top != None:
+			assert self.bottom < self.top
+		if self.left != None and self.right != None:
+			assert self.left < self.right
 
-	def __bool__( self ):
+	def is_set( self ):
 		return self.left != None and self.right != None and self.bottom != None and self.top != None
 
 	def __str__( self ):
@@ -80,6 +98,15 @@ class CoordinateSystem:
 		# Set default bounds
 		self.bounds = Bounds()
 
+	def add( self, element ):
+		assert element
+		assert isinstance( element, CoordinateSystemElement )
+
+		import pdb;pdb.set_trace();
+		self.elements.append( element )
+
+		self.reload_bounds()
+
 	def reload_bounds( self ):
 		if not self.elements:
 			self.bounds.left = -1
@@ -89,7 +116,7 @@ class CoordinateSystem:
 			return
 
 		for element in self.elements:
-			bounds.update( element.bounds )
+			self.bounds.update( element.bounds )
 
 		assert self.bounds
 
@@ -134,6 +161,34 @@ class CoordinateSystemElement:
 
 	def __init__( self ):
 		self.bounds = Bounds()
+
+	def reload_bounds( self ):
+		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
 	
 	def draw():
 		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
+
+class Line( CoordinateSystemElement ):
+
+	start = None
+	end = None
+
+	def __init__( self, start, end ):
+		CoordinateSystemElement.__init__( self )
+
+		assert start
+		assert len( start ) == 2
+		assert end
+		assert len( end ) == 2
+
+		self.start = start
+		self.end = end
+
+		self.reload_bounds()
+	
+	def reload_bounds( self ):
+		self.bounds.update(
+				left = min( self.start[ 0 ], self.end[ 0 ] ),
+				right = max( self.start[ 0 ], self.end[ 0 ] ),
+				bottom = min( self.start[ 1 ], self.end[ 1 ] ),
+				top = max( self.start[ 1 ], self.end[ 1 ] ) )
