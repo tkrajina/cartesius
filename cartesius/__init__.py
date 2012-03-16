@@ -123,7 +123,8 @@ class CoordinateSystem:
 		assert self.bounds
 
 	def __draw_elements( self, draw ):
-		pass
+		for element in self.elements:
+			element.draw( draw = draw, bounds = self.bounds )
 
 	def __draw_axes( self, draw ):
 		assert self.bounds
@@ -167,7 +168,8 @@ class CoordinateSystemElement:
 	def reload_bounds( self ):
 		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
 	
-	def draw():
+	def draw( self, draw, bounds ):
+		""" Note, bounds are coordinate system's bounds, not this element's bounds! """
 		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
 
 class Line( CoordinateSystemElement ):
@@ -191,3 +193,8 @@ class Line( CoordinateSystemElement ):
 	def reload_bounds( self ):
 		self.bounds.update( point = self.start )
 		self.bounds.update( point = self.end )
+
+	def draw( self, draw, bounds ):
+		x1, y1 = cartesisus_to_image_coord( x = self.start[ 0 ], y = self.start[ 1 ], bounds = bounds )
+		x2, y2 = cartesisus_to_image_coord( x = self.end[ 0 ], y = self.end[ 1 ], bounds = bounds )
+		draw.line( ( x1, y1, x2, y2 ), ( 0, 0, 255, 127 ) )
