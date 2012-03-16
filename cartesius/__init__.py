@@ -105,8 +105,8 @@ class CoordinateSystem:
 		assert element
 		assert isinstance( element, CoordinateSystemElement )
 
+		element.reload_bounds()
 		self.elements.append( element )
-
 		self.reload_bounds()
 
 	def reload_bounds( self ):
@@ -166,6 +166,7 @@ class CoordinateSystemElement:
 		self.bounds = Bounds()
 
 	def reload_bounds( self ):
+		""" Will be called after the element is added to the coordinate system """
 		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
 	
 	def draw( self, draw, bounds ):
