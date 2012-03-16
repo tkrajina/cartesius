@@ -68,46 +68,51 @@ class Tests( mod_unittest.TestCase ):
 		bounds.top = 1
 		self.assertTrue( bounds.is_set() )
 
-	def test_bounds( self ):
+	def test_bounds_width_point( self ):
 		bounds = mod_cartesius.Bounds()
 
 		self.assertFalse( bounds.is_set() )
 
-		bounds.update( left = 2 )
+		bounds.update( point = ( 2, 17 ) )
 		self.assertEquals( bounds.left, 2 )
+		self.assertEquals( bounds.right, 2 )
+		self.assertEquals( bounds.bottom, 17 )
+		self.assertEquals( bounds.top, 17 )
 
-		bounds.update( left = 12 )
+		bounds.update( point = ( -1, -1 ) )
+		self.assertEquals( bounds.left, -1 )
+		self.assertEquals( bounds.right, 2 )
+		self.assertEquals( bounds.bottom, -1 )
+		self.assertEquals( bounds.top, 17 )
+
+	def test_bounds_width_xy( self ):
+		bounds = mod_cartesius.Bounds()
+
+		self.assertFalse( bounds.is_set() )
+
+		bounds.update( x = 2 )
 		self.assertEquals( bounds.left, 2 )
-
-		bounds.update( left = -12 )
-		self.assertEquals( bounds.left, -12 )
-
-		bounds.update( right = 2 )
 		self.assertEquals( bounds.right, 2 )
 
-		bounds.update( right = 2 )
+		bounds.update( x = -1 )
+		self.assertEquals( bounds.left, -1 )
 		self.assertEquals( bounds.right, 2 )
 
-		bounds.update( right = 12 )
-		self.assertEquals( bounds.right, 12 )
+		bounds.update( x = 100 )
+		self.assertEquals( bounds.left, -1 )
+		self.assertEquals( bounds.right, 100 )
 
-		bounds.update( bottom = 2 )
+		bounds.update( y = 2 )
 		self.assertEquals( bounds.bottom, 2 )
-
-		bounds.update( bottom = 3 )
-		self.assertEquals( bounds.bottom, 2 )
-
-		bounds.update( bottom = -100 )
-		self.assertEquals( bounds.bottom, -100 )
-
-		bounds.update( top = 2 )
 		self.assertEquals( bounds.top, 2 )
 
-		bounds.update( top = 3 )
-		self.assertEquals( bounds.top, 3 )
+		bounds.update( y = -1 )
+		self.assertEquals( bounds.bottom, -1 )
+		self.assertEquals( bounds.top, 2 )
 
-		bounds.update( top = -100 )
-		self.assertEquals( bounds.top, 3 )
+		bounds.update( y = 100 )
+		self.assertEquals( bounds.bottom, -1 )
+		self.assertEquals( bounds.top, 100 )
 
 	def test_line_bounds( self ):
 		line = mod_cartesius.Line( ( 1, 2 ), ( -5, 4 ) )

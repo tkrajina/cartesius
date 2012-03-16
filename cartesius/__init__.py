@@ -63,23 +63,25 @@ class Bounds:
 	def reset( self ):
 		self.left_bound, self.right_bound, self.lower_bound, self.upper_bound = None, None, None, None
 
-	def update( self, bounds = None, left = None, right = None, top = None, bottom = None ):
-		if left != None:
-			self.left = min_max( left, self.left, self.right )[ 0 ]
-		if right != None:
-			self.right  = min_max( right, self.left, self.right )[ 1 ]
-		if bottom != None:
-			self.bottom = min_max( bottom, self.bottom, self.top )[ 0 ]
-		if top != None:
-			self.top = min_max( top, self.bottom, self.top )[ 1 ]
+	def update( self, bounds = None, x = None, y = None, point = None ):
+		if point != None:
+			assert len( point ) == 2
+			x = point[ 0 ]
+			y = point[ 1 ]
+
+		if x != None:
+			self.left, self.right = min_max( x, self.left, self.right )
+		if y != None:
+			self.bottom, self.top = min_max( y, self.bottom, self.top )
 
 		if bounds:
-			self.update( left = bounds.left, right = bounds.right, bottom = bounds.bottom, top = bounds.top )
+			self.update( x = bounds.left, y = bounds.top )
+			self.update( x = bounds.right, y = bounds.bottom )
 
 		if self.bottom != None and self.top != None:
-			assert self.bottom < self.top
+			assert self.bottom <= self.top
 		if self.left != None and self.right != None:
-			assert self.left < self.right
+			assert self.left <= self.right
 
 	def is_set( self ):
 		return self.left != None and self.right != None and self.bottom != None and self.top != None
@@ -103,7 +105,6 @@ class CoordinateSystem:
 		assert element
 		assert isinstance( element, CoordinateSystemElement )
 
-		import pdb;pdb.set_trace();
 		self.elements.append( element )
 
 		self.reload_bounds()
@@ -188,8 +189,5 @@ class Line( CoordinateSystemElement ):
 		self.reload_bounds()
 	
 	def reload_bounds( self ):
-		self.bounds.update(
-				left = min( self.start[ 0 ], self.end[ 0 ] ),
-				right = max( self.start[ 0 ], self.end[ 0 ] ),
-				bottom = min( self.start[ 1 ], self.end[ 1 ] ),
-				top = max( self.start[ 1 ], self.end[ 1 ] ) )
+		self.bounds.update( point = self.start )
+		self.bounds.update( point = self.end )
