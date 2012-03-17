@@ -235,10 +235,11 @@ class GraphFunction( CoordinateSystemElement ):
 	step = None
 	start = None
 	end = None
+	filled = False
 
 	points = None
 
-	def __init__( self, function, start = None, end = None, step = None ):
+	def __init__( self, function, start = None, end = None, step = None, filled = False ):
 		CoordinateSystemElement.__init__( self )
 
 		assert function
@@ -247,6 +248,7 @@ class GraphFunction( CoordinateSystemElement ):
 		self.step = float( step if step else 0.1 )
 		self.start = start if start != None else -1
 		self.end = end if end != None else -1
+		self.filled = filled
 
 		self.points = []
 
@@ -269,6 +271,16 @@ class GraphFunction( CoordinateSystemElement ):
 			self.bounds.update( point = point )
 
 	def draw( self, draw, bounds ):
+		zero_point = cartesisus_to_image_coord( 0, 0, bounds )
 		for i, point in enumerate( self.points ):
-			x, y = cartesisus_to_image_coord( point[ 0 ], point[ 1 ], bounds )
-			draw.line( ( x, y, x + 1, y + 1 ), ( 0, 0, 255, 127 ) )
+			if i > 0:
+				previous = self.points[ i - 1 ]
+				x1, y1 = cartesisus_to_image_coord( previous[ 0 ], previous[ 1 ], bounds )
+				x2, y2 = cartesisus_to_image_coord( point[ 0 ], point[ 1 ], bounds )
+				if self.filled:
+					draw.polygon(
+						[ ( x1, zero_point[ 1 ] ), ( x1, y1 ), ( x2, y2 ), ( x2, zero_point[ 1 ] ) ], 
+						fill = ( 0, 0, 255, 127 )
+					)
+				else:
+					draw.line( ( x1, y1, x2, y2 ), ( 0, 0, 255, 127 ) )
