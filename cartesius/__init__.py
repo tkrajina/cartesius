@@ -228,3 +228,47 @@ class Line( CoordinateSystemElement ):
 		x1, y1 = cartesisus_to_image_coord( x = self.start[ 0 ], y = self.start[ 1 ], bounds = bounds )
 		x2, y2 = cartesisus_to_image_coord( x = self.end[ 0 ], y = self.end[ 1 ], bounds = bounds )
 		draw.line( ( x1, y1, x2, y2 ), ( 0, 0, 255, 127 ) )
+
+class GraphFunction( CoordinateSystemElement ):
+
+	function = None
+	step = None
+	start = None
+	end = None
+
+	points = None
+
+	def __init__( self, function, start = None, end = None, step = None ):
+		CoordinateSystemElement.__init__( self )
+
+		assert function
+
+		self.function = function
+		self.step = float( step if step else 0.1 )
+		self.start = start if start != None else -1
+		self.end = end if end != None else -1
+
+		self.points = []
+
+		assert self.start < self.end
+		assert self.step > 0
+
+		self.compute()
+
+	def compute( self ):
+		self.points = []
+		# TODO: int or floor/ceil ?
+		for i in range( int( ( self.end - self.start ) / self.step ) ):
+			x = self.start + i * self.step
+			y = self.function( x )
+			point = ( x, y )
+			self.points.append( point )
+	
+	def reload_bounds( self ):
+		for point in self.points:
+			self.bounds.update( point = point )
+
+	def draw( self, draw, bounds ):
+		for i, point in enumerate( self.points ):
+			x, y = cartesisus_to_image_coord( point[ 0 ], point[ 1 ], bounds )
+			draw.line( ( x, y, x + 1, y + 1 ), ( 0, 0, 255, 127 ) )

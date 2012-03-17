@@ -31,7 +31,7 @@ Cartesius is an simple library for drawing things (graphs, histograms) in the ca
     
     # Function graph
     def f( x ):return x ** 2 - 5
-    graph_function = cartesius.GraphFunction( function = f, steps = 0.2 )
+    graph_function = cartesius.GraphFunction( function = f, steps = 0.2, from = 2, to = 10 )
     coordinate_system.add( graph_function )
     
     # Line:
