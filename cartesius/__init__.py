@@ -20,7 +20,7 @@ def cartesisus_to_image_coord( x, y, bounds ):
 	x_ratio = ( x - bounds.left ) / ( bounds.right - bounds.left )
 	y_ratio = ( y - bounds.bottom ) / ( bounds.top - bounds.bottom )
 
-	return ( x_ratio * bounds.image_width, y_ratio * bounds.image_height )
+	return ( x_ratio * bounds.image_width, bounds.image_height - y_ratio * bounds.image_height )
 
 def min_max( *n ):
 	mod_logging.debug( 'n = {0}'.format( n ) )
