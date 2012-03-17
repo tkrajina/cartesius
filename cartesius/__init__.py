@@ -60,8 +60,35 @@ class Bounds:
 		self.image_width = image_width
 		self.image_height = image_height
 
+	def get_width_height( self ):
+		assert self.left != None
+		assert self.right != None
+		assert self.bottom != None
+		assert self.top != None
+		assert self.right > self.left
+		assert self.top > self.bottom
+
+		return self.right - self.left, self.top - self.bottom
+
 	def reset( self ):
 		self.left_bound, self.right_bound, self.lower_bound, self.upper_bound = None, None, None, None
+
+	def update_to_image_size( self ):
+		assert self.image_width
+		assert self.image_height
+
+		width, height = self.get_width_height()
+
+		desired_width_height_ratio = self.image_width / float( self.image_height )
+
+		if desired_width_height_ratio < width / float( height ):
+			desired_height = width / desired_width_height_ratio
+			self.bottom = self.bottom - ( desired_height - height ) / 2
+			self.top = self.top + ( desired_height - height ) / 2
+		else:
+			desired_width = height * desired_width_height_ratio
+			self.left = self.left - ( desired_width - width ) / 2
+			self.right = self.right + ( desired_width - width ) / 2
 
 	def update( self, bounds = None, x = None, y = None, point = None ):
 		if point != None:
@@ -87,7 +114,7 @@ class Bounds:
 		return self.left != None and self.right != None and self.bottom != None and self.top != None
 
 	def __str__( self ):
-		return '[bounds:{0},{1},{2},{3}, image:{4},{5}]'.format( self.bottom, self.top, self.left, self.right, self.image_width, self.image_height )
+		return '[bounds:{0},{1},{2},{3}, image:{4},{5}]'.format( self.left, self.right, self.bottom, self.top, self.image_width, self.image_height )
 
 class CoordinateSystem:
 
@@ -153,6 +180,7 @@ class CoordinateSystem:
 		draw = mod_imagedraw.Draw( image )
 
 		self.__draw_elements( draw )
+
 		self.__draw_axes( draw )
 
 		return image

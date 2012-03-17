@@ -114,6 +114,26 @@ class Tests( mod_unittest.TestCase ):
 		self.assertEquals( bounds.bottom, -1 )
 		self.assertEquals( bounds.top, 100 )
 
+	def test_bounds_update_to_image_size_1( self ):
+		bounds = mod_cartesius.Bounds( left = -1, right = 1, bottom = -2, top = 2, image_width = 100, image_height = 100 )
+
+		bounds.update_to_image_size()
+
+		self.assertEquals( bounds.left, -2 )
+		self.assertEquals( bounds.right, 2 )
+		self.assertEquals( bounds.bottom, -2 )
+		self.assertEquals( bounds.top, 2 )
+
+	def test_bounds_update_to_image_size_2( self ):
+		bounds = mod_cartesius.Bounds( left = -1, right = 1, bottom = -1, top = 1, image_width = 400, image_height = 100 )
+
+		bounds.update_to_image_size()
+
+		self.assertEquals( bounds.left, -4 )
+		self.assertEquals( bounds.right, 4 )
+		self.assertEquals( bounds.bottom, -1 )
+		self.assertEquals( bounds.top, 1 )
+
 	def test_line_bounds( self ):
 		line = mod_cartesius.Line( ( 1, 2 ), ( -5, 4 ) )
 
