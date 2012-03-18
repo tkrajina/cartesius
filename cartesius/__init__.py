@@ -261,11 +261,11 @@ class GraphFunction( CoordinateSystemElement ):
 	step = None
 	start = None
 	end = None
-	filled = False
 	points = None
 	color = None
+	fill_color = None
 
-	def __init__( self, function, start = None, end = None, step = None, filled = False, color = None, transparency_mask = None ):
+	def __init__( self, function, start = None, end = None, step = None, fill_color = False, color = None, transparency_mask = None ):
 		CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
 		assert function
@@ -274,8 +274,9 @@ class GraphFunction( CoordinateSystemElement ):
 		self.step = float( step if step else 0.1 )
 		self.start = start if start != None else -1
 		self.end = end if end != None else -1
-		self.filled = filled
-		self.color = color if color else ( 100, 100, 100 )
+
+		self.fill_color = fill_color
+		self.color = color if color else DEFAULT_ELEMENT_COLOR
 
 		self.points = []
 
@@ -305,11 +306,12 @@ class GraphFunction( CoordinateSystemElement ):
 				previous = self.points[ i - 1 ]
 				x1, y1 = cartesisus_to_image_coord( previous[ 0 ], previous[ 1 ], bounds )
 				x2, y2 = cartesisus_to_image_coord( point[ 0 ], point[ 1 ], bounds )
-				if self.filled:
+				if self.fill_color:
 					draw.polygon(
 						[ ( x1, zero_point[ 1 ] ), ( x1, y1 ), ( x2, y2 ), ( x2, zero_point[ 1 ] ) ], 
-						fill = self.get_color_with_transparency( self.color )
+						fill = self.get_color_with_transparency( self.fill_color )
 					)
+					draw.line( ( x1, y1, x2, y2 ), self.get_color_with_transparency( self.color ) )
 				else:
 					draw.line( ( x1, y1, x2, y2 ), self.get_color_with_transparency( self.color ) )
 
