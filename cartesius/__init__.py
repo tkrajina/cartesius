@@ -5,6 +5,8 @@ import logging as mod_logging
 import Image as mod_image
 import ImageDraw as mod_imagedraw
 
+DEFAULT_ELEMENT_COLOR = ( 0, 0, 0 )
+
 def cartesisus_to_image_coord( x, y, bounds ):
 	assert bounds.is_set()
 	assert bounds.image_width
@@ -203,6 +205,15 @@ class CoordinateSystemElement:
 		""" Will be called after the element is added to the coordinate system """
 		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
 
+	def get_color_with_transparency( self, color ):
+		""" Use this to get color with appropriate transparency taken from this element. """
+		if not color:
+			color = DEFAULT_ELEMENT_COLOR
+
+		assert len( color ) >= 3
+
+		return ( color[ 0 ], color[ 1 ], color[ 2 ], self.transparency_mask )
+
 	def draw( self, image, draw, bounds ):
 		if self.transparency_mask == 255:
 			tmp_image, tmp_draw = image, draw
@@ -219,8 +230,9 @@ class Line( CoordinateSystemElement ):
 
 	start = None
 	end = None
+	color = None
 
-	def __init__( self, start, end, transparency_mask = None ):
+	def __init__( self, start, end, color = None, transparency_mask = None ):
 		CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
 		assert start
@@ -230,6 +242,7 @@ class Line( CoordinateSystemElement ):
 
 		self.start = start
 		self.end = end
+		self.color = color if color else DEFAULT_ELEMENT_COLOR
 
 		self.reload_bounds()
 	
@@ -240,7 +253,7 @@ class Line( CoordinateSystemElement ):
 	def process_image( self, image, draw, bounds ):
 		x1, y1 = cartesisus_to_image_coord( x = self.start[ 0 ], y = self.start[ 1 ], bounds = bounds )
 		x2, y2 = cartesisus_to_image_coord( x = self.end[ 0 ], y = self.end[ 1 ], bounds = bounds )
-		draw.line( ( x1, y1, x2, y2 ), ( 0, 0, 255, 127 ) )
+		draw.line( ( x1, y1, x2, y2 ), self.get_color_with_transparency( self.color ) )
 
 class GraphFunction( CoordinateSystemElement ):
 
@@ -295,8 +308,8 @@ class GraphFunction( CoordinateSystemElement ):
 				if self.filled:
 					draw.polygon(
 						[ ( x1, zero_point[ 1 ] ), ( x1, y1 ), ( x2, y2 ), ( x2, zero_point[ 1 ] ) ], 
-						fill = self.color
+						fill = self.get_color_with_transparency( self.color )
 					)
 				else:
-					draw.line( ( x1, y1, x2, y2 ), ( 0, 0, 255, 127 ) )
+					draw.line( ( x1, y1, x2, y2 ), self.get_color_with_transparency( self.color ) )
 
