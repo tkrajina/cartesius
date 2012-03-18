@@ -2,10 +2,13 @@
 
 import pdb as mod_pdb
 import logging as mod_logging
+import math as mod_math
 
 import Image as mod_image
 import ImageDraw as mod_imagedraw
 
+DEFAULT_AXES_COLOR = ( 150, 150, 150 )
+DEFAULT_GRID_COLOR = ( 235, 235, 235 )
 DEFAULT_ELEMENT_COLOR = ( 0, 0, 0 )
 
 def cartesisus_to_image_coord( x, y, bounds ):
@@ -154,7 +157,7 @@ class CoordinateSystem:
 		for element in self.elements:
 			element.draw( image = image, draw = draw, bounds = self.bounds )
 
-	def __draw_axes( self, draw ):
+	def __draw_axes( self, draw, show_grid = False ):
 		assert self.bounds
 
 		x_axe_from_point = cartesisus_to_image_coord( 0, self.bounds.bottom, self.bounds )
@@ -162,14 +165,21 @@ class CoordinateSystem:
 		y_axe_from_point = cartesisus_to_image_coord( self.bounds.left, 0, self.bounds )
 		y_axe_to_point = cartesisus_to_image_coord( self.bounds.right, 0, self.bounds )
 
-		mod_logging.debug( 'from {0},{1} to {2},{3}'.format( x_axe_from_point, x_axe_to_point, y_axe_from_point, y_axe_to_point ) )
+		draw.line( ( x_axe_from_point[ 0 ], x_axe_from_point[ 1 ], x_axe_to_point[ 0 ], x_axe_to_point[ 1 ] ), DEFAULT_AXES_COLOR )
+		draw.line( ( y_axe_from_point[ 0 ], y_axe_from_point[ 1 ], y_axe_to_point[ 0 ], y_axe_to_point[ 1 ] ), DEFAULT_AXES_COLOR )
 
-		draw.line( ( x_axe_from_point[ 0 ], x_axe_from_point[ 1 ], x_axe_to_point[ 0 ], x_axe_to_point[ 1 ] ), ( 150, 150, 150, 255 ) )
-		draw.line( ( y_axe_from_point[ 0 ], y_axe_from_point[ 1 ], y_axe_to_point[ 0 ], y_axe_to_point[ 1 ] ), ( 150, 150, 150, 255 ) )
+		for i in range( int( mod_math.floor( self.bounds.left ) ), int( mod_math.ceil( self.bounds.right ) ) ):
+			x, y = cartesisus_to_image_coord( i, 0, self.bounds )
+			if show_grid and i != 0:
+				draw.line( ( x, x_axe_from_point[ 1 ], x, x_axe_to_point[ 1 ] ), DEFAULT_GRID_COLOR )
+			draw.line( ( x, y - 2, x, y + 2 ), DEFAULT_AXES_COLOR )
+		for i in range( int( mod_math.floor( self.bounds.bottom ) ), int( mod_math.ceil( self.bounds.top ) ) ):
+			x, y = cartesisus_to_image_coord( 0, i, self.bounds )
+			if show_grid and i != 0:
+				draw.line( ( y_axe_from_point[ 0 ], y, y_axe_to_point[ 0 ], y ), DEFAULT_GRID_COLOR )
+			draw.line( ( x - 2, y, x + 2, y ), DEFAULT_AXES_COLOR )
 
-		#draw.line( ( 200, 0, 200, 200 ), ( 2, 2, 2, 255 ) )
-
-	def draw( self, width, height ):
+	def draw( self, width, height, show_grid = False ):
 		""" Returns a PIL image """
 
 		self.bounds.image_width = width
@@ -182,8 +192,8 @@ class CoordinateSystem:
 
 		self.bounds.update_to_image_size()
 
+		self.__draw_axes( draw, show_grid = show_grid )
 		self.__draw_elements( image = image, draw = draw )
-		self.__draw_axes( draw )
 
 		return image
 
