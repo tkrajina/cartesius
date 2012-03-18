@@ -147,9 +147,9 @@ class CoordinateSystem:
 
 		assert self.bounds
 
-	def __draw_elements( self, draw ):
+	def __draw_elements( self, image, draw ):
 		for element in self.elements:
-			element.draw( draw = draw, bounds = self.bounds )
+			element.draw( image = image, draw = draw, bounds = self.bounds )
 
 	def __draw_axes( self, draw ):
 		assert self.bounds
@@ -179,7 +179,7 @@ class CoordinateSystem:
 
 		self.bounds.update_to_image_size()
 
-		self.__draw_elements( draw )
+		self.__draw_elements( image = image, draw = draw )
 		self.__draw_axes( draw )
 
 		return image
@@ -188,25 +188,40 @@ class CoordinateSystemElement:
 	""" Abstract class, every subclass should detect bounds and have the code to draw this item """
 
 	bounds = None
+	transparency_mask = None
 
-	def __init__( self ):
+	def __init__( self, transparency_mask = None ):
 		self.bounds = Bounds()
+
+		self.transparency_mask = transparency_mask if transparency_mask else 255
 
 	def reload_bounds( self ):
 		""" Will be called after the element is added to the coordinate system """
 		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
 	
-	def draw( self, draw, bounds ):
-		""" Note, bounds are coordinate system's bounds, not this element's bounds! """
+	def process_image( self, image, draw, bounds ):
+		""" Will be called after the element is added to the coordinate system """
 		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
+
+	def draw( self, image, draw, bounds ):
+		if self.transparency_mask == 255:
+			tmp_image, tmp_draw = image, draw
+		else:
+			tmp_image = mod_image.new( 'RGBA', ( bounds.image_width, bounds.image_height ) )
+			tmp_draw = mod_imagedraw.Draw( tmp_image )
+
+		self.process_image( tmp_image, tmp_draw, bounds )
+
+		if tmp_image != image or tmp_draw != draw:
+			image.paste( tmp_image, mask = tmp_image )
 
 class Line( CoordinateSystemElement ):
 
 	start = None
 	end = None
 
-	def __init__( self, start, end ):
-		CoordinateSystemElement.__init__( self )
+	def __init__( self, start, end, transparency_mask = None ):
+		CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
 		assert start
 		assert len( start ) == 2
@@ -222,7 +237,7 @@ class Line( CoordinateSystemElement ):
 		self.bounds.update( point = self.start )
 		self.bounds.update( point = self.end )
 
-	def draw( self, draw, bounds ):
+	def process_image( self, image, draw, bounds ):
 		x1, y1 = cartesisus_to_image_coord( x = self.start[ 0 ], y = self.start[ 1 ], bounds = bounds )
 		x2, y2 = cartesisus_to_image_coord( x = self.end[ 0 ], y = self.end[ 1 ], bounds = bounds )
 		draw.line( ( x1, y1, x2, y2 ), ( 0, 0, 255, 127 ) )
@@ -234,13 +249,11 @@ class GraphFunction( CoordinateSystemElement ):
 	start = None
 	end = None
 	filled = False
-
 	points = None
-
 	color = None
 
-	def __init__( self, function, start = None, end = None, step = None, filled = False, color = None ):
-		CoordinateSystemElement.__init__( self )
+	def __init__( self, function, start = None, end = None, step = None, filled = False, color = None, transparency_mask = None ):
+		CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
 		assert function
 
@@ -270,8 +283,9 @@ class GraphFunction( CoordinateSystemElement ):
 	def reload_bounds( self ):
 		for point in self.points:
 			self.bounds.update( point = point )
+	
+	def process_image( self, image, draw, bounds ):
 
-	def draw( self, draw, bounds ):
 		zero_point = cartesisus_to_image_coord( 0, 0, bounds )
 		for i, point in enumerate( self.points ):
 			if i > 0:
@@ -285,3 +299,4 @@ class GraphFunction( CoordinateSystemElement ):
 					)
 				else:
 					draw.line( ( x1, y1, x2, y2 ), ( 0, 0, 255, 127 ) )
+
