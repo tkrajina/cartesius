@@ -12,8 +12,6 @@ def cartesisus_to_image_coord( x, y, bounds ):
 	assert x != None
 	assert y != None
 
-	mod_logging.debug( 'x = {0}, y = {1}'.format( x, y ) )
-
 	x = float( x )
 	y = float( y )
 
@@ -23,7 +21,7 @@ def cartesisus_to_image_coord( x, y, bounds ):
 	return ( x_ratio * bounds.image_width, bounds.image_height - y_ratio * bounds.image_height )
 
 def min_max( *n ):
-	mod_logging.debug( 'n = {0}'.format( n ) )
+	#mod_logging.debug( 'n = {0}'.format( n ) )
 	if not n:
 		return None
 
@@ -239,7 +237,9 @@ class GraphFunction( CoordinateSystemElement ):
 
 	points = None
 
-	def __init__( self, function, start = None, end = None, step = None, filled = False ):
+	color = None
+
+	def __init__( self, function, start = None, end = None, step = None, filled = False, color = None ):
 		CoordinateSystemElement.__init__( self )
 
 		assert function
@@ -249,6 +249,7 @@ class GraphFunction( CoordinateSystemElement ):
 		self.start = start if start != None else -1
 		self.end = end if end != None else -1
 		self.filled = filled
+		self.color = color if color else ( 100, 100, 100 )
 
 		self.points = []
 
@@ -280,7 +281,7 @@ class GraphFunction( CoordinateSystemElement ):
 				if self.filled:
 					draw.polygon(
 						[ ( x1, zero_point[ 1 ] ), ( x1, y1 ), ( x2, y2 ), ( x2, zero_point[ 1 ] ) ], 
-						fill = ( 0, 0, 255, 127 )
+						fill = self.color
 					)
 				else:
 					draw.line( ( x1, y1, x2, y2 ), ( 0, 0, 255, 127 ) )
