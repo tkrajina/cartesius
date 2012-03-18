@@ -6,8 +6,10 @@ import math as mod_math
 
 import Image as mod_image
 import ImageDraw as mod_imagedraw
+import ImageFont as mod_imagefont
 
 DEFAULT_AXES_COLOR = ( 150, 150, 150 )
+DEFAULT_LABEL_COLOR = ( 150, 150, 150 )
 DEFAULT_GRID_COLOR = ( 235, 235, 235 )
 DEFAULT_ELEMENT_COLOR = ( 0, 0, 0 )
 
@@ -157,7 +159,7 @@ class CoordinateSystem:
 		for element in self.elements:
 			element.draw( image = image, draw = draw, bounds = self.bounds )
 
-	def __draw_axes( self, draw, show_grid = False ):
+	def __draw_axes( self, draw, show_grid = False, show_labels = False ):
 		assert self.bounds
 
 		x_axe_from_point = cartesisus_to_image_coord( 0, self.bounds.bottom, self.bounds )
@@ -172,14 +174,23 @@ class CoordinateSystem:
 			x, y = cartesisus_to_image_coord( i, 0, self.bounds )
 			if show_grid and i != 0:
 				draw.line( ( x, x_axe_from_point[ 1 ], x, x_axe_to_point[ 1 ] ), DEFAULT_GRID_COLOR )
+			if show_labels and i != 0:
+				label = str( i )
+				label_size = draw.textsize( label )
+				draw.text( ( x - label_size[ 0 ] / 2., y ), label, DEFAULT_LABEL_COLOR )
 			draw.line( ( x, y - 2, x, y + 2 ), DEFAULT_AXES_COLOR )
+
 		for i in range( int( mod_math.floor( self.bounds.bottom ) ), int( mod_math.ceil( self.bounds.top ) ) ):
 			x, y = cartesisus_to_image_coord( 0, i, self.bounds )
 			if show_grid and i != 0:
 				draw.line( ( y_axe_from_point[ 0 ], y, y_axe_to_point[ 0 ], y ), DEFAULT_GRID_COLOR )
+			if show_labels and i != 0:
+				label = str( i )
+				label_size = draw.textsize( label )
+				draw.text( ( x - label_size[ 0 ], y - label_size[ 1 ] / 2. ), label, DEFAULT_LABEL_COLOR )
 			draw.line( ( x - 2, y, x + 2, y ), DEFAULT_AXES_COLOR )
 
-	def draw( self, width, height, show_grid = False ):
+	def draw( self, width, height, show_grid = False, show_labels = False ):
 		""" Returns a PIL image """
 
 		self.bounds.image_width = width
@@ -192,7 +203,7 @@ class CoordinateSystem:
 
 		self.bounds.update_to_image_size()
 
-		self.__draw_axes( draw, show_grid = show_grid )
+		self.__draw_axes( draw, show_grid = show_grid, show_labels = show_labels )
 		self.__draw_elements( image = image, draw = draw )
 
 		return image
