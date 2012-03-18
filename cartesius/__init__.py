@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import pdb as mod_pdb
 import logging as mod_logging
 
 import Image as mod_image
@@ -314,4 +315,49 @@ class GraphFunction( CoordinateSystemElement ):
 					draw.line( ( x1, y1, x2, y2 ), self.get_color_with_transparency( self.color ) )
 				else:
 					draw.line( ( x1, y1, x2, y2 ), self.get_color_with_transparency( self.color ) )
+
+class Circle( CoordinateSystemElement ):
+
+	x = None
+	y = None
+	radius = None
+	color = None
+	fill_color = None
+
+	def __init__( self, x, y, radius, color = None, fill_color = None, transparency_mask = None ):
+		CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
+
+		assert x != None
+		assert y != None
+		assert radius > 0
+
+		self.x = x
+		self.y = y
+		self.radius = radius
+
+		self.color = color if color else DEFAULT_ELEMENT_COLOR
+		self.fill_color = fill_color
+
+		self.reload_bounds()
+	
+	def reload_bounds( self ):
+		self.bounds.update( point = ( self.x + self.radius, self.y ) )
+		self.bounds.update( point = ( self.x - self.radius, self.y ) )
+		self.bounds.update( point = ( self.x, self.y + self.radius ) )
+		self.bounds.update( point = ( self.x, self.y - self.radius ) )
+
+	def process_image( self, image, draw, bounds ):
+		x1, y1 = cartesisus_to_image_coord(
+				x = self.x - self.radius / 2.,
+				y = self.y + self.radius / 2.,
+				bounds = bounds )
+		x2, y2 = cartesisus_to_image_coord(
+				x = self.x + self.radius / 2.,
+				y = self.y - self.radius / 2.,
+				bounds = bounds )
+
+		draw.ellipse(
+				( x1, y1, x2, y2 ),
+				fill = self.get_color_with_transparency( self.fill_color ),
+				outline = self.get_color_with_transparency( self.color ) )
 
