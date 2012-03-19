@@ -9,8 +9,8 @@ mod_logging.basicConfig( level = mod_logging.DEBUG, format = '%(asctime)s %(name
 
 class Test:
 
-	def test_lines( self ):
-		"""Lines of different colors."""
+	def test_001_lines( self ):
+		"""Lines of different colors"""
 		coordinate_system = mod_cartesius.CoordinateSystem()
 
 		coordinate_system.add( mod_cartesius.Line( ( 0, 0 ), ( -.7, -.7 ) ) )
@@ -19,8 +19,8 @@ class Test:
 
 		return coordinate_system.draw( 600, 300, show_grid = True, show_labels = True )
 
-	def test_function( self ):
-		""" Function math.sin from -4 to 5 """
+	def test_002_function( self ):
+		""" Function math.sin from -4 to 5"""
 		coordinate_system = mod_cartesius.CoordinateSystem()
 
 		f = lambda x : mod_math.sin( x ) * 2
@@ -28,8 +28,8 @@ class Test:
 
 		return coordinate_system.draw( 600, 300, show_grid = False, show_labels = True )
 
-	def test_filled_function( self ):
-		""" Line function and normal function but with filled graph """
+	def test_003_filled_function( self ):
+		""" Line function and normal function but with filled graph"""
 		coordinate_system = mod_cartesius.CoordinateSystem()
 
 		f = lambda x : mod_math.sin( x ) * 2
@@ -40,7 +40,7 @@ class Test:
 
 		return coordinate_system.draw( 600, 300, show_grid = False, show_labels = True )
 
-	def test_filled_transparent_graphs( self ):
+	def test_004_filled_transparent_graphs( self ):
 		coordinate_system = mod_cartesius.CoordinateSystem()
 
 		coordinate_system.add(
@@ -63,8 +63,8 @@ class Test:
 
 		return coordinate_system.draw( 600, 300, show_grid = True, show_labels = True )
 
-	def test_key_value_graphs( self ):
-		""" Key-value graphs. """
+	def test_005_key_value_graphs( self ):
+		""" Key-value graphs"""
 		coordinate_system = mod_cartesius.CoordinateSystem()
 
 		# With dict:
@@ -82,16 +82,30 @@ class Test:
 
 		return coordinate_system.draw( 600, 300, show_grid = True, show_labels = True )
 
-	def test_circles( self ):
-		""" Key-value graphs. """
+	def test_006_circles( self ):
+		""" Key-value graphs"""
 		coordinate_system = mod_cartesius.CoordinateSystem()
 
-		coordinate_system.add( mod_cartesius.Circle( x = 4, y = -3, radius = 2, transparency_mask = 200, fill_color = ( 150, 150, 150 ), color = ( 0, 0, 0 ) ) )
-		coordinate_system.add( mod_cartesius.Circle( x = 4, y = 3, radius = 2, transparency_mask = 200, color = ( 0, 0, 255 ) ) )
+		coordinate_system.add(
+			mod_cartesius.Circle(
+				x = 4,
+				y = -3,
+				radius = 2,
+				transparency_mask = 200,
+				fill_color = ( 150, 150, 150 ),
+				color = ( 0, 0, 0 ) ) )
+		coordinate_system.add(
+			mod_cartesius.Circle(
+				x = 4,
+				y = 3,
+				radius = 2,
+				transparency_mask = 200,
+				color = ( 0, 0, 255 ) ) )
 
 		return coordinate_system.draw( 600, 300, show_grid = True, show_labels = True )
 
-	def test_circles_2( self ):
+	def test_007_circles_2( self ):
+		""" Another example with circles """
 		coordinate_system = mod_cartesius.CoordinateSystem()
 		
 		for i in range( 1, 20 ):
@@ -114,7 +128,9 @@ if __name__ == '__main__':
 
 	test = Test()
 
-	for method in dir( test ):
+	elements = dir( test )
+	elements.sort()
+	for method in elements:
 		if method.startswith( 'test_' ):
 			name = method.replace( 'test_', '' )
 
@@ -124,8 +140,8 @@ if __name__ == '__main__':
 			image_name = '{0}.png'.format( name )
 			image.save( image_name )
 
+			html += '<h2>{0}:</h2>'.format( description )
 			html += '<p><img src="{0}" /></p>'.format( image_name )
-			html += '<p>{0}</p>'.format( description )
 
 	html += '</body>'
 

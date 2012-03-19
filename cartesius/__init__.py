@@ -230,7 +230,7 @@ class CoordinateSystemElement:
 	def get_color_with_transparency( self, color ):
 		""" Use this to get color with appropriate transparency taken from this element. """
 		if not color:
-			color = DEFAULT_ELEMENT_COLOR
+			return None
 
 		assert len( color ) >= 3
 
