@@ -5,3 +5,5 @@ tmp/
 tmp_*.py
 q.py
 tags
+*.png
+*.html
