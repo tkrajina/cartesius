@@ -389,22 +389,28 @@ class KeyValueGraph( CoordinateSystemElement ):
 
 	items = None
 
-	def __init__( self, key_values, color = None, fill_color = False, transparency_mask = None ):
+	def __init__( self, values, color = None, fill_color = False, transparency_mask = None ):
 		CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
-		assert key_values 
+		assert values 
 
 		self.color = color
 		self.fill_color = fill_color
 
-		keys = key_values.keys()
-		keys.sort()
-
 		self.items = []
 
-		for key in keys:
-			item = ( key, key_values[ key ] )
-			self.items.append( item )
+		if hasattr( values, 'keys' ) and callable( getattr( values, 'keys' ) ):
+			keys = values.keys()
+			keys.sort()
+
+			for key in keys:
+				item = ( key, values[ key ] )
+				self.items.append( item )
+		else:
+			self.items = values
+
+		for item in self.items:
+			assert len( item ) == 2
 
 		self.reload_bounds()
 	
