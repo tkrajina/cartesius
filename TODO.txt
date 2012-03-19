@@ -1,0 +1,4 @@
+- show/hide axes
+- show/hide axes labels
+- show/hide axes dots
+- arc's
