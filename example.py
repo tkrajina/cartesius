@@ -28,6 +28,10 @@ coordinate_system.add( mod_cartesius.GraphFunction( k, start = -1.5, end = 11, s
 
 coordinate_system.add( mod_cartesius.Circle( x = 4, y = -3, radius = 2, transparency_mask = 50, color = ( 0, 0, 0 ) ) )
 
+coordinate_system.add( mod_cartesius.KeyValueGraph( key_values = { 0: 1, 2.5: -1, 3: 1.2, 7: .2 } ) )
+
+coordinate_system.add( mod_cartesius.KeyValueGraph( key_values = { -2: 1, 0: -1, 3: 1.2, 7: 1.2 }, fill_color = ( 50, 50, 50 ), transparency_mask = 50 ) )
+
 image = coordinate_system.draw( 1200, 500, show_grid = True, show_labels = True )
 
 image.show()

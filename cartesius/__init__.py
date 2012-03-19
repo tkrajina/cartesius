@@ -382,3 +382,52 @@ class Circle( CoordinateSystemElement ):
 				fill = self.get_color_with_transparency( self.fill_color ),
 				outline = self.get_color_with_transparency( self.color ) )
 
+class KeyValueGraph( CoordinateSystemElement ):
+
+	color = None
+	fill_color = None
+
+	items = None
+
+	def __init__( self, key_values, color = None, fill_color = False, transparency_mask = None ):
+		CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
+
+		assert key_values 
+
+		self.color = color
+		self.fill_color = fill_color
+
+		keys = key_values.keys()
+		keys.sort()
+
+		self.items = []
+
+		for key in keys:
+			item = ( key, key_values[ key ] )
+			self.items.append( item )
+
+		self.reload_bounds()
+	
+	def reload_bounds( self ):
+		assert self.items
+		for key, value in self.items:
+			self.bounds.update( point = ( key, value ) )
+
+	def process_image( self, image, draw, bounds ):
+		assert self.items
+
+		zero_point = cartesisus_to_image_coord( 0, 0, bounds )
+
+		for i, point in enumerate( self.items ):
+			if i > 0:
+				previous = self.items[ i - 1 ]
+				x1, y1 = cartesisus_to_image_coord( previous[ 0 ], previous[ 1 ], bounds )
+				x2, y2 = cartesisus_to_image_coord( point[ 0 ], point[ 1 ], bounds )
+				if self.fill_color:
+					draw.polygon(
+						[ ( x1, zero_point[ 1 ] ), ( x1, y1 ), ( x2, y2 ), ( x2, zero_point[ 1 ] ) ], 
+						fill = self.get_color_with_transparency( self.fill_color )
+					)
+					draw.line( ( x1, y1, x2, y2 ), self.get_color_with_transparency( self.color ) )
+				else:
+					draw.line( ( x1, y1, x2, y2 ), self.get_color_with_transparency( self.color ) )
