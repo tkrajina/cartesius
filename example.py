@@ -143,6 +143,8 @@ if __name__ == '__main__':
 			html += '<h2>{0}:</h2>'.format( description )
 			html += '<p><img src="{0}" /></p>'.format( image_name )
 
+			print 'written:', image_name
+
 	html += '</body>'
 
 	with open( 'index.html', 'w' ) as f:
