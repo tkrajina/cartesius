@@ -248,6 +248,24 @@ class CoordinateSystemElement:
 		if tmp_image != image or tmp_draw != draw:
 			image.paste( tmp_image, mask = tmp_image )
 
+class Dot( CoordinateSystemElement ):
+
+	# TODO
+
+	pass
+
+class Label( CoordinateSystemElement ):
+
+	# TODO
+
+	pass
+
+class Grid( CoordinateSystemElement ):
+
+	# TODO
+
+	pass
+
 class Line( CoordinateSystemElement ):
 
 	start = None
