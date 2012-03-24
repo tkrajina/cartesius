@@ -41,6 +41,7 @@ class Test:
 		return coordinate_system.draw( 600, 300, show_grid = False, show_labels = True )
 
 	def test_004_filled_transparent_graphs( self ):
+		""" Two functions """
 		coordinate_system = mod_cartesius.CoordinateSystem()
 
 		coordinate_system.add(
