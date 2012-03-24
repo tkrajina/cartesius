@@ -297,6 +297,24 @@ class Axis( CoordinateSystemElement ):
 			draw.line( ( x - 2, y, x + 2, y ), DEFAULT_AXES_COLOR )
 		"""
 
+class Dot( CoordinateSystemElement ):
+
+	# TODO
+
+	pass
+
+class Label( CoordinateSystemElement ):
+
+	# TODO
+
+	pass
+
+class Grid( CoordinateSystemElement ):
+
+	# TODO
+
+	pass
+
 class Line( CoordinateSystemElement ):
 
 	start = None
