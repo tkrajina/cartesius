@@ -181,7 +181,7 @@ class CoordinateSystem:
 		if self.y_axis:
 			self.y_axis.draw( image = image, draw = draw, bounds = self.bounds )
 
-	def draw( self, width, height, show_grid = False, show_labels = False ):
+	def draw( self, width, height, show_labels = False ):
 		""" Returns a PIL image """
 
 		self.bounds.image_width = width
@@ -311,9 +311,58 @@ class Label( CoordinateSystemElement ):
 
 class Grid( CoordinateSystemElement ):
 
-	# TODO
+	horizontal = None
+	vertical = None
+	color = None
 
-	pass
+	def __init__( self, horizontal, vertical, color = None, transparency_mask = None ):
+		CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
+
+		assert horizontal or vertical, 'Grid must have horizontal or vertical distance.'
+
+		self.horizontal = float( horizontal ) if horizontal else None
+		self.vertical = float( vertical ) if vertical else None
+		self.color = color if color else DEFAULT_GRID_COLOR
+
+		#Bounds are not important for axes:
+		#self.reload_bounds()
+	
+	def reload_bounds( self ):
+		# not important
+		pass
+
+	def process_image( self, image, draw, bounds ):
+		if self.vertical:
+			axe_from_point = cartesisus_to_image_coord( 0, bounds.bottom, bounds )
+			axe_to_point = cartesisus_to_image_coord( 0, bounds.top, bounds )
+			i = mod_math.floor( bounds.left / self.vertical )
+			while i < mod_math.ceil( bounds.right ):
+				x, y = cartesisus_to_image_coord( i, 0, bounds )
+				if i != 0 and i != bounds.left and i != bounds.right:
+					draw.line( ( x, axe_from_point[ 1 ], x, axe_to_point[ 1 ] ), self.get_color_with_transparency( self.color ) )
+				i += self.vertical
+
+		if self.horizontal:
+			axe_from_point = cartesisus_to_image_coord( bounds.left, 0, bounds )
+			axe_to_point = cartesisus_to_image_coord( bounds.right, 0, bounds )
+			i = mod_math.floor( bounds.bottom / self.horizontal )
+			while i < mod_math.ceil( bounds.top ):
+				x, y = cartesisus_to_image_coord( 0, i, bounds )
+				if i != 0 and i != bounds.bottom and i != bounds.top:
+					draw.line( ( axe_from_point[ 0 ], y, axe_to_point[ 0 ], y ), self.get_color_with_transparency( self.color ) )
+				i += self.horizontal
+
+		"""
+		for i in range( int( mod_math.floor( bounds.bottom ) ), int( mod_math.ceil( bounds.top ) ) ):
+			x, y = cartesisus_to_image_coord( 0, i, bounds )
+			if show_grid and i != 0:
+				draw.line( ( y_axe_from_point[ 0 ], y, y_axe_to_point[ 0 ], y ), DEFAULT_GRID_COLOR )
+			if show_labels and i != 0:
+				label = str( i )
+				label_size = draw.textsize( label )
+				draw.text( ( x - label_size[ 0 ], y - label_size[ 1 ] / 2. ), label, DEFAULT_LABEL_COLOR )
+			draw.line( ( x - 2, y, x + 2, y ), DEFAULT_AXES_COLOR )
+			"""
 
 class Line( CoordinateSystemElement ):
 
