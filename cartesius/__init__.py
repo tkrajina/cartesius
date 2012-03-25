@@ -241,15 +241,17 @@ class CoordinateSystemElement:
 class Axis( CoordinateSystemElement ):
 
 	horizontal = None
+	show_labels = None
 	color = None
 	label_color = None
 
-	def __init__( self, horizontal, color = None, label_color = None, transparency_mask = None ):
+	def __init__( self, horizontal, color = None, show_labels = None, label_color = None, transparency_mask = None ):
 		CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
 		self.horizontal = horizontal
 		self.color = color if color else DEFAULT_AXES_COLOR
 		self.label_color = label_color if label_color else DEFAULT_LABEL_COLOR
+		self.show_labels = show_labels
 
 		#Bounds are not important for axes:
 		#self.reload_bounds()
@@ -268,34 +270,25 @@ class Axis( CoordinateSystemElement ):
 		if self.horizontal:
 			axe_from_point = cartesisus_to_image_coord( 0, bounds.bottom, bounds )
 			axe_to_point = cartesisus_to_image_coord( 0, bounds.top, bounds )
+			for i in range( int( mod_math.floor( bounds.bottom ) ), int( mod_math.ceil( bounds.top ) ) ):
+				x, y = cartesisus_to_image_coord( 0, i, bounds )
+				if self.show_labels and i != 0:
+					label = str( i )
+					label_size = draw.textsize( label )
+					draw.text( ( x - label_size[ 0 ], y - label_size[ 1 ] / 2. ), label, DEFAULT_LABEL_COLOR )
+				draw.line( ( x - 2, y, x + 2, y ), DEFAULT_AXES_COLOR )
 		else:
 			axe_from_point = cartesisus_to_image_coord( bounds.left, 0, bounds )
 			axe_to_point = cartesisus_to_image_coord( bounds.right, 0, bounds )
+			for i in range( int( mod_math.floor( bounds.left ) ), int( mod_math.ceil( bounds.right ) ) ):
+				x, y = cartesisus_to_image_coord( i, 0, bounds )
+				if self.show_labels and i != 0:
+					label = str( i )
+					label_size = draw.textsize( label )
+					draw.text( ( x - label_size[ 0 ], y - label_size[ 1 ] / 2. ), label, DEFAULT_LABEL_COLOR )
+				draw.line( ( x, y - 2, x, y + 2 ), DEFAULT_AXES_COLOR )
 
 		draw.line( ( axe_from_point[ 0 ], axe_from_point[ 1 ], axe_to_point[ 0 ], axe_to_point[ 1 ] ), DEFAULT_AXES_COLOR )
-
-		# TODO
-		""" 
-		for i in range( int( mod_math.floor( bounds.left ) ), int( mod_math.ceil( bounds.right ) ) ):
-			x, y = cartesisus_to_image_coord( i, 0, bounds )
-			if show_grid and i != 0:
-				draw.line( ( x, x_axe_from_point[ 1 ], x, x_axe_to_point[ 1 ] ), DEFAULT_GRID_COLOR )
-			if show_labels and i != 0:
-				label = str( i )
-				label_size = draw.textsize( label )
-				draw.text( ( x - label_size[ 0 ] / 2., y ), label, DEFAULT_LABEL_COLOR )
-			draw.line( ( x, y - 2, x, y + 2 ), DEFAULT_AXES_COLOR )
-
-		for i in range( int( mod_math.floor( bounds.bottom ) ), int( mod_math.ceil( bounds.top ) ) ):
-			x, y = cartesisus_to_image_coord( 0, i, bounds )
-			if show_grid and i != 0:
-				draw.line( ( y_axe_from_point[ 0 ], y, y_axe_to_point[ 0 ], y ), DEFAULT_GRID_COLOR )
-			if show_labels and i != 0:
-				label = str( i )
-				label_size = draw.textsize( label )
-				draw.text( ( x - label_size[ 0 ], y - label_size[ 1 ] / 2. ), label, DEFAULT_LABEL_COLOR )
-			draw.line( ( x - 2, y, x + 2, y ), DEFAULT_AXES_COLOR )
-		"""
 
 class Dot( CoordinateSystemElement ):
 
@@ -351,18 +344,6 @@ class Grid( CoordinateSystemElement ):
 				if i != 0 and i != bounds.bottom and i != bounds.top:
 					draw.line( ( axe_from_point[ 0 ], y, axe_to_point[ 0 ], y ), self.get_color_with_transparency( self.color ) )
 				i += self.horizontal
-
-		"""
-		for i in range( int( mod_math.floor( bounds.bottom ) ), int( mod_math.ceil( bounds.top ) ) ):
-			x, y = cartesisus_to_image_coord( 0, i, bounds )
-			if show_grid and i != 0:
-				draw.line( ( y_axe_from_point[ 0 ], y, y_axe_to_point[ 0 ], y ), DEFAULT_GRID_COLOR )
-			if show_labels and i != 0:
-				label = str( i )
-				label_size = draw.textsize( label )
-				draw.text( ( x - label_size[ 0 ], y - label_size[ 1 ] / 2. ), label, DEFAULT_LABEL_COLOR )
-			draw.line( ( x - 2, y, x + 2, y ), DEFAULT_AXES_COLOR )
-			"""
 
 class Line( CoordinateSystemElement ):
 
