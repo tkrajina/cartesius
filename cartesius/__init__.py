@@ -181,18 +181,19 @@ class CoordinateSystem:
 		if self.y_axis:
 			self.y_axis.draw( image = image, draw = draw, bounds = self.bounds )
 
-	def draw( self, width, height, show_labels = False ):
+	def draw( self, width, height, axis_units_equal_length = True, show_labels = False ):
 		""" Returns a PIL image """
 
 		self.bounds.image_width = width
 		self.bounds.image_height = height
 
-		self.reload_bounds()
+		if axis_units_equal_length:
+			self.reload_bounds()
 
 		image = mod_image.new( 'RGBA', ( width, height ), ( 255, 255, 255, 255 ) )
 		draw = mod_imagedraw.Draw( image )
 
-		self.bounds.update_to_image_size()
+		#self.bounds.update_to_image_size()
 
 		self.__draw_elements( image = image, draw = draw )
 
