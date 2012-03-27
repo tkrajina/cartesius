@@ -193,7 +193,7 @@ class CoordinateSystem:
 		image = mod_image.new( 'RGBA', ( width, height ), ( 255, 255, 255, 255 ) )
 		draw = mod_imagedraw.Draw( image )
 
-		#self.bounds.update_to_image_size()
+		self.bounds.update_to_image_size()
 
 		self.__draw_elements( image = image, draw = draw )
 
