@@ -4,6 +4,7 @@ import logging as mod_logging
 import cartesius as mod_cartesius
 import math as mod_math
 import os as mod_os
+import sys as mod_sys
 
 mod_logging.basicConfig( level = mod_logging.DEBUG, format = '%(asctime)s %(name)-12s %(levelname)-8s %(message)s' )
 
@@ -216,35 +217,43 @@ def test_circles_5():
 
 examples.append( test_circles_5 )
 
-if __name__ == '__main__':
-	html = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-	<html>
-	<head>
+args = mod_sys.argv[ 1: ]
 
-	<title>Cartesius examples</title>
+if args:
+	filtered_examples = []
+	for example in examples:
+		if example.func_name in args and example.func_name not in filtered_examples:
+			filtered_examples.append( example )
+	examples = filtered_examples
 
-	<style type="text/css"></style>
+html = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
 
-	</head>
-	<body>"""
+<title>Cartesius examples</title>
 
-	try:
-		mod_os.makedirs( 'examples' )
-	except:
-		pass
+<style type="text/css"></style>
 
-	for i, function in enumerate( examples ):
-		description = function.__doc__.strip()
-		image = function()
-		image_name = 'graph-{0}.png'.format( i )
-		image.save( 'examples/' + image_name )
+</head>
+<body>"""
 
-		html += '<h2>{0}:</h2>'.format( description )
-		html += '<p><img src="{0}" /></p>'.format( image_name )
+try:
+	mod_os.makedirs( 'examples' )
+except:
+	pass
 
-		print 'written:', image_name
+for i, function in enumerate( examples ):
+	description = function.__doc__.strip()
+	image = function()
+	image_name = 'graph-{0}.png'.format( i )
+	image.save( 'examples/' + image_name )
 
-	html += '</body>'
+	html += '<h2>{0}:</h2>'.format( description )
+	html += '<p><img src="{0}" /></p>'.format( image_name )
 
-	with open( 'examples/index.html', 'w' ) as f:
-		f.write( html )
+	print 'written:', image_name
+
+html += '</body>'
+
+with open( 'examples/index.html', 'w' ) as f:
+	f.write( html )
