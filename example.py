@@ -3,6 +3,7 @@
 import logging as mod_logging
 import cartesius as mod_cartesius
 import math as mod_math
+import os as mod_os
 
 mod_logging.basicConfig( level = mod_logging.DEBUG, format = '%(asctime)s %(name)-12s %(levelname)-8s %(message)s' )
 
@@ -227,11 +228,16 @@ if __name__ == '__main__':
 	</head>
 	<body>"""
 
+	try:
+		mod_os.makedirs( 'examples' )
+	except:
+		pass
+
 	for i, function in enumerate( examples ):
 		description = function.__doc__.strip()
 		image = function()
 		image_name = 'graph-{0}.png'.format( i )
-		image.save( image_name )
+		image.save( 'examples/' + image_name )
 
 		html += '<h2>{0}:</h2>'.format( description )
 		html += '<p><img src="{0}" /></p>'.format( image_name )
@@ -240,5 +246,5 @@ if __name__ == '__main__':
 
 	html += '</body>'
 
-	with open( 'index.html', 'w' ) as f:
+	with open( 'examples/index.html', 'w' ) as f:
 		f.write( html )
