@@ -22,6 +22,18 @@ def test_lines():
 
 examples.append( test_lines )
 
+def test_lines_with_custom_bounds():
+	"""Lines of different colors with custom bounds"""
+	coordinate_system = mod_cartesius.CoordinateSystem( bounds = ( -2, 2, -2, 2 ) )
+
+	coordinate_system.add( mod_cartesius.Line( ( 0, 0 ), ( -.7, -.7 ) ) )
+	coordinate_system.add( mod_cartesius.Line( ( .5, -.5 ), ( -.5, .5 ), color = ( 0, 255, 0 ) ) )
+	coordinate_system.add( mod_cartesius.Line( ( 0, 0 ), ( 10, 1 ), color = ( 0, 0, 255 ) ) )
+
+	return coordinate_system.draw( 600, 300, show_labels = True )
+
+examples.append( test_lines_with_custom_bounds )
+
 def test_function():
 	""" Function math.sin from -4 to 5"""
 	coordinate_system = mod_cartesius.CoordinateSystem()
