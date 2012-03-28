@@ -18,7 +18,7 @@ def test_lines():
 	coordinate_system.add( mod_cartesius.Line( ( .5, -.5 ), ( -.5, .5 ), color = ( 0, 255, 0 ) ) )
 	coordinate_system.add( mod_cartesius.Line( ( 0, 0 ), ( 10, 1 ), color = ( 0, 0, 255 ) ) )
 
-	return coordinate_system.draw( 600, 300, show_labels = True )
+	return coordinate_system.draw( 600, 300 )
 
 examples.append( test_lines )
 
@@ -29,7 +29,7 @@ def test_function():
 	f = lambda x : mod_math.sin( x ) * 2
 	coordinate_system.add( mod_cartesius.GraphFunction( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
-	return coordinate_system.draw( 600, 300, show_labels = True )
+	return coordinate_system.draw( 600, 300 )
 
 examples.append( test_function )
 
@@ -40,7 +40,7 @@ def test_function_with_custom_bounds():
 	f = lambda x : mod_math.sin( x ) * 2
 	coordinate_system.add( mod_cartesius.GraphFunction( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
-	return coordinate_system.draw( 600, 300, show_labels = True )
+	return coordinate_system.draw( 600, 300 )
 
 examples.append( test_function_with_custom_bounds )
 
@@ -54,7 +54,7 @@ def test_filled_function():
 	g = lambda x : mod_math.sin( x ) * 2
 	coordinate_system.add( mod_cartesius.GraphFunction( g, start = 1, end = 4, step = 0.02, fill_color = ( 200, 255, 200 ) ) )
 
-	return coordinate_system.draw( 600, 300, show_labels = True )
+	return coordinate_system.draw( 600, 300 )
 
 examples.append( test_filled_function )
 
@@ -71,7 +71,7 @@ def test_filled_function():
 	g = lambda x : mod_math.sin( x ) * 2
 	coordinate_system.add( mod_cartesius.GraphFunction( g, start = 1, end = 4, step = 0.02, fill_color = ( 200, 255, 200 ) ) )
 
-	return coordinate_system.draw( 600, 300, show_labels = True )
+	return coordinate_system.draw( 600, 300 )
 
 examples.append( test_filled_function )
 
@@ -97,7 +97,7 @@ def test_filled_transparent_graphs():
 					fill_color = ( 200, 255, 200 ),
 					transparency_mask = 100 ) )
 
-	return coordinate_system.draw( 600, 300, show_labels = True )
+	return coordinate_system.draw( 600, 300 )
 
 examples.append( test_filled_transparent_graphs )
 
@@ -125,7 +125,7 @@ def test_filled_transparent_graphs_2():
 
 	coordinate_system.add( mod_cartesius.Grid( 1, 1, transparency_mask = 140 ) )
 
-	return coordinate_system.draw( 600, 300, show_labels = True )
+	return coordinate_system.draw( 600, 300 )
 
 examples.append( test_filled_transparent_graphs_2 )
 
@@ -146,7 +146,7 @@ def test_key_value_graphs():
 					color = ( 255, 0, 0 ),
 					transparency_mask = 150 ) )
 
-	return coordinate_system.draw( 600, 300, show_labels = True )
+	return coordinate_system.draw( 600, 300 )
 
 examples.append( test_key_value_graphs )
 
@@ -170,7 +170,7 @@ def test_circles():
 			transparency_mask = 200,
 			color = ( 0, 0, 255 ) ) )
 
-	return coordinate_system.draw( 600, 300, show_labels = True )
+	return coordinate_system.draw( 600, 300 )
 
 examples.append( test_circles )
 
@@ -182,7 +182,7 @@ def test_circles_2():
 		x = i / 2.
 		coordinate_system.add( mod_cartesius.Circle( x, y = mod_math.sin( x ), radius = mod_math.sqrt( x ), transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
 
-	return coordinate_system.draw( 600, 300, show_labels = True )
+	return coordinate_system.draw( 600, 300 )
 
 examples.append( test_circles_2 )
 
@@ -196,7 +196,7 @@ def test_circles_3():
 		x = i / 2.
 		coordinate_system.add( mod_cartesius.Circle( x, y = mod_math.sin( x ), radius = mod_math.sqrt( x ), transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
 
-	return coordinate_system.draw( 600, 300, show_labels = True )
+	return coordinate_system.draw( 600, 300 )
 
 examples.append( test_circles_3 )
 
@@ -210,7 +210,7 @@ def test_circles_4():
 		x = i / 2.
 		coordinate_system.add( mod_cartesius.Circle( x, y = mod_math.sin( x ), radius = mod_math.sqrt( x ), transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
 
-	return coordinate_system.draw( 600, 300, show_labels = True )
+	return coordinate_system.draw( 600, 300 )
 
 examples.append( test_circles_4 )
 
@@ -224,9 +224,22 @@ def test_circles_5():
 		x = i / 2.
 		coordinate_system.add( mod_cartesius.Circle( x, y = mod_math.sin( x ), radius = mod_math.sqrt( x ), transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
 
-	return coordinate_system.draw( 600, 300, show_labels = True )
+	return coordinate_system.draw( 600, 300 )
 
 examples.append( test_circles_5 )
+
+def test_axis_with_custom_labels():
+	"""Axis with custom labels"""
+	coordinate_system = mod_cartesius.CoordinateSystem()
+
+	coordinate_system.add( mod_cartesius.Axis( horizontal = True, show_labels = True ) )
+	
+	f = lambda x : mod_math.sin( x ) * 2
+	coordinate_system.add( mod_cartesius.GraphFunction( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+
+	return coordinate_system.draw( 600, 300 )
+
+examples.append( test_axis_with_custom_labels )
 
 args = mod_sys.argv[ 1: ]
 

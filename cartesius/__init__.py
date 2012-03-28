@@ -202,7 +202,7 @@ class CoordinateSystem:
 		if self.y_axis:
 			self.y_axis.draw( image = image, draw = draw, bounds = self.bounds )
 
-	def draw( self, width, height, axis_units_equal_length = True, show_labels = False ):
+	def draw( self, width, height, axis_units_equal_length = True ):
 		""" Returns a PIL image """
 
 		self.bounds.image_width = width
@@ -289,27 +289,31 @@ class Axis( CoordinateSystemElement ):
 	def is_vertical( self ):
 		return not self.is_horizontal()
 
+	def draw_dot( self, i, bounds, draw ):
+		if self.horizontal:
+			x, y = cartesisus_to_image_coord( 0, i, bounds )
+		else:
+			x, y = cartesisus_to_image_coord( i, 0, bounds )
+
+		if self.show_labels and i != 0:
+			label = str( i )
+			label_size = draw.textsize( label )
+			draw.text( ( x - label_size[ 0 ], y - label_size[ 1 ] / 2. ), label, DEFAULT_LABEL_COLOR )
+
+		draw.line( ( x - 2, y, x + 2, y ), DEFAULT_AXES_COLOR )
+		draw.line( ( x, y + 2, x, y - 2 ), DEFAULT_AXES_COLOR )
+
 	def process_image( self, image, draw, bounds ):
 		if self.horizontal:
 			axe_from_point = cartesisus_to_image_coord( 0, bounds.bottom, bounds )
 			axe_to_point = cartesisus_to_image_coord( 0, bounds.top, bounds )
 			for i in range( int( mod_math.floor( bounds.bottom ) ), int( mod_math.ceil( bounds.top ) ) ):
-				x, y = cartesisus_to_image_coord( 0, i, bounds )
-				if self.show_labels and i != 0:
-					label = str( i )
-					label_size = draw.textsize( label )
-					draw.text( ( x - label_size[ 0 ], y - label_size[ 1 ] / 2. ), label, DEFAULT_LABEL_COLOR )
-				draw.line( ( x - 2, y, x + 2, y ), DEFAULT_AXES_COLOR )
+				self.draw_dot( i, bounds, draw )
 		else:
 			axe_from_point = cartesisus_to_image_coord( bounds.left, 0, bounds )
 			axe_to_point = cartesisus_to_image_coord( bounds.right, 0, bounds )
 			for i in range( int( mod_math.floor( bounds.left ) ), int( mod_math.ceil( bounds.right ) ) ):
-				x, y = cartesisus_to_image_coord( i, 0, bounds )
-				if self.show_labels and i != 0:
-					label = str( i )
-					label_size = draw.textsize( label )
-					draw.text( ( x - label_size[ 0 ], y - label_size[ 1 ] / 2. ), label, DEFAULT_LABEL_COLOR )
-				draw.line( ( x, y - 2, x, y + 2 ), DEFAULT_AXES_COLOR )
+				self.draw_dot( i, bounds, draw )
 
 		draw.line( ( axe_from_point[ 0 ], axe_from_point[ 1 ], axe_to_point[ 0 ], axe_to_point[ 1 ] ), DEFAULT_AXES_COLOR )
 
