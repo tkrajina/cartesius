@@ -33,6 +33,17 @@ def test_function():
 
 examples.append( test_function )
 
+def test_function_with_custom_bounds():
+	"""Same function, but with custom coordinate system bounds"""
+	coordinate_system = mod_cartesius.CoordinateSystem( bounds = ( -32, 20, -3, 3 ))
+
+	f = lambda x : mod_math.sin( x ) * 2
+	coordinate_system.add( mod_cartesius.GraphFunction( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+
+	return coordinate_system.draw( 600, 300, show_labels = True )
+
+examples.append( test_function_with_custom_bounds )
+
 def test_filled_function():
 	""" Line function and normal function but with filled graph"""
 	coordinate_system = mod_cartesius.CoordinateSystem()

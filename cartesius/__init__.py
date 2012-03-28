@@ -63,6 +63,11 @@ class Bounds:
 		self.bottom = bottom
 		self.top = top
 
+		if self.bottom != None and self.top != None:
+			assert self.bottom < self.top, 'Bottom bound ({0}) greater than top bound ({1})'.format( self.bottom, self.top )
+		if self.left != None and self.right != None:
+			assert self.left < self.right, 'Left bound ({0}) greater than right bound ({1})'.format( self.left, self.right )
+
 		self.image_width = image_width
 		self.image_height = image_height
 
@@ -134,11 +139,24 @@ class CoordinateSystem:
 	# y axis element:
 	y_axis = None
 
-	def __init__( self ):
+	resize_bounds = None
+
+	def __init__( self, bounds = None ):
+		""" If custom bounds are given, they won't be resized according to new elements. """
 		self.elements = []
 
 		# Set default bounds
-		self.bounds = Bounds()
+		if bounds:
+			if isinstance( bounds, Bounds ):
+				self.bounds = bounds
+				self.resize_bounds = False
+			else:
+				assert len( bounds ) == 4, 'Bounds must be a 4 element tuple/list'
+				self.bounds = Bounds( left = bounds[ 0 ], right = bounds[ 1 ], bottom = bounds[ 2 ], top = bounds[ 3 ] )
+				self.resize_bounds = False
+		else:
+			self.bounds = Bounds()
+			self.resize_bounds = True
 
 		# By default, axes are on:
 		self.x_axis = Axis( horizontal = True )
@@ -159,6 +177,9 @@ class CoordinateSystem:
 			self.reload_bounds()
 
 	def reload_bounds( self ):
+		if not self.resize_bounds:
+			return
+
 		if not self.elements:
 			self.bounds.left = -1
 			self.bounds.right = 1
@@ -193,7 +214,8 @@ class CoordinateSystem:
 		image = mod_image.new( 'RGBA', ( width, height ), ( 255, 255, 255, 255 ) )
 		draw = mod_imagedraw.Draw( image )
 
-		self.bounds.update_to_image_size()
+		if self.resize_bounds:
+			self.bounds.update_to_image_size()
 
 		self.__draw_elements( image = image, draw = draw )
 
