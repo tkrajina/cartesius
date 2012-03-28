@@ -232,7 +232,7 @@ def test_axis_with_custom_labels():
 	"""Axis with custom labels"""
 	coordinate_system = mod_cartesius.CoordinateSystem()
 
-	coordinate_system.add( mod_cartesius.Axis( horizontal = True, show_labels = True ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = True, labels = 1 ) )
 	
 	f = lambda x : mod_math.sin( x ) * 2
 	coordinate_system.add( mod_cartesius.GraphFunction( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )

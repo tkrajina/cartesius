@@ -264,17 +264,24 @@ class CoordinateSystemElement:
 class Axis( CoordinateSystemElement ):
 
 	horizontal = None
-	show_labels = None
 	color = None
 	label_color = None
 
-	def __init__( self, horizontal, color = None, show_labels = None, label_color = None, transparency_mask = None ):
+	# If set, draw label every:
+	labels = None
+
+	# If set, draw point every:
+	points = None
+
+	def __init__( self, horizontal, color = None, labels = None, label_color = None, points = None, transparency_mask = None ):
 		CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
 		self.horizontal = horizontal
 		self.color = color if color else DEFAULT_AXES_COLOR
 		self.label_color = label_color if label_color else DEFAULT_LABEL_COLOR
-		self.show_labels = show_labels
+
+		self.labels = float( labels ) if labels else None
+		self.points = float( points ) if points else None
 
 		#Bounds are not important for axes:
 		#self.reload_bounds()
@@ -295,7 +302,7 @@ class Axis( CoordinateSystemElement ):
 		else:
 			x, y = cartesisus_to_image_coord( i, 0, bounds )
 
-		if self.show_labels and i != 0:
+		if self.labels and i != 0:
 			label = str( i )
 			label_size = draw.textsize( label )
 			draw.text( ( x - label_size[ 0 ], y - label_size[ 1 ] / 2. ), label, DEFAULT_LABEL_COLOR )
@@ -303,17 +310,26 @@ class Axis( CoordinateSystemElement ):
 		draw.line( ( x - 2, y, x + 2, y ), DEFAULT_AXES_COLOR )
 		draw.line( ( x, y + 2, x, y - 2 ), DEFAULT_AXES_COLOR )
 
+	def get_point( self, n ):
+		if self.horizontal:
+			return 0, n
+		else:
+			return n, 0
+
 	def process_image( self, image, draw, bounds ):
 		if self.horizontal:
 			axe_from_point = cartesisus_to_image_coord( 0, bounds.bottom, bounds )
 			axe_to_point = cartesisus_to_image_coord( 0, bounds.top, bounds )
-			for i in range( int( mod_math.floor( bounds.bottom ) ), int( mod_math.ceil( bounds.top ) ) ):
-				self.draw_dot( i, bounds, draw )
+			dots_from = int( mod_math.floor( bounds.bottom ) )
+			dots_to = int( mod_math.ceil( bounds.top ) )
 		else:
 			axe_from_point = cartesisus_to_image_coord( bounds.left, 0, bounds )
 			axe_to_point = cartesisus_to_image_coord( bounds.right, 0, bounds )
-			for i in range( int( mod_math.floor( bounds.left ) ), int( mod_math.ceil( bounds.right ) ) ):
-				self.draw_dot( i, bounds, draw )
+			dots_from = int( mod_math.floor( bounds.left ) )
+			dots_to = int( mod_math.ceil( bounds.right ) )
+
+		for i in range( dots_from, dots_to ):
+			self.draw_dot( i, bounds, draw )
 
 		draw.line( ( axe_from_point[ 0 ], axe_from_point[ 1 ], axe_to_point[ 0 ], axe_to_point[ 1 ] ), DEFAULT_AXES_COLOR )
 
