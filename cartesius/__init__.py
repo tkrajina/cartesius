@@ -13,6 +13,17 @@ DEFAULT_LABEL_COLOR = ( 150, 150, 150 )
 DEFAULT_GRID_COLOR = ( 235, 235, 235 )
 DEFAULT_ELEMENT_COLOR = ( 0, 0, 0 )
 
+# Possible label positions:
+LEFT_UP       = -1, 1
+LEFT_CENTER   = -1, 0
+LEFT_DOWN     = -1, -1
+CENTER_UP     = 0, 1
+CENTER        = 0, 0
+CENTER_DOWN   = 0, -1
+RIGHT_UP      = 1, 1
+RIGHT_CENTER  = 1, 0
+RIGHT_DOWN    = 1, -1
+
 def cartesisus_to_image_coord( x, y, bounds ):
 	assert bounds.is_set()
 	assert bounds.image_width
@@ -163,6 +174,10 @@ class CoordinateSystem:
 		self.y_axis = Axis( horizontal = False, points = 1 )
 
 	def add( self, element ):
+		"""
+		Add element on coordinate system. Note that if you add an axis, it will remove a
+		previous existing horizontal/vertical axis.
+		"""
 		assert element
 		assert isinstance( element, CoordinateSystemElement )
 
@@ -192,17 +207,17 @@ class CoordinateSystem:
 
 		assert self.bounds
 
-	def __draw_elements( self, image, draw ):
+	def __draw_elements( self, image, draw, hide_x_axis = False, hide_y_axis = False ):
 		for element in self.elements:
 			element.draw( image = image, draw = draw, bounds = self.bounds )
 
-		if self.x_axis:
+		if not hide_x_axis and self.x_axis:
 			self.x_axis.draw( image = image, draw = draw, bounds = self.bounds )
 
-		if self.y_axis:
+		if not hide_y_axis and self.y_axis:
 			self.y_axis.draw( image = image, draw = draw, bounds = self.bounds )
 
-	def draw( self, width, height, axis_units_equal_length = True ):
+	def draw( self, width, height, axis_units_equal_length = True, hide_x_axis = False, hide_y_axis = False ):
 		""" Returns a PIL image """
 
 		self.bounds.image_width = width
@@ -217,7 +232,7 @@ class CoordinateSystem:
 		if self.resize_bounds:
 			self.bounds.update_to_image_size()
 
-		self.__draw_elements( image = image, draw = draw )
+		self.__draw_elements( image = image, draw = draw, hide_x_axis = hide_x_axis, hide_y_axis = hide_y_axis )
 
 		return image
 
@@ -273,17 +288,6 @@ class Axis( CoordinateSystemElement ):
 	# If set, draw point every:
 	points = None
 
-	# Possible label positions:
-	LEFT_UP       = -1, 1
-	LEFT_CENTER   = -1, 0
-	LEFT_DOWN     = -1, -1
-	CENTER_UP     = 0, 1
-	CENTER        = 0, 0
-	CENTER_DOWN   = 0, -1
-	RIGHT_UP      = 1, 1
-	RIGHT_CENTER  = 1, 0
-	RIGHT_DOWN    = 1, -1
-
 	def __init__( self, horizontal, color = None, labels = None, label_color = None,
 			label_position = None, points = None, transparency_mask = None ):
 		CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
@@ -296,9 +300,9 @@ class Axis( CoordinateSystemElement ):
 		self.points = float( points ) if points else None
 
 		if self.horizontal:
-			self.label_position = label_position if label_position else self.LEFT_CENTER
+			self.label_position = label_position if label_position else LEFT_CENTER
 		else:
-			self.label_position = label_position if label_position else self.CENTER_DOWN
+			self.label_position = label_position if label_position else CENTER_DOWN
 
 		assert len( self.label_position ) == 2
 
@@ -409,7 +413,7 @@ class Axis( CoordinateSystemElement ):
 		self.draw_dots( bounds, draw )
 		self.draw_labels( bounds, draw )
 
-		draw.line( ( axe_from_point[ 0 ], axe_from_point[ 1 ], axe_to_point[ 0 ], axe_to_point[ 1 ] ), DEFAULT_AXES_COLOR )
+		draw.line( ( axe_from_point[ 0 ], axe_from_point[ 1 ], axe_to_point[ 0 ], axe_to_point[ 1 ] ), self.color )
 
 class Dot( CoordinateSystemElement ):
 

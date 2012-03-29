@@ -3,6 +3,7 @@
 import logging as mod_logging
 import cartesius as mod_cartesius
 import math as mod_math
+import random as mod_random
 import os as mod_os
 import sys as mod_sys
 
@@ -18,7 +19,7 @@ def test_lines():
 	coordinate_system.add( mod_cartesius.Line( ( .5, -.5 ), ( -.5, .5 ), color = ( 0, 255, 0 ) ) )
 	coordinate_system.add( mod_cartesius.Line( ( 0, 0 ), ( 10, 1 ), color = ( 0, 0, 255 ) ) )
 
-	return coordinate_system.draw( 600, 300 )
+	return coordinate_system.draw( 500, 250 )
 
 examples.append( test_lines )
 
@@ -29,7 +30,7 @@ def test_function():
 	f = lambda x : mod_math.sin( x ) * 2
 	coordinate_system.add( mod_cartesius.GraphFunction( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
-	return coordinate_system.draw( 600, 300 )
+	return coordinate_system.draw( 500, 250 )
 
 examples.append( test_function )
 
@@ -40,7 +41,7 @@ def test_function_with_custom_bounds():
 	f = lambda x : mod_math.sin( x ) * 2
 	coordinate_system.add( mod_cartesius.GraphFunction( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
-	return coordinate_system.draw( 600, 300 )
+	return coordinate_system.draw( 500, 250 )
 
 examples.append( test_function_with_custom_bounds )
 
@@ -54,7 +55,7 @@ def test_filled_function():
 	g = lambda x : mod_math.sin( x ) * 2
 	coordinate_system.add( mod_cartesius.GraphFunction( g, start = 1, end = 4, step = 0.02, fill_color = ( 200, 255, 200 ) ) )
 
-	return coordinate_system.draw( 600, 300 )
+	return coordinate_system.draw( 500, 250 )
 
 examples.append( test_filled_function )
 
@@ -71,7 +72,7 @@ def test_filled_function():
 	g = lambda x : mod_math.sin( x ) * 2
 	coordinate_system.add( mod_cartesius.GraphFunction( g, start = 1, end = 4, step = 0.02, fill_color = ( 200, 255, 200 ) ) )
 
-	return coordinate_system.draw( 600, 300 )
+	return coordinate_system.draw( 500, 250 )
 
 examples.append( test_filled_function )
 
@@ -97,7 +98,7 @@ def test_filled_transparent_graphs():
 					fill_color = ( 200, 255, 200 ),
 					transparency_mask = 100 ) )
 
-	return coordinate_system.draw( 600, 300 )
+	return coordinate_system.draw( 500, 250 )
 
 examples.append( test_filled_transparent_graphs )
 
@@ -125,7 +126,7 @@ def test_filled_transparent_graphs_2():
 
 	coordinate_system.add( mod_cartesius.Grid( 1, 1, transparency_mask = 140 ) )
 
-	return coordinate_system.draw( 600, 300 )
+	return coordinate_system.draw( 500, 250 )
 
 examples.append( test_filled_transparent_graphs_2 )
 
@@ -139,38 +140,33 @@ def test_key_value_graphs():
 					values = { -2: 1, 0: -1, 3: 1.2, 7: 1.2 },
 					fill_color = ( 50, 50, 50 ),
 					transparency_mask = 50 ) )
+
 	# With pairs of tuples
 	coordinate_system.add( 
 			mod_cartesius.KeyValueGraph( 
-					values = ( ( 0, 0 ), ( 1, -3 ), ( 10, 3 ) ),
+					values = ( ( 0, 0 ), ( 1, -3 ), ( 4, 3 ), ( 5, -2 ), ( 7, 0 ) ),
 					color = ( 255, 0, 0 ),
 					transparency_mask = 150 ) )
 
-	return coordinate_system.draw( 600, 300 )
+	return coordinate_system.draw( 500, 250 )
 
 examples.append( test_key_value_graphs )
 
 def test_circles():
-	""" Key-value graphs"""
+	"""50 random circles"""
 	coordinate_system = mod_cartesius.CoordinateSystem()
 
-	coordinate_system.add(
-		mod_cartesius.Circle(
-			x = 4,
-			y = -3,
-			radius = 2,
-			transparency_mask = 200,
-			fill_color = ( 150, 150, 150 ),
-			color = ( 0, 0, 0 ) ) )
-	coordinate_system.add(
-		mod_cartesius.Circle(
-			x = 4,
-			y = 3,
-			radius = 2,
-			transparency_mask = 200,
-			color = ( 0, 0, 255 ) ) )
+	for i in range( 50 ):
+		coordinate_system.add(
+			mod_cartesius.Circle(
+				x = mod_random.randint( -20, 20 ),
+				y = mod_random.randint( 0, 20 ),
+				radius = mod_random.randint( 1, 5 ),
+				transparency_mask = mod_random.randint( 0, 255 ),
+				fill_color = ( mod_random.randint( 0, 255 ), mod_random.randint( 0, 255 ), mod_random.randint( 0, 255 ) ),
+				color = ( mod_random.randint( 0, 255 ), mod_random.randint( 0, 255 ), mod_random.randint( 0, 255 ) ) ) )
 
-	return coordinate_system.draw( 600, 300 )
+	return coordinate_system.draw( 500, 250 )
 
 examples.append( test_circles )
 
@@ -182,7 +178,7 @@ def test_circles_2():
 		x = i / 2.
 		coordinate_system.add( mod_cartesius.Circle( x, y = mod_math.sin( x ), radius = mod_math.sqrt( x ), transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
 
-	return coordinate_system.draw( 600, 300 )
+	return coordinate_system.draw( 500, 250 )
 
 examples.append( test_circles_2 )
 
@@ -196,7 +192,7 @@ def test_circles_3():
 		x = i / 2.
 		coordinate_system.add( mod_cartesius.Circle( x, y = mod_math.sin( x ), radius = mod_math.sqrt( x ), transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
 
-	return coordinate_system.draw( 600, 300 )
+	return coordinate_system.draw( 500, 250 )
 
 examples.append( test_circles_3 )
 
@@ -210,7 +206,7 @@ def test_circles_4():
 		x = i / 2.
 		coordinate_system.add( mod_cartesius.Circle( x, y = mod_math.sin( x ), radius = mod_math.sqrt( x ), transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
 
-	return coordinate_system.draw( 600, 300 )
+	return coordinate_system.draw( 500, 250 )
 
 examples.append( test_circles_4 )
 
@@ -224,7 +220,7 @@ def test_circles_5():
 		x = i / 2.
 		coordinate_system.add( mod_cartesius.Circle( x, y = mod_math.sin( x ), radius = mod_math.sqrt( x ), transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
 
-	return coordinate_system.draw( 600, 300 )
+	return coordinate_system.draw( 500, 250 )
 
 examples.append( test_circles_5 )
 
@@ -238,9 +234,23 @@ def test_axis_with_custom_labels():
 	f = lambda x : mod_math.sin( x ) * 2
 	coordinate_system.add( mod_cartesius.GraphFunction( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
-	return coordinate_system.draw( 600, 300 )
+	return coordinate_system.draw( 500, 250 )
 
 examples.append( test_axis_with_custom_labels )
+
+def test_axis_custom_colors():
+	"""Axis with custom colors"""
+	coordinate_system = mod_cartesius.CoordinateSystem()
+
+	coordinate_system.add( mod_cartesius.Axis( horizontal = True, color = ( 255, 0, 0 ), labels = 1, points = 0.25 ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = False, color = ( 0, 255, 0 ), labels = 2, points = 1 ) )
+	
+	f = lambda x : x * mod_math.sin( x * x )
+	coordinate_system.add( mod_cartesius.GraphFunction( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+
+	return coordinate_system.draw( 500, 250 )
+
+examples.append( test_axis_custom_colors )
 
 def test_with_two_horizontal_grids():
 	"""Two horizontal grids"""
@@ -252,7 +262,7 @@ def test_with_two_horizontal_grids():
 	f = lambda x : mod_math.sin( x ) * 2
 	coordinate_system.add( mod_cartesius.GraphFunction( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
-	return coordinate_system.draw( 600, 300 )
+	return coordinate_system.draw( 500, 250 )
 
 examples.append( test_with_two_horizontal_grids )
 
@@ -261,34 +271,48 @@ def test_labels_positions():
 	result = []
 
 	coordinate_system = mod_cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
-	coordinate_system.add( mod_cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = mod_cartesius.Axis.LEFT_UP, ) )
-	coordinate_system.add( mod_cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = mod_cartesius.Axis.LEFT_CENTER, ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = mod_cartesius.LEFT_UP, ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = mod_cartesius.LEFT_CENTER, ) )
 	result.append( coordinate_system.draw( 150, 150 ) )
 
 	coordinate_system = mod_cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
-	coordinate_system.add( mod_cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = mod_cartesius.Axis.LEFT_DOWN, ) )
-	coordinate_system.add( mod_cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = mod_cartesius.Axis.CENTER_UP, ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = mod_cartesius.LEFT_DOWN, ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = mod_cartesius.CENTER_UP, ) )
 	result.append( coordinate_system.draw( 150, 150 ) )
 
 	coordinate_system = mod_cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
-	coordinate_system.add( mod_cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = mod_cartesius.Axis.CENTER, ) )
-	coordinate_system.add( mod_cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = mod_cartesius.Axis.CENTER_DOWN, ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = mod_cartesius.CENTER, ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = mod_cartesius.CENTER_DOWN, ) )
 	result.append( coordinate_system.draw( 150, 150 ) )
 
 	coordinate_system = mod_cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
-	coordinate_system.add( mod_cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = mod_cartesius.Axis.RIGHT_UP, ) )
-	coordinate_system.add( mod_cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = mod_cartesius.Axis.RIGHT_CENTER, ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = mod_cartesius.RIGHT_UP, ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = mod_cartesius.RIGHT_CENTER, ) )
 	result.append( coordinate_system.draw( 150, 150 ) )
 
 	coordinate_system = mod_cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
-	coordinate_system.add( mod_cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = mod_cartesius.Axis.RIGHT_DOWN, ) )
-	coordinate_system.add( mod_cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = mod_cartesius.Axis.RIGHT_DOWN, ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = mod_cartesius.RIGHT_DOWN, ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = mod_cartesius.RIGHT_DOWN, ) )
 	result.append( coordinate_system.draw( 150, 150 ) )
 
 	return result
 
 examples.append( test_labels_positions )
 
+def test_hide_axis():
+	"""Test with hidden axis"""
+	result = []
+
+	coordinate_system = mod_cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
+	f = lambda x : x * mod_math.sin( x * x )
+	coordinate_system.add( mod_cartesius.GraphFunction( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+
+	result.append( coordinate_system.draw( 150, 150, hide_y_axis = True ) )
+	result.append( coordinate_system.draw( 150, 150, hide_x_axis = True ) )
+
+	return result
+
+examples.append( test_hide_axis )
 args = mod_sys.argv[ 1: ]
 
 if args:
@@ -321,7 +345,7 @@ for i, function in enumerate( examples ):
 	if not isinstance( images, list ):
 		images = [ images ]	
 
-	html += '<h2>{0}:</h2>'.format( description )
+	html += '<p>{0}:</p>'.format( description )
 
 	html += '<p>'
 	for j, image in enumerate( images ):
