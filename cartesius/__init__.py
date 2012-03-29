@@ -344,6 +344,9 @@ class Axis( CoordinateSystemElement ):
 		draw.line( ( x, y + 2, x, y - 2 ), DEFAULT_AXES_COLOR )
 
 	def draw_label( self, i, bounds, draw ):
+		if i == int( i ):
+			i = int( i )
+
 		label = str( i )
 		label_size = draw.textsize( label )
 		x, y = self.get_point( i )
