@@ -247,7 +247,7 @@ def test_with_two_horizontal_grids():
 	coordinate_system = mod_cartesius.CoordinateSystem()
 
 	coordinate_system.add( mod_cartesius.Grid( 0.25, None, color = ( 200, 200, 200 ) ) )
-	coordinate_system.add( mod_cartesius.Grid( 1, None, color = ( 100, 100, 250 ) ) )
+	coordinate_system.add( mod_cartesius.Grid( 1, None, color = ( 250, 50, 50 ) ) )
 
 	f = lambda x : mod_math.sin( x ) * 2
 	coordinate_system.add( mod_cartesius.GraphFunction( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
@@ -255,6 +255,39 @@ def test_with_two_horizontal_grids():
 	return coordinate_system.draw( 600, 300 )
 
 examples.append( test_with_two_horizontal_grids )
+
+def test_labels_positions():
+	"""Labels on different positions"""
+	result = []
+
+	coordinate_system = mod_cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = mod_cartesius.Axis.LEFT_UP, ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = mod_cartesius.Axis.LEFT_CENTER, ) )
+	result.append( coordinate_system.draw( 150, 150 ) )
+
+	coordinate_system = mod_cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = mod_cartesius.Axis.LEFT_DOWN, ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = mod_cartesius.Axis.CENTER_UP, ) )
+	result.append( coordinate_system.draw( 150, 150 ) )
+
+	coordinate_system = mod_cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = mod_cartesius.Axis.CENTER, ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = mod_cartesius.Axis.CENTER_DOWN, ) )
+	result.append( coordinate_system.draw( 150, 150 ) )
+
+	coordinate_system = mod_cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = mod_cartesius.Axis.RIGHT_UP, ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = mod_cartesius.Axis.RIGHT_CENTER, ) )
+	result.append( coordinate_system.draw( 150, 150 ) )
+
+	coordinate_system = mod_cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = mod_cartesius.Axis.RIGHT_DOWN, ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = mod_cartesius.Axis.RIGHT_DOWN, ) )
+	result.append( coordinate_system.draw( 150, 150 ) )
+
+	return result
+
+examples.append( test_labels_positions )
 
 args = mod_sys.argv[ 1: ]
 
@@ -283,14 +316,20 @@ except:
 
 for i, function in enumerate( examples ):
 	description = function.__doc__.strip()
-	image = function()
-	image_name = 'graph-{0}.png'.format( i )
-	image.save( 'examples/' + image_name )
+	images = function()
+
+	if not isinstance( images, list ):
+		images = [ images ]	
 
 	html += '<h2>{0}:</h2>'.format( description )
-	html += '<p><img src="{0}" /></p>'.format( image_name )
 
-	print 'written:', image_name
+	html += '<p>'
+	for j, image in enumerate( images ):
+		image_name = 'graph-{0}-{1}.png'.format( i, j )
+		image.save( 'examples/' + image_name )
+		print 'written:', image_name
+		html += '<img src="{0}" style="border: 1px solid #f0f0f0;padding:5px;margin:5px;" /> '.format( image_name )
+	html += '</p>'
 
 html += '</body>'
 
