@@ -331,7 +331,12 @@ html = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://
 <style type="text/css"></style>
 
 </head>
-<body>"""
+<body>
+<h1>Cartesius</h1>
+<p>
+Cartesius is a small library for drawing 2d coordinate system images.
+More on <a href='http://github.com/tkrajina/cartesius'>http://github.com/tkrajina/cartesius</a>
+</p>"""
 
 for i, function in enumerate( examples ):
 	description = function.__doc__.strip()
