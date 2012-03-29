@@ -296,9 +296,9 @@ class Axis( CoordinateSystemElement ):
 		self.points = float( points ) if points else None
 
 		if self.horizontal:
-			self.label_position = label_position if label_position else self.LEFT_DOWN
+			self.label_position = label_position if label_position else self.LEFT_CENTER
 		else:
-			self.label_position = label_position if label_position else self.LEFT_DOWN
+			self.label_position = label_position if label_position else self.CENTER_DOWN
 
 		assert len( self.label_position ) == 2
 
@@ -374,18 +374,18 @@ class Axis( CoordinateSystemElement ):
 		x, y = cartesisus_to_image_coord( x, y, bounds )
 
 		if self.label_position[ 0 ] == -1:
-			pass
+			x = x - label_width - 4
 		elif self.label_position[ 0 ] == 0:
 			x = x - label_width / 2.
 		elif self.label_position[ 0 ] == 1:
-			x = x - label_width
+			x += 4
 
 		if self.label_position[ 1 ] == -1:
-			pass
+			y += 2
 		elif self.label_position[ 1 ] == 0:
 			y = y - label_height / 2.
 		elif self.label_position[ 1 ] == 1:
-			y = y - label_height
+			y = y - label_height - 2
 
 		draw.text( ( x, y ), label, DEFAULT_LABEL_COLOR )
 
