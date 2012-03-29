@@ -1,8 +1,0 @@
-+ custom bounds
-+ no automatic bounds resize
-- custom axes labels
-- show/hide axes
-- show/hide axes labels
-- show/hide axes dots
-- show/hide parts of axes (for example, show only positive or only negative parts)
-- arc's

@@ -333,11 +333,6 @@ html = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://
 </head>
 <body>"""
 
-try:
-	mod_os.makedirs( 'examples' )
-except:
-	pass
-
 for i, function in enumerate( examples ):
 	description = function.__doc__.strip()
 	images = function()
@@ -350,12 +345,12 @@ for i, function in enumerate( examples ):
 	html += '<p>'
 	for j, image in enumerate( images ):
 		image_name = 'graph-{0}-{1}.png'.format( i, j )
-		image.save( 'examples/' + image_name )
+		image.save( image_name )
 		print 'written:', image_name
 		html += '<img src="{0}" style="border: 1px solid #f0f0f0;padding:5px;margin:5px;" /> '.format( image_name )
 	html += '</p>'
 
 html += '</body>'
 
-with open( 'examples/index.html', 'w' ) as f:
+with open( 'index.html', 'w' ) as f:
 	f.write( html )
