@@ -229,11 +229,11 @@ def test_circles_5():
 examples.append( test_circles_5 )
 
 def test_axis_with_custom_labels():
-	"""Axis with custom labels"""
+	"""Axis with custom label positions, vertical axes has points oevery 0.5, horizontal every 1.0"""
 	coordinate_system = mod_cartesius.CoordinateSystem()
 
-	coordinate_system.add( mod_cartesius.Axis( horizontal = True, labels = 1 ) )
-	coordinate_system.add( mod_cartesius.Axis( horizontal = False, labels = 2 ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = True, labels = 1, points = 0.5 ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = False, labels = 2, points = 1 ) )
 	
 	f = lambda x : mod_math.sin( x ) * 2
 	coordinate_system.add( mod_cartesius.GraphFunction( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )

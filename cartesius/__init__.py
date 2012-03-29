@@ -159,8 +159,8 @@ class CoordinateSystem:
 			self.resize_bounds = True
 
 		# By default, axes are on:
-		self.x_axis = Axis( horizontal = True )
-		self.y_axis = Axis( horizontal = False )
+		self.x_axis = Axis( horizontal = True, points = 1 )
+		self.y_axis = Axis( horizontal = False, points = 1 )
 
 	def add( self, element ):
 		assert element
@@ -323,7 +323,6 @@ class Axis( CoordinateSystemElement ):
 		if not self.labels:
 			return
 
-		mod_pdb.set_trace()
 		if self.horizontal:
 			labels_from, labels_to = self.get_start_end( self.labels, bounds.bottom, bounds.top )
 		else:
@@ -351,7 +350,6 @@ class Axis( CoordinateSystemElement ):
 		label_size = draw.textsize( label )
 		x, y = self.get_point( i )
 		x, y = cartesisus_to_image_coord( x, y, bounds )
-		print x, y, label
 		draw.text( ( x - label_size[ 0 ], y - label_size[ 1 ] / 2. ), label, DEFAULT_LABEL_COLOR )
 
 	def get_point( self, n ):
