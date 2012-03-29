@@ -273,7 +273,8 @@ class Axis( CoordinateSystemElement ):
 	# If set, draw point every:
 	points = None
 
-	def __init__( self, horizontal, color = None, labels = None, label_color = None, points = None, transparency_mask = None ):
+	def __init__( self, horizontal, color = None, labels = None, label_color = None,
+			points = None, transparency_mask = None ):
 		CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
 		self.horizontal = horizontal
@@ -296,12 +297,41 @@ class Axis( CoordinateSystemElement ):
 	def is_vertical( self ):
 		return not self.is_horizontal()
 
+	def draw_dots( self, bounds, draw ):
+		if not self.points:
+			return
+
+		if self.horizontal:
+			dots_from = int( mod_math.floor( bounds.bottom ) )
+			dots_to = int( mod_math.ceil( bounds.top ) )
+		else:
+			dots_from = int( mod_math.floor( bounds.left ) )
+			dots_to = int( mod_math.ceil( bounds.right ) )
+
+		for i in range( dots_from, dots_to ):
+			self.draw_dot( i, bounds, draw )
+
+	def draw_labels( self, bounds, draw ):
+		if not self.labels:
+			return
+
+		if self.horizontal:
+			labels_from = int( mod_math.floor( bounds.bottom ) )
+			labels_to = int( mod_math.ceil( bounds.top ) )
+		else:
+			labels_from = int( mod_math.floor( bounds.left ) )
+			labels_to = int( mod_math.ceil( bounds.right ) )
+
+		for i in range( labels_from, labels_to ):
+			self.draw_label( i, bounds, draw )
+
 	def draw_dot( self, i, bounds, draw ):
 		if self.horizontal:
 			x, y = cartesisus_to_image_coord( 0, i, bounds )
 		else:
 			x, y = cartesisus_to_image_coord( i, 0, bounds )
 
+		# TODO
 		if self.labels and i != 0:
 			label = str( i )
 			label_size = draw.textsize( label )
@@ -310,6 +340,10 @@ class Axis( CoordinateSystemElement ):
 		draw.line( ( x - 2, y, x + 2, y ), DEFAULT_AXES_COLOR )
 		draw.line( ( x, y + 2, x, y - 2 ), DEFAULT_AXES_COLOR )
 
+	def draw_label( self, i, bounds, draw ):
+		# TODO
+		pass
+
 	def get_point( self, n ):
 		if self.horizontal:
 			return 0, n
@@ -317,19 +351,18 @@ class Axis( CoordinateSystemElement ):
 			return n, 0
 
 	def process_image( self, image, draw, bounds ):
+
+		# TODO: Podijeliti na dio za crtanje točaka i dio za labele
+
 		if self.horizontal:
 			axe_from_point = cartesisus_to_image_coord( 0, bounds.bottom, bounds )
 			axe_to_point = cartesisus_to_image_coord( 0, bounds.top, bounds )
-			dots_from = int( mod_math.floor( bounds.bottom ) )
-			dots_to = int( mod_math.ceil( bounds.top ) )
 		else:
 			axe_from_point = cartesisus_to_image_coord( bounds.left, 0, bounds )
 			axe_to_point = cartesisus_to_image_coord( bounds.right, 0, bounds )
-			dots_from = int( mod_math.floor( bounds.left ) )
-			dots_to = int( mod_math.ceil( bounds.right ) )
 
-		for i in range( dots_from, dots_to ):
-			self.draw_dot( i, bounds, draw )
+		self.draw_dots( bounds, draw )
+		self.draw_labels( bounds, draw )
 
 		draw.line( ( axe_from_point[ 0 ], axe_from_point[ 1 ], axe_to_point[ 0 ], axe_to_point[ 1 ] ), DEFAULT_AXES_COLOR )
 
