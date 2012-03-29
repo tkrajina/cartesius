@@ -297,33 +297,42 @@ class Axis( CoordinateSystemElement ):
 	def is_vertical( self ):
 		return not self.is_horizontal()
 
+	def get_start_end( self, step, lower_bound, higher_bound ):
+		start = int( mod_math.floor( lower_bound / float( step ) ) * step )
+		end = int( mod_math.ceil( higher_bound / float( step ) ) * step )
+
+		return start, end
+
 	def draw_dots( self, bounds, draw ):
+		# TODO: Rename points!
 		if not self.points:
 			return
 
 		if self.horizontal:
-			dots_from = int( mod_math.floor( bounds.bottom ) )
-			dots_to = int( mod_math.ceil( bounds.top ) )
+			dots_from, dots_to = self.get_start_end( self.points, bounds.bottom, bounds.top )
 		else:
-			dots_from = int( mod_math.floor( bounds.left ) )
-			dots_to = int( mod_math.ceil( bounds.right ) )
+			dots_from, dots_to = self.get_start_end( self.points, bounds.left, bounds.right )
 
-		for i in range( dots_from, dots_to ):
+		i = dots_from
+		while i <= dots_to:
 			self.draw_dot( i, bounds, draw )
+			i += self.points
 
 	def draw_labels( self, bounds, draw ):
+		# TODO: Rename labels!
 		if not self.labels:
 			return
 
+		mod_pdb.set_trace()
 		if self.horizontal:
-			labels_from = int( mod_math.floor( bounds.bottom ) )
-			labels_to = int( mod_math.ceil( bounds.top ) )
+			labels_from, labels_to = self.get_start_end( self.labels, bounds.bottom, bounds.top )
 		else:
-			labels_from = int( mod_math.floor( bounds.left ) )
-			labels_to = int( mod_math.ceil( bounds.right ) )
+			labels_from, labels_to = self.get_start_end( self.labels, bounds.left, bounds.right )
 
-		for i in range( labels_from, labels_to ):
+		i = labels_from
+		while i <= labels_to:
 			self.draw_label( i, bounds, draw )
+			i += self.labels
 
 	def draw_dot( self, i, bounds, draw ):
 		if self.horizontal:
@@ -331,18 +340,16 @@ class Axis( CoordinateSystemElement ):
 		else:
 			x, y = cartesisus_to_image_coord( i, 0, bounds )
 
-		# TODO
-		if self.labels and i != 0:
-			label = str( i )
-			label_size = draw.textsize( label )
-			draw.text( ( x - label_size[ 0 ], y - label_size[ 1 ] / 2. ), label, DEFAULT_LABEL_COLOR )
-
 		draw.line( ( x - 2, y, x + 2, y ), DEFAULT_AXES_COLOR )
 		draw.line( ( x, y + 2, x, y - 2 ), DEFAULT_AXES_COLOR )
 
 	def draw_label( self, i, bounds, draw ):
-		# TODO
-		pass
+		label = str( i )
+		label_size = draw.textsize( label )
+		x, y = self.get_point( i )
+		x, y = cartesisus_to_image_coord( x, y, bounds )
+		print x, y, label
+		draw.text( ( x - label_size[ 0 ], y - label_size[ 1 ] / 2. ), label, DEFAULT_LABEL_COLOR )
 
 	def get_point( self, n ):
 		if self.horizontal:
