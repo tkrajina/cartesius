@@ -341,74 +341,74 @@ def test_detached_axes():
 	coordinate_system = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
 
 	coordinate_system.add( cartesius.Function( lambda x : x * mod_math.sin( x * x ), start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
-	coordinate_system.add( cartesius.Axis( horizontal = True, hide_positive = True ) )
-	coordinate_system.add( cartesius.Axis( horizontal = False, hide_positive = True ) )
+	coordinate_system.add( cartesius.Axis( horizontal = True ) )
+	coordinate_system.add( cartesius.Axis( horizontal = False, hide = True ) )
 
-	return coordinate_system
+	return coordinate_system.draw( 500, 250 )
 
-#examples.append( test_detached_axes )
+examples.append( test_detached_axes )
 
-examples.append( test_hide_axis_positive_or_negative_parts )
-args = mod_sys.argv[ 1: ]
+if __name__ == '__main__':
+	args = mod_sys.argv[ 1: ]
 
-if args:
-	filtered_examples = []
-	for example in examples:
-		if example.func_name in args and example.func_name not in filtered_examples:
-			filtered_examples.append( example )
-	examples = filtered_examples
+	if args:
+		filtered_examples = []
+		for example in examples:
+			if example.func_name in args and example.func_name not in filtered_examples:
+				filtered_examples.append( example )
+		examples = filtered_examples
 
-def clean_source_lines( function ):
-	source_lines = mod_inspect.getsourcelines( function )[ 0 ]
-	source_started = False
-	result = ''
+	def clean_source_lines( function ):
+		source_lines = mod_inspect.getsourcelines( function )[ 0 ]
+		source_started = False
+		result = ''
 
-	for line in source_lines:
-		if line.strip().endswith( '"""' ):
-			source_started = True
-		elif source_started:
-			if not line.strip().startswith( 'return' ):
-				result += line[ 1: ]
+		for line in source_lines:
+			if line.strip().endswith( '"""' ):
+				source_started = True
+			elif source_started:
+				if not line.strip().startswith( 'return' ):
+					result += line[ 1: ]
 
-	return result
+		return result
 
-html = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
+	html = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+	<html>
+	<head>
 
-<title>Cartesius examples</title>
+	<title>Cartesius examples</title>
 
-<style type="text/css"></style>
+	<style type="text/css"></style>
 
-</head>
-<body>
-<h1>Cartesius</h1>
-<p>
-Cartesius is a small library for drawing 2d coordinate system images.
-More on <a href='http://github.com/tkrajina/cartesius'>http://github.com/tkrajina/cartesius</a>
-</p>"""
+	</head>
+	<body>
+	<h1>Cartesius</h1>
+	<p>
+	Cartesius is a small library for drawing 2d coordinate system images.
+	More on <a href='http://github.com/tkrajina/cartesius'>http://github.com/tkrajina/cartesius</a>
+	</p>"""
 
-for i, function in enumerate( examples ):
-	description = function.__doc__.strip()
-	images = function()
+	for i, function in enumerate( examples ):
+		description = function.__doc__.strip()
+		images = function()
 
-	if not isinstance( images, list ):
-		images = [ images ]	
+		if not isinstance( images, list ):
+			images = [ images ]	
 
-	html += '<h2>{0}:</h2>'.format( description )
+		html += '<h2>{0}:</h2>'.format( description )
 
-	html += '<p>'
-	for j, image in enumerate( images ):
-		image_name = 'graph-{0}-{1}.png'.format( i, j )
-		image.save( image_name )
-		print 'written:', image_name
-		html += '<img src="{0}" style="border: 1px solid #f0f0f0;padding:5px;margin:5px;" /> '.format( image_name )
-	html += '</p>'
+		html += '<p>'
+		for j, image in enumerate( images ):
+			image_name = 'graph-{0}-{1}.png'.format( i, j )
+			image.save( image_name )
+			print 'written:', image_name
+			html += '<img src="{0}" style="border: 1px solid #f0f0f0;padding:5px;margin:5px;" /> '.format( image_name )
+		html += '</p>'
 
-	html += '<p>Code:</p>'
-	html += '<pre style="font-size:0.8em;border-style:solid;border-color:gray;border-width:0px 0px 0px 1px;margin:2px 2px 10px 2px;padding:2px 2px 2px 10px;">' + clean_source_lines( function ) + '</pre>'
+		html += '<p>Code:</p>'
+		html += '<pre style="font-size:0.8em;border-style:solid;border-color:gray;border-width:0px 0px 0px 1px;margin:2px 2px 10px 2px;padding:2px 2px 2px 10px;">' + clean_source_lines( function ) + '</pre>'
 
-html += '</body>'
+	html += '</body>'
 
-with open( 'index.html', 'w' ) as f:
-	f.write( html )
+	with open( 'index.html', 'w' ) as f:
+		f.write( html )
