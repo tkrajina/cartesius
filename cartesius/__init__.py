@@ -293,7 +293,7 @@ class Axis( CoordinateSystemElement ):
 
 	def __init__( self, horizontal, color = None, labels = None, label_color = None,
 			label_position = None, points = None, transparency_mask = None, hide_positive = False,
-			hide_negative = False ):
+			hide_negative = False, hide = False ):
 		CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
 		self.horizontal = horizontal
@@ -304,14 +304,18 @@ class Axis( CoordinateSystemElement ):
 		self.points = float( points ) if points else 1
 
 		if self.horizontal:
-			self.label_position = label_position if label_position else LEFT_CENTER
-		else:
 			self.label_position = label_position if label_position else CENTER_DOWN
+		else:
+			self.label_position = label_position if label_position else LEFT_CENTER
 
 		assert len( self.label_position ) == 2
 
 		self.hide_positive = hide_positive
 		self.hide_negative = hide_negative
+
+		if hide:
+			self.hide_positive = True
+			self.hide_negative = True
 
 		#Bounds are not important for axes:
 		#self.reload_bounds()
@@ -347,9 +351,9 @@ class Axis( CoordinateSystemElement ):
 			return
 
 		if self.horizontal:
-			dots_from, dots_to = self.get_start_end( self.points, bounds.bottom, bounds.top )
-		else:
 			dots_from, dots_to = self.get_start_end( self.points, bounds.left, bounds.right )
+		else:
+			dots_from, dots_to = self.get_start_end( self.points, bounds.bottom, bounds.top )
 
 		i = dots_from
 		while i <= dots_to:
@@ -358,9 +362,9 @@ class Axis( CoordinateSystemElement ):
 
 	def draw_dot( self, i, bounds, draw ):
 		if self.horizontal:
-			x, y = cartesisus_to_image_coord( 0, i, bounds )
-		else:
 			x, y = cartesisus_to_image_coord( i, 0, bounds )
+		else:
+			x, y = cartesisus_to_image_coord( 0, i, bounds )
 
 		draw.line( ( x - 2, y, x + 2, y ), DEFAULT_AXES_COLOR )
 		draw.line( ( x, y + 2, x, y - 2 ), DEFAULT_AXES_COLOR )
@@ -370,9 +374,9 @@ class Axis( CoordinateSystemElement ):
 			return
 
 		if self.horizontal:
-			labels_from, labels_to = self.get_start_end( self.labels, bounds.bottom, bounds.top )
-		else:
 			labels_from, labels_to = self.get_start_end( self.labels, bounds.left, bounds.right )
+		else:
+			labels_from, labels_to = self.get_start_end( self.labels, bounds.bottom, bounds.top )
 
 		i = labels_from
 		while i <= labels_to:
@@ -410,23 +414,12 @@ class Axis( CoordinateSystemElement ):
 
 	def get_point( self, n ):
 		if self.horizontal:
-			return 0, n
-		else:
 			return n, 0
+		else:
+			return 0, n
 
 	def process_image( self, image, draw, bounds ):
 		if self.horizontal:
-			start = bounds.bottom
-			end = bounds.top
-
-			if self.hide_negative:
-				start = max( start, 0 )
-			if self.hide_positive:
-				end = min( end, 0 )
-
-			axe_from_point = cartesisus_to_image_coord( 0, start, bounds )
-			axe_to_point = cartesisus_to_image_coord( 0, end, bounds )
-		else:
 			start = bounds.left
 			end = bounds.right
 
@@ -437,6 +430,17 @@ class Axis( CoordinateSystemElement ):
 
 			axe_from_point = cartesisus_to_image_coord( start, 0, bounds )
 			axe_to_point = cartesisus_to_image_coord( end, 0, bounds )
+		else:
+			start = bounds.bottom
+			end = bounds.top
+
+			if self.hide_negative:
+				start = max( start, 0 )
+			if self.hide_positive:
+				end = min( end, 0 )
+
+			axe_from_point = cartesisus_to_image_coord( 0, start, bounds )
+			axe_to_point = cartesisus_to_image_coord( 0, end, bounds )
 
 		self.draw_dots( bounds, draw )
 		self.draw_labels( bounds, draw )

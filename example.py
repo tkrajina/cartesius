@@ -270,49 +270,54 @@ examples.append( test_with_two_horizontal_grids )
 
 def test_labels_positions():
 	"""Labels on different positions"""
-	result = []
+	cs_1 = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
+	cs_1.add( cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = cartesius.LEFT_UP, ) )
+	cs_1.add( cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = cartesius.LEFT_CENTER, ) )
 
-	coordinate_system = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
-	coordinate_system.add( cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = cartesius.LEFT_UP, ) )
-	coordinate_system.add( cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = cartesius.LEFT_CENTER, ) )
-	result.append( coordinate_system.draw( 150, 150 ) )
+	cs_2 = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
+	cs_2.add( cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = cartesius.LEFT_DOWN, ) )
+	cs_2.add( cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = cartesius.CENTER_UP, ) )
 
-	coordinate_system = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
-	coordinate_system.add( cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = cartesius.LEFT_DOWN, ) )
-	coordinate_system.add( cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = cartesius.CENTER_UP, ) )
-	result.append( coordinate_system.draw( 150, 150 ) )
+	cs_3 = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
+	cs_3.add( cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = cartesius.CENTER, ) )
+	cs_3.add( cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = cartesius.CENTER_DOWN, ) )
 
-	coordinate_system = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
-	coordinate_system.add( cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = cartesius.CENTER, ) )
-	coordinate_system.add( cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = cartesius.CENTER_DOWN, ) )
-	result.append( coordinate_system.draw( 150, 150 ) )
+	cs_4 = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
+	cs_4.add( cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = cartesius.RIGHT_UP, ) )
+	cs_4.add( cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = cartesius.RIGHT_CENTER, ) )
 
-	coordinate_system = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
-	coordinate_system.add( cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = cartesius.RIGHT_UP, ) )
-	coordinate_system.add( cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = cartesius.RIGHT_CENTER, ) )
-	result.append( coordinate_system.draw( 150, 150 ) )
+	cs_5 = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
+	cs_5.add( cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = cartesius.RIGHT_DOWN, ) )
+	cs_5.add( cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = cartesius.RIGHT_DOWN, ) )
 
-	coordinate_system = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
-	coordinate_system.add( cartesius.Axis( horizontal = True, points = 1, labels = 1, label_position = cartesius.RIGHT_DOWN, ) )
-	coordinate_system.add( cartesius.Axis( horizontal = False, points = 1, labels = 1, label_position = cartesius.RIGHT_DOWN, ) )
-	result.append( coordinate_system.draw( 150, 150 ) )
-
-	return result
+	return cs_1.draw( 150, 150 ), cs_2.draw( 150, 150 ), cs_3.draw( 150, 150 ), cs_4.draw( 150, 150 ), cs_5.draw( 150, 150 )
 
 examples.append( test_labels_positions )
 
 def test_hide_axis():
 	"""Test with hidden axis"""
-	result = []
 
-	coordinate_system = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
-	f = lambda x : x * mod_math.sin( x * x )
-	coordinate_system.add( cartesius.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+	cs_1 = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
+	cs_1.add( cartesius.Axis( horizontal = True, hide = True ) )
+	cs_1.add( cartesius.Axis( horizontal = False ) )
+	cs_1.add( cartesius.Function(
+			lambda x : x * mod_math.sin( x * x ),
+			start = -4,
+			end = 5,
+			step = 0.02,
+			color = ( 0, 0, 255 ) ) )
 
-	result.append( coordinate_system.draw( 150, 150, hide_y_axis = True ) )
-	result.append( coordinate_system.draw( 150, 150, hide_x_axis = True ) )
+	cs_2 = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
+	cs_2.add( cartesius.Axis( horizontal = True ) )
+	cs_2.add( cartesius.Axis( horizontal = False, hide = True ) )
+	cs_2.add( cartesius.Function(
+			lambda x : x * mod_math.sin( x * x ),
+			start = -4,
+			end = 5,
+			step = 0.02,
+			color = ( 0, 0, 255 ) ) )
 
-	return result
+	return cs_1.draw( 150, 150 ), cs_2.draw( 150, 150 )
 
 examples.append( test_hide_axis )
 
@@ -337,12 +342,12 @@ def test_hide_axis_positive_or_negative_parts():
 examples.append( test_hide_axis_positive_or_negative_parts )
 
 def test_detached_axes():
-	"""Detached axes"""
+	" ""Detached axes" ""
 	coordinate_system = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
 
 	coordinate_system.add( cartesius.Function( lambda x : x * mod_math.sin( x * x ), start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
-	coordinate_system.add( cartesius.Axis( horizontal = True ) )
-	coordinate_system.add( cartesius.Axis( horizontal = False, hide = True ) )
+	coordinate_system.add( cartesius.Axis( horizontal = True, hide = True ) )
+	coordinate_system.add( cartesius.Axis( horizontal = False ) )
 
 	return coordinate_system.draw( 500, 250 )
 
@@ -392,7 +397,7 @@ if __name__ == '__main__':
 		description = function.__doc__.strip()
 		images = function()
 
-		if not isinstance( images, list ):
+		if not isinstance( images, tuple ) and not isinstance( images, list ):
 			images = [ images ]	
 
 		html += '<h2>{0}:</h2>'.format( description )
