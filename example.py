@@ -338,7 +338,7 @@ def test_hide_axis_positive_or_negative_parts():
 examples.append( test_hide_axis_positive_or_negative_parts )
 
 def test_detached_axes():
-	"""Detached axes"""
+	"""Detached axes; x and y axis with ( 1.3, -4 ) as center """
 	coordinate_system = cartesius.CoordinateSystem( bounds = ( -10, 10, -10, 10 ) )
 
 	coordinate_system.add( cartesius.Function(
@@ -353,7 +353,20 @@ def test_detached_axes():
 	coordinate_system.add( cartesius.Axis( horizontal = False, labels = 2 ) )
 
 	# Detached:
-	coordinate_system.add( cartesius.Axis( horizontal = True, detached_center = ( 2, -2 ) ) )
+	detached_axes_center = ( -5, 4 )
+
+	coordinate_system.add( cartesius.Axis(
+			horizontal = True,
+			points = 2,
+			labels = 2,
+			detached_center = detached_axes_center,
+			color = ( 255, 0, 0 ) ) )
+	coordinate_system.add( cartesius.Axis(
+			horizontal = False,
+			points = 2,
+			labels = 2,
+			detached_center = detached_axes_center,
+			color = ( 0, 0, 255 ) ) )
 
 	return coordinate_system.draw( 500, 250 )
 
