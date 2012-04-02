@@ -288,8 +288,12 @@ class Axis( CoordinateSystemElement ):
 	# If set, draw point every:
 	points = None
 
+	hide_positive = None
+	hide_negative = None
+
 	def __init__( self, horizontal, color = None, labels = None, label_color = None,
-			label_position = None, points = None, transparency_mask = None ):
+			label_position = None, points = None, transparency_mask = None, hide_positive = False,
+			hide_negative = False ):
 		CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
 		self.horizontal = horizontal
@@ -297,7 +301,7 @@ class Axis( CoordinateSystemElement ):
 		self.label_color = label_color if label_color else DEFAULT_LABEL_COLOR
 
 		self.labels = float( labels ) if labels else None
-		self.points = float( points ) if points else None
+		self.points = float( points ) if points else 1
 
 		if self.horizontal:
 			self.label_position = label_position if label_position else LEFT_CENTER
@@ -305,6 +309,9 @@ class Axis( CoordinateSystemElement ):
 			self.label_position = label_position if label_position else CENTER_DOWN
 
 		assert len( self.label_position ) == 2
+
+		self.hide_positive = hide_positive
+		self.hide_negative = hide_negative
 
 		#Bounds are not important for axes:
 		#self.reload_bounds()
@@ -323,10 +330,19 @@ class Axis( CoordinateSystemElement ):
 		start = int( mod_math.floor( lower_bound / float( step ) ) * step )
 		end = int( mod_math.ceil( higher_bound / float( step ) ) * step )
 
+		if self.hide_negative:
+			start = max( start, 0 )
+		if self.hide_positive:
+			end = min( end, 0 )
+
+		if self.hide_negative:
+			start = max( start, 0 )
+		if self.hide_positive:
+			end = min( end, 0 )
+
 		return start, end
 
 	def draw_dots( self, bounds, draw ):
-		# TODO: Rename points!
 		if not self.points:
 			return
 
@@ -350,7 +366,6 @@ class Axis( CoordinateSystemElement ):
 		draw.line( ( x, y + 2, x, y - 2 ), DEFAULT_AXES_COLOR )
 
 	def draw_labels( self, bounds, draw ):
-		# TODO: Rename labels!
 		if not self.labels:
 			return
 
@@ -400,15 +415,28 @@ class Axis( CoordinateSystemElement ):
 			return n, 0
 
 	def process_image( self, image, draw, bounds ):
-
-		# TODO: Podijeliti na dio za crtanje točaka i dio za labele
-
 		if self.horizontal:
-			axe_from_point = cartesisus_to_image_coord( 0, bounds.bottom, bounds )
-			axe_to_point = cartesisus_to_image_coord( 0, bounds.top, bounds )
+			start = bounds.bottom
+			end = bounds.top
+
+			if self.hide_negative:
+				start = max( start, 0 )
+			if self.hide_positive:
+				end = min( end, 0 )
+
+			axe_from_point = cartesisus_to_image_coord( 0, start, bounds )
+			axe_to_point = cartesisus_to_image_coord( 0, end, bounds )
 		else:
-			axe_from_point = cartesisus_to_image_coord( bounds.left, 0, bounds )
-			axe_to_point = cartesisus_to_image_coord( bounds.right, 0, bounds )
+			start = bounds.left
+			end = bounds.right
+
+			if self.hide_negative:
+				start = max( start, 0 )
+			if self.hide_positive:
+				end = min( end, 0 )
+
+			axe_from_point = cartesisus_to_image_coord( start, 0, bounds )
+			axe_to_point = cartesisus_to_image_coord( end, 0, bounds )
 
 		self.draw_dots( bounds, draw )
 		self.draw_labels( bounds, draw )

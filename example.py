@@ -313,6 +313,27 @@ def test_hide_axis():
 	return result
 
 examples.append( test_hide_axis )
+
+def test_hide_axis_positive_or_negative_parts():
+	"""Hide positive and/or negative parts of axes"""
+	result = []
+
+	coordinate_system = mod_cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
+	coordinate_system.add( mod_cartesius.GraphFunction( lambda x : x * mod_math.sin( x * x ), start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = True, hide_positive = True ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = False, hide_positive = True ) )
+	result.append( coordinate_system.draw( 150, 150 ) )
+
+	coordinate_system = mod_cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
+	coordinate_system.add( mod_cartesius.GraphFunction( lambda x : x * mod_math.sin( x * x ), start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = True, hide_negative = True ) )
+	coordinate_system.add( mod_cartesius.Axis( horizontal = False, hide_negative = True ) )
+	result.append( coordinate_system.draw( 150, 150 ) )
+
+	return result
+
+examples.append( test_hide_axis_positive_or_negative_parts )
+
 args = mod_sys.argv[ 1: ]
 
 if args:
