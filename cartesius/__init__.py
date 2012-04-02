@@ -182,10 +182,13 @@ class CoordinateSystem:
 		assert isinstance( element, CoordinateSystemElement )
 
 		if isinstance( element, Axis ):
-			if element.is_horizontal():
-				self.x_axis = element
+			if element.is_detached():
+				self.elements.append( element )
 			else:
-				self.y_axis = element
+				if element.is_horizontal():
+					self.x_axis = element
+				else:
+					self.y_axis = element
 		else:
 			element.reload_bounds()
 			self.elements.append( element )
@@ -291,9 +294,11 @@ class Axis( CoordinateSystemElement ):
 	hide_positive = None
 	hide_negative = None
 
+	center = None
+
 	def __init__( self, horizontal, color = None, labels = None, label_color = None,
 			label_position = None, points = None, transparency_mask = None, hide_positive = False,
-			hide_negative = False, hide = False ):
+			hide_negative = False, hide = False, detached_center = None ):
 		CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
 		self.horizontal = horizontal
@@ -317,8 +322,17 @@ class Axis( CoordinateSystemElement ):
 			self.hide_positive = True
 			self.hide_negative = True
 
+		if detached_center:
+			assert len( detached_center ) == 2
+			self.center = detached_center
+		else:
+			self.center = ( 0, 0 )
+
 		#Bounds are not important for axes:
 		#self.reload_bounds()
+
+	def is_detached( self ):
+		return self.center[ 0 ] != 0 or self.center[ 1 ] != 0
 	
 	def reload_bounds( self ):
 		# not important
