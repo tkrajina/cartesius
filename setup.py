@@ -18,7 +18,7 @@ import distutils.core as mod_distutilscore
 
 mod_distutilscore.setup(
 	name = 'cartesius',
-	version = '0.1.0',
+	version = '0.1.1',
 	description = 'Cartesius 2D coordinate system drawing library',
 	license = 'Apache License, Version 2.0',
 	author = 'Tomo Krajina',
