@@ -527,7 +527,7 @@ class Line( CoordinateSystemElement ):
 		x2, y2 = cartesisus_to_image_coord( x = self.end[ 0 ], y = self.end[ 1 ], bounds = bounds )
 		draw.line( ( x1, y1, x2, y2 ), self.get_color_with_transparency( self.color ) )
 
-class GraphFunction( CoordinateSystemElement ):
+class Function( CoordinateSystemElement ):
 
 	function = None
 	step = None
