@@ -392,7 +392,10 @@ if __name__ == '__main__':
 				source_started = True
 			elif source_started:
 				if not line.strip().startswith( 'return' ):
-					result += line[ 1: ]
+					if line.startswith( '\t' ):
+						result += line[ 1: ]
+					else:
+						result += line
 
 		return result
 
@@ -430,7 +433,10 @@ if __name__ == '__main__':
 		html += '</p>'
 
 		html += '<p>Code:</p>'
-		html += '<pre style="font-size:0.8em;border-style:solid;border-color:gray;border-width:0px 0px 0px 1px;margin:2px 2px 10px 2px;padding:2px 2px 2px 10px;">' + clean_source_lines( function ) + '</pre>'
+		html += '<pre style="font-size:0.8em;border-style:solid;border-color:gray;border-width:0px 0px 0px 1px;margin:2px 2px 10px 2px;padding:2px 2px 2px 10px;">' 
+		html += 'import cartesius\n\n'
+		html += clean_source_lines( function ) 
+		html += '</pre>'
 
 	html += '</body>'
 
