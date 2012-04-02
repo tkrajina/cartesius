@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging as mod_logging
+import inspect as mod_inspect
 import math as mod_math
 import random as mod_random
 import os as mod_os
@@ -335,6 +336,19 @@ def test_hide_axis_positive_or_negative_parts():
 
 examples.append( test_hide_axis_positive_or_negative_parts )
 
+def test_detached_axes():
+	"""Detached axes"""
+	coordinate_system = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
+
+	coordinate_system.add( cartesius.Function( lambda x : x * mod_math.sin( x * x ), start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+	coordinate_system.add( cartesius.Axis( horizontal = True, hide_positive = True ) )
+	coordinate_system.add( cartesius.Axis( horizontal = False, hide_positive = True ) )
+
+	return coordinate_system
+
+#examples.append( test_detached_axes )
+
+examples.append( test_hide_axis_positive_or_negative_parts )
 args = mod_sys.argv[ 1: ]
 
 if args:
@@ -343,6 +357,20 @@ if args:
 		if example.func_name in args and example.func_name not in filtered_examples:
 			filtered_examples.append( example )
 	examples = filtered_examples
+
+def clean_source_lines( function ):
+	source_lines = mod_inspect.getsourcelines( function )[ 0 ]
+	source_started = False
+	result = ''
+
+	for line in source_lines:
+		if line.strip().endswith( '"""' ):
+			source_started = True
+		elif source_started:
+			if not line.strip().startswith( 'return' ):
+				result += line[ 1: ]
+
+	return result
 
 html = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -367,7 +395,7 @@ for i, function in enumerate( examples ):
 	if not isinstance( images, list ):
 		images = [ images ]	
 
-	html += '<p>{0}:</p>'.format( description )
+	html += '<h2>{0}:</h2>'.format( description )
 
 	html += '<p>'
 	for j, image in enumerate( images ):
@@ -376,6 +404,9 @@ for i, function in enumerate( examples ):
 		print 'written:', image_name
 		html += '<img src="{0}" style="border: 1px solid #f0f0f0;padding:5px;margin:5px;" /> '.format( image_name )
 	html += '</p>'
+
+	html += '<p>Code:</p>'
+	html += '<pre style="font-size:0.8em;border-style:solid;border-color:gray;border-width:0px 0px 0px 1px;margin:2px 2px 10px 2px;padding:2px 2px 2px 10px;">' + clean_source_lines( function ) + '</pre>'
 
 html += '</body>'
 
