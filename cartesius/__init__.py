@@ -3,6 +3,7 @@
 import pdb as mod_pdb
 import logging as mod_logging
 import math as mod_math
+import re as mod_re
 
 import Image as mod_image
 import ImageDraw as mod_imagedraw
@@ -301,6 +302,7 @@ class Axis( CoordinateSystemElement ):
 
 	# If set, draw label every:
 	labels = None
+	labels_suffix = None
 
 	# If set, draw point every:
 	points = None
@@ -313,6 +315,9 @@ class Axis( CoordinateSystemElement ):
 	def __init__( self, horizontal = False, vertical = False, color = None, labels = None, label_color = None,
 			label_position = None, points = None, transparency_mask = None, hide_positive = False,
 			hide_negative = False, hide = False, detached_center = None ):
+		"""
+		labels: May be an integer, or string like '100m' or dict like {1000:'one km', 500:'half km'}
+		"""
 		CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
 		assert bool( horizontal ) != bool( vertical ), 'Axis must be set to be horizontal or vertical'
@@ -322,7 +327,15 @@ class Axis( CoordinateSystemElement ):
 		self.color = color if color else DEFAULT_AXES_COLOR
 		self.label_color = label_color if label_color else DEFAULT_LABEL_COLOR
 
-		self.labels = float( labels ) if labels else None
+		if isinstance( labels, str ) or isinstance( labels, unicode ):
+			mod_pdb.set_trace()
+			groups = mod_re.findall( '([0-9\.]+)(.*)', labels )
+			assert len( groups ) == 1 and len( groups[ 0 ] ) == 2, 'Invalid label string: {0}'.format( label )
+			self.labels = float( groups[ 0 ][ 0 ] )
+			self.labels_suffix = groups[ 0 ][ 1 ]
+		else:
+			self.labels = float( labels ) if labels else None
+
 		self.points = float( points ) if points else 1
 
 		if self.horizontal:
@@ -434,6 +447,8 @@ class Axis( CoordinateSystemElement ):
 			i = int( i )
 
 		label = str( i )
+		if self.labels_suffix:
+			label += self.labels_suffix
 		label_width, label_height = draw.textsize( label )
 
 		x, y = self.get_point( i )
