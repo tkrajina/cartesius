@@ -249,16 +249,16 @@ def test_axis_with_custom_labels():
 examples.append( test_axis_with_custom_labels )
 
 def test_axis_with_custom_labels_2():
-	"""Axis with custom labels"""
+	"""Axis with custom labels II"""
 	coordinate_system = cartesius.CoordinateSystem( bounds = ( -1500, 1500, -1500, 1500 ) )
 
+	# Labels with suffixes 'm':
 	coordinate_system.add( cartesius.Axis( horizontal = True, labels = '500m', points = 100 ) )
-	coordinate_system.add( cartesius.Axis( vertical = True, hide = True ) )
-	#coordinate_system.add( cartesius.Axis( vertical = True, labels = {1000:'one km', 500:'half km'}, points = 1 ) )
-	
-	f = lambda x : math.sin( x ) * 2
-	coordinate_system.add( cartesius.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
+	# Custom labels on custom positions:
+	coordinate_system.add( cartesius.Axis( vertical = True, labels = { 1000: 'one km', 500: 'half km' },
+			points = 100 ) )
+	
 	return coordinate_system.draw( 500, 250 )
 
 examples.append( test_axis_with_custom_labels_2 )

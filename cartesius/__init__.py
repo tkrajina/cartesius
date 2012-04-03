@@ -303,6 +303,7 @@ class Axis( CoordinateSystemElement ):
 	# If set, draw label every:
 	labels = None
 	labels_suffix = None
+	custom_labels = None
 
 	# If set, draw point every:
 	points = None
@@ -328,11 +329,12 @@ class Axis( CoordinateSystemElement ):
 		self.label_color = label_color if label_color else DEFAULT_LABEL_COLOR
 
 		if isinstance( labels, str ) or isinstance( labels, unicode ):
-			mod_pdb.set_trace()
 			groups = mod_re.findall( '([0-9\.]+)(.*)', labels )
 			assert len( groups ) == 1 and len( groups[ 0 ] ) == 2, 'Invalid label string: {0}'.format( label )
 			self.labels = float( groups[ 0 ][ 0 ] )
 			self.labels_suffix = groups[ 0 ][ 1 ]
+		elif isinstance( labels, dict ):
+			self.labels = labels
 		else:
 			self.labels = float( labels ) if labels else None
 
@@ -423,32 +425,37 @@ class Axis( CoordinateSystemElement ):
 		if not self.labels:
 			return
 
-		if self.horizontal:
-			labels_from, labels_to = self.get_start_end(
-					self.labels,
-					bounds.left - self.center[ 0 ],
-					bounds.right - self.center[ 0 ] )
+		if isinstance( self.labels, dict ):
+			for i, label in self.labels.items():
+				self.draw_label( i, bounds, draw, label = label )
 		else:
-			labels_from, labels_to = self.get_start_end(
-					self.labels,
-					bounds.bottom - self.center[ 1 ],
-					bounds.top - self.center[ 1 ] )
+			if self.horizontal:
+				labels_from, labels_to = self.get_start_end(
+						self.labels,
+						bounds.left - self.center[ 0 ],
+						bounds.right - self.center[ 0 ] )
+			else:
+				labels_from, labels_to = self.get_start_end(
+						self.labels,
+						bounds.bottom - self.center[ 1 ],
+						bounds.top - self.center[ 1 ] )
 
-		i = labels_from
-		while i <= labels_to:
-			self.draw_label( i, bounds, draw )
-			i += self.labels
+			i = labels_from
+			while i <= labels_to:
+				self.draw_label( i, bounds, draw )
+				i += self.labels
 
-	def draw_label( self, i, bounds, draw ):
+	def draw_label( self, i, bounds, draw, label = None ):
 		if i == 0:
 			return
 
 		if i == int( i ):
 			i = int( i )
 
-		label = str( i )
-		if self.labels_suffix:
-			label += self.labels_suffix
+		if not label:
+			label = str( i )
+			if self.labels_suffix:
+				label += self.labels_suffix
 		label_width, label_height = draw.textsize( label )
 
 		x, y = self.get_point( i )
