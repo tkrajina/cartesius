@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
 
-import logging as mod_logging
-import inspect as mod_inspect
-import math as mod_math
-import random as mod_random
-import os as mod_os
-import sys as mod_sys
+#
+# Run this script to create example images with code snippets.
+#
+
+import logging
+import inspect
+import math
+import random
+import os
+import sys
 
 import cartesius as cartesius
 
-mod_logging.basicConfig( level = mod_logging.DEBUG, format = '%(asctime)s %(name)-12s %(levelname)-8s %(message)s' )
+logging.basicConfig( level = logging.DEBUG, format = '%(asctime)s %(name)-12s %(levelname)-8s %(message)s' )
 
 examples = []
 
@@ -29,7 +33,7 @@ def test_function():
 	""" Function math.sin from -4 to 5"""
 	coordinate_system = cartesius.CoordinateSystem()
 
-	f = lambda x : mod_math.sin( x ) * 2
+	f = lambda x : math.sin( x ) * 2
 	coordinate_system.add( cartesius.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
 	return coordinate_system.draw( 500, 250 )
@@ -40,7 +44,7 @@ def test_function_with_custom_bounds():
 	"""Same function, but with custom coordinate system bounds"""
 	coordinate_system = cartesius.CoordinateSystem( bounds = ( -32, 20, -3, 3 ))
 
-	f = lambda x : mod_math.sin( x ) * 2
+	f = lambda x : math.sin( x ) * 2
 	coordinate_system.add( cartesius.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
 	return coordinate_system.draw( 500, 250 )
@@ -51,10 +55,10 @@ def test_filled_function():
 	""" Line function and normal function but with filled graph"""
 	coordinate_system = cartesius.CoordinateSystem()
 
-	f = lambda x : mod_math.sin( x ) * 2
+	f = lambda x : math.sin( x ) * 2
 	coordinate_system.add( cartesius.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
-	g = lambda x : mod_math.sin( x ) * 2
+	g = lambda x : math.sin( x ) * 2
 	coordinate_system.add( cartesius.Function( g, start = 1, end = 4, step = 0.02, fill_color = ( 200, 255, 200 ) ) )
 
 	return coordinate_system.draw( 500, 250 )
@@ -68,10 +72,10 @@ def test_filled_function():
 	# Grid:
 	coordinate_system.add( cartesius.Grid( 1, 1 ) )
 
-	f = lambda x : mod_math.sin( x ) * 2
+	f = lambda x : math.sin( x ) * 2
 	coordinate_system.add( cartesius.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
-	g = lambda x : mod_math.sin( x ) * 2
+	g = lambda x : math.sin( x ) * 2
 	coordinate_system.add( cartesius.Function( g, start = 1, end = 4, step = 0.02, fill_color = ( 200, 255, 200 ) ) )
 
 	return coordinate_system.draw( 500, 250 )
@@ -84,7 +88,7 @@ def test_filled_transparent_graphs():
 
 	coordinate_system.add(
 			cartesius.Function(
-					mod_math.sin,
+					math.sin,
 					start = -4,
 					end = 5,
 					step = 0.02,
@@ -93,7 +97,7 @@ def test_filled_transparent_graphs():
 
 	coordinate_system.add(
 			cartesius.Function(
-					mod_math.cos,
+					math.cos,
 					start = -4,
 					end = 5,
 					step = 0.02,
@@ -110,7 +114,7 @@ def test_filled_transparent_graphs_2():
 
 	coordinate_system.add(
 			cartesius.Function(
-					mod_math.sin,
+					math.sin,
 					start = -4,
 					end = 5,
 					step = 0.02,
@@ -119,7 +123,7 @@ def test_filled_transparent_graphs_2():
 
 	coordinate_system.add(
 			cartesius.Function(
-					mod_math.cos,
+					math.cos,
 					start = -4,
 					end = 5,
 					step = 0.02,
@@ -161,12 +165,12 @@ def test_circles():
 	for i in range( 50 ):
 		coordinate_system.add(
 			cartesius.Circle(
-				x = mod_random.randint( -20, 20 ),
-				y = mod_random.randint( 0, 20 ),
-				radius = mod_random.randint( 1, 5 ),
-				transparency_mask = mod_random.randint( 0, 255 ),
-				fill_color = ( mod_random.randint( 0, 255 ), mod_random.randint( 0, 255 ), mod_random.randint( 0, 255 ) ),
-				color = ( mod_random.randint( 0, 255 ), mod_random.randint( 0, 255 ), mod_random.randint( 0, 255 ) ) ) )
+				x = random.randint( -20, 20 ),
+				y = random.randint( 0, 20 ),
+				radius = random.randint( 1, 5 ),
+				transparency_mask = random.randint( 0, 255 ),
+				fill_color = ( random.randint( 0, 255 ), random.randint( 0, 255 ), random.randint( 0, 255 ) ),
+				color = ( random.randint( 0, 255 ), random.randint( 0, 255 ), random.randint( 0, 255 ) ) ) )
 
 	return coordinate_system.draw( 500, 250 )
 
@@ -178,7 +182,8 @@ def test_circles_2():
 	
 	for i in range( 1, 20 ):
 		x = i / 2.
-		coordinate_system.add( cartesius.Circle( x, y = mod_math.sin( x ), radius = mod_math.sqrt( x ), transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
+		coordinate_system.add( cartesius.Circle( x, y = math.sin( x ), radius = math.sqrt( x ),
+				transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
 
 	return coordinate_system.draw( 500, 250 )
 
@@ -192,7 +197,8 @@ def test_circles_3():
 
 	for i in range( 1, 20 ):
 		x = i / 2.
-		coordinate_system.add( cartesius.Circle( x, y = mod_math.sin( x ), radius = mod_math.sqrt( x ), transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
+		coordinate_system.add( cartesius.Circle( x, y = math.sin( x ), radius = math.sqrt( x ),
+				transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
 
 	return coordinate_system.draw( 500, 250 )
 
@@ -206,7 +212,8 @@ def test_circles_4():
 
 	for i in range( 1, 20 ):
 		x = i / 2.
-		coordinate_system.add( cartesius.Circle( x, y = mod_math.sin( x ), radius = mod_math.sqrt( x ), transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
+		coordinate_system.add( cartesius.Circle( x, y = math.sin( x ), radius = math.sqrt( x ),
+				transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
 
 	return coordinate_system.draw( 500, 250 )
 
@@ -220,7 +227,8 @@ def test_circles_5():
 
 	for i in range( 1, 20 ):
 		x = i / 2.
-		coordinate_system.add( cartesius.Circle( x, y = mod_math.sin( x ), radius = mod_math.sqrt( x ), transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
+		coordinate_system.add( cartesius.Circle( x, y = math.sin( x ), radius = math.sqrt( x ),
+				transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
 
 	return coordinate_system.draw( 500, 250 )
 
@@ -233,7 +241,7 @@ def test_axis_with_custom_labels():
 	coordinate_system.add( cartesius.Axis( horizontal = True, labels = 1, points = 0.25 ) )
 	coordinate_system.add( cartesius.Axis( vertical = True, labels = 2, points = 1 ) )
 	
-	f = lambda x : mod_math.sin( x ) * 2
+	f = lambda x : math.sin( x ) * 2
 	coordinate_system.add( cartesius.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
 	return coordinate_system.draw( 500, 250 )
@@ -247,7 +255,7 @@ def test_axis_custom_colors():
 	coordinate_system.add( cartesius.Axis( horizontal = True, color = ( 255, 0, 0 ), labels = 1, points = 0.25 ) )
 	coordinate_system.add( cartesius.Axis( vertical = True, color = ( 0, 255, 0 ), labels = 2, points = 1 ) )
 	
-	f = lambda x : x * mod_math.sin( x * x )
+	f = lambda x : x * math.sin( x * x )
 	coordinate_system.add( cartesius.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
 	return coordinate_system.draw( 500, 250 )
@@ -261,7 +269,7 @@ def test_with_two_horizontal_grids():
 	coordinate_system.add( cartesius.Grid( 0.25, None, color = ( 200, 200, 200 ) ) )
 	coordinate_system.add( cartesius.Grid( 1, None, color = ( 250, 50, 50 ) ) )
 
-	f = lambda x : mod_math.sin( x ) * 2
+	f = lambda x : math.sin( x ) * 2
 	coordinate_system.add( cartesius.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
 	return coordinate_system.draw( 500, 250 )
@@ -301,7 +309,7 @@ def test_hide_axis():
 	cs_1.add( cartesius.Axis( horizontal = True, hide = True ) )
 	cs_1.add( cartesius.Axis( vertical = True ) )
 	cs_1.add( cartesius.Function(
-			lambda x : x * mod_math.sin( x * x ),
+			lambda x : x * math.sin( x * x ),
 			start = -4,
 			end = 5,
 			step = 0.02,
@@ -311,7 +319,7 @@ def test_hide_axis():
 	cs_2.add( cartesius.Axis( horizontal = True ) )
 	cs_2.add( cartesius.Axis( vertical = True, hide = True ) )
 	cs_2.add( cartesius.Function(
-			lambda x : x * mod_math.sin( x * x ),
+			lambda x : x * math.sin( x * x ),
 			start = -4,
 			end = 5,
 			step = 0.02,
@@ -324,12 +332,12 @@ examples.append( test_hide_axis )
 def test_hide_axis_positive_or_negative_parts():
 	"""Hide positive and/or negative parts of axes"""
 	cs_1 = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
-	cs_1.add( cartesius.Function( lambda x : x * mod_math.sin( x * x ), start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+	cs_1.add( cartesius.Function( lambda x : x * math.sin( x * x ), start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 	cs_1.add( cartesius.Axis( horizontal = True, hide_positive = True ) )
 	cs_1.add( cartesius.Axis( vertical = True, hide_positive = True ) )
 
 	cs_2 = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
-	cs_2.add( cartesius.Function( lambda x : x * mod_math.sin( x * x ), start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+	cs_2.add( cartesius.Function( lambda x : x * math.sin( x * x ), start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 	cs_2.add( cartesius.Axis( horizontal = True, hide_negative = True ) )
 	cs_2.add( cartesius.Axis( vertical = True, hide_negative = True ) )
 
@@ -338,15 +346,14 @@ def test_hide_axis_positive_or_negative_parts():
 examples.append( test_hide_axis_positive_or_negative_parts )
 
 def test_detached_axes():
-	"""Detached axes; x and y axis with ( 1.3, -4 ) as center """
+	"""
+	Detached axes; x and y axis with ( 1.3, -4 ) as center and anoher pair of detached axes but
+	showing only negativ/positive parts
+	"""
 	coordinate_system = cartesius.CoordinateSystem( bounds = ( -10, 10, -10, 10 ) )
 
-	coordinate_system.add( cartesius.Function(
-			lambda x : x * mod_math.sin( x * x ),
-			start = -4,
-			end = 5,
-			step = 0.02,
-			color = ( 0, 0, 255 ) ) )
+	coordinate_system.add( cartesius.Function( lambda x : x * math.sin( x * x ),
+			start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
 	# Standard axes:
 	coordinate_system.add( cartesius.Axis( horizontal = True, points = 2 ) )
@@ -355,25 +362,24 @@ def test_detached_axes():
 	# Detached:
 	detached_axes_center = ( -5, 4 )
 
-	coordinate_system.add( cartesius.Axis(
-			horizontal = True,
-			points = 2,
-			labels = 2,
-			detached_center = detached_axes_center,
-			color = ( 255, 0, 0 ) ) )
-	coordinate_system.add( cartesius.Axis(
-			vertical = True,
-			points = 2,
-			labels = 2,
-			detached_center = detached_axes_center,
-			color = ( 0, 0, 255 ) ) )
+	coordinate_system.add( cartesius.Axis( horizontal = True, points = 2, labels = 2,
+			detached_center = detached_axes_center, color = ( 255, 0, 0 ) ) )
+	coordinate_system.add( cartesius.Axis( vertical = True, points = 2, labels = 2,
+			detached_center = detached_axes_center, color = ( 0, 0, 255 ) ) )
+
+	# Another pair of detached axes:
+	detached_axes_center = ( 4, -5 )
+	coordinate_system.add( cartesius.Axis( horizontal = True, points = 2, labels = 2,
+			detached_center = detached_axes_center, hide_negative = True ) )
+	coordinate_system.add( cartesius.Axis( vertical = True, points = 2, labels = 2,
+			detached_center = detached_axes_center, hide_positive = True ) )
 
 	return coordinate_system.draw( 500, 250 )
 
 examples.append( test_detached_axes )
 
 if __name__ == '__main__':
-	args = mod_sys.argv[ 1: ]
+	args = sys.argv[ 1: ]
 
 	if args:
 		filtered_examples = []
@@ -383,37 +389,45 @@ if __name__ == '__main__':
 		examples = filtered_examples
 
 	def clean_source_lines( function ):
-		source_lines = mod_inspect.getsourcelines( function )[ 0 ]
+		source_lines = inspect.getsourcelines( function )[ 0 ]
 		source_started = False
 		result = ''
 
 		for line in source_lines:
+			# TODO: This works only for single line comments:
 			if line.strip().endswith( '"""' ):
 				source_started = True
 			elif source_started:
 				if not line.strip().startswith( 'return' ):
 					if line.startswith( '\t' ):
-						result += line[ 1: ]
+						line = line[ 1: ]
+						if line.strip().startswith( '#' ):
+							result += '<span class="comment">{0}</span>'.format( line )
+						else:
+							result += '<span style="line">{0}</span>'.format( line )
 					else:
 						result += line
 
 		return result
 
 	html = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-	<html>
-	<head>
+<html>
+<head>
 
-	<title>Cartesius examples</title>
+<title>Cartesius examples</title>
 
-	<style type="text/css"></style>
+<style type="text/css">
+span.line {color:#898989}
+span.comment {color:#0000ff}
+</style>
 
-	</head>
-	<body>
-	<h1>Cartesius</h1>
-	<p>
-	Cartesius is a small library for drawing 2d coordinate system images.
-	More on <a href='http://github.com/tkrajina/cartesius'>http://github.com/tkrajina/cartesius</a>
-	</p>"""
+</head>
+<body>
+<h1>Cartesius</h1>
+<p>
+Cartesius is a small library for drawing 2d coordinate system images.
+More on <a href='http://github.com/tkrajina/cartesius'>http://github.com/tkrajina/cartesius</a>
+</p>"""
 
 	for i, function in enumerate( examples ):
 		description = function.__doc__.strip()
