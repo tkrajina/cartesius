@@ -464,27 +464,27 @@ class Axis( CoordinateSystemElement ):
 
 	def process_image( self, image, draw, bounds ):
 		if self.horizontal:
-			start = bounds.left - self.center[ 1 ]
-			end = bounds.right - self.center[ 1 ]
+			start = bounds.left
+			end = bounds.right
 
 			if self.hide_negative:
-				start = max( start, 0 )
+				start = max( start, self.center[ 0 ] )
 			if self.hide_positive:
-				end = min( end, 0 )
+				end = min( end, self.center[ 0 ] )
 
-			axe_from_point = cartesisus_to_image_coord( start + self.center[ 1 ], 0 + self.center[ 1 ], bounds )
-			axe_to_point = cartesisus_to_image_coord( end + self.center[ 1 ], 0 + self.center[ 1 ], bounds )
+			axe_from_point = cartesisus_to_image_coord( start, self.center[ 1 ], bounds )
+			axe_to_point = cartesisus_to_image_coord( end, self.center[ 1 ], bounds )
 		else:
-			start = bounds.bottom - self.center[ 0 ]
-			end = bounds.top - self.center[ 0 ]
+			start = bounds.bottom
+			end = bounds.top
 
 			if self.hide_negative:
-				start = max( start, 0 )
+				start = max( start, self.center[ 1 ] )
 			if self.hide_positive:
-				end = min( end, 0 )
+				end = min( end, self.center[ 1 ] )
 
-			axe_from_point = cartesisus_to_image_coord( 0 + self.center[ 0 ], start + self.center[ 0 ], bounds )
-			axe_to_point = cartesisus_to_image_coord( 0 + self.center[ 0 ], end + self.center[ 0 ], bounds )
+			axe_from_point = cartesisus_to_image_coord( self.center[ 0 ], start, bounds )
+			axe_to_point = cartesisus_to_image_coord( self.center[ 0 ], end, bounds )
 
 		self.draw_dots( bounds, draw )
 		self.draw_labels( bounds, draw )
