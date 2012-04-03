@@ -173,7 +173,7 @@ class CoordinateSystem:
 
 		# By default, axes are on:
 		self.x_axis = Axis( horizontal = True, points = 1 )
-		self.y_axis = Axis( horizontal = False, points = 1 )
+		self.y_axis = Axis( vertical = True, points = 1 )
 
 	def add( self, element ):
 		"""
@@ -298,12 +298,15 @@ class Axis( CoordinateSystemElement ):
 
 	center = None
 
-	def __init__( self, horizontal, color = None, labels = None, label_color = None,
+	def __init__( self, horizontal = False, vertical = False, color = None, labels = None, label_color = None,
 			label_position = None, points = None, transparency_mask = None, hide_positive = False,
 			hide_negative = False, hide = False, detached_center = None ):
 		CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
+		assert bool( horizontal ) != bool( vertical ), 'Axis must be set to be horizontal or vertical'
+
 		self.horizontal = horizontal
+
 		self.color = color if color else DEFAULT_AXES_COLOR
 		self.label_color = label_color if label_color else DEFAULT_LABEL_COLOR
 
