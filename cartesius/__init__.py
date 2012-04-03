@@ -8,7 +8,7 @@ import Image as mod_image
 import ImageDraw as mod_imagedraw
 import ImageFont as mod_imagefont
 
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 
 DEFAULT_AXES_COLOR = ( 150, 150, 150 )
 DEFAULT_LABEL_COLOR = ( 150, 150, 150 )
