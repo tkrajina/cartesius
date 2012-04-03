@@ -58,7 +58,10 @@ def min_max( *n ):
 	return min_result, max_result
 			
 class Bounds:
-	""" Bounds for coordinate system and image size. """
+	"""
+	Bounds for coordinate system and image size. If the user don't explicitly set hiw own bounds, those
+	will be resized with each new element.
+	"""
 
 	image_width = None
 	image_height = None
@@ -177,8 +180,10 @@ class CoordinateSystem:
 
 	def add( self, element ):
 		"""
-		Add element on coordinate system. Note that if you add an axis, it will remove a
-		previous existing horizontal/vertical axis.
+		Add element on coordinate system.
+
+		Note that if you add n default axis, it will remove a previous existing horizontal/vertical axis,
+		but the same does not apply for detached axes.
 		"""
 		assert element
 		assert isinstance( element, CoordinateSystemElement )
@@ -282,6 +287,13 @@ class CoordinateSystemElement:
 			image.paste( tmp_image, mask = tmp_image )
 
 class Axis( CoordinateSystemElement ):
+	"""
+	Axis class.
+
+	Axis can be horizontal or vertical.
+
+	Axis can, also, be default ( (0,0) as center) or detached (if (0,0) if not the center).
+	"""
 
 	horizontal = None
 	color = None
