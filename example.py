@@ -177,6 +177,35 @@ def test_circles():
 
 examples.append( test_circles )
 
+def test_circles_antialising():
+	"""50 random circles with antialiasing"""
+	coordinate_system = cartesius.CoordinateSystem()
+
+	for i in range( 10 ):
+		coordinate_system.add(
+			elements.Circle(
+				x = random.randint( -2, 2 ),
+				y = random.randint( -2, 2 ),
+				radius = random.randint( 1, 3 ),
+				transparency_mask = random.randint( 0, 255 ),
+				fill_color = ( random.randint( 0, 255 ), random.randint( 0, 255 ), random.randint( 0, 255 ) ),
+				color = ( random.randint( 0, 255 ), random.randint( 0, 255 ), random.randint( 0, 255 ) ) ) )
+
+	coordinate_system.add( elements.Function(
+			lambda x: math.sin( x ),
+			start = -4,
+			end = 5,
+			step = 0.02,
+			color = ( 0, 0, 255 ) ) )
+
+	coordinate_system.add( elements.Axis( horizontal = True, labels = 1, points = 0.25 ) )
+	coordinate_system.add( elements.Axis( vertical = True, labels = 2, points = 1 ) )
+
+	# Note that antialiasing must be an integer, the bigger the better the image, but more CPU used:
+	return coordinate_system.draw( 500, 250, antialising = 2 )
+
+examples.append( test_circles_antialising )
+
 def test_circles_2():
 	""" Another example with circles """
 	coordinate_system = cartesius.CoordinateSystem()
