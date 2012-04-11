@@ -22,7 +22,6 @@ class Axis( mod_main.CoordinateSystemElement ):
 	# If set, draw label every:
 	labels = None
 	labels_suffix = None
-	custom_labels = None
 
 	# If set, draw point every:
 	points = None
@@ -171,7 +170,9 @@ class Axis( mod_main.CoordinateSystemElement ):
 		if i == int( i ):
 			i = int( i )
 
-		if not label:
+		if label:
+			label = str( label )
+		else:
 			label = str( i )
 			if self.labels_suffix:
 				label += self.labels_suffix
