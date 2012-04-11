@@ -258,6 +258,7 @@ class CoordinateSystemElement:
 			tmp_image = mod_image.new( 'RGBA', ( bounds.image_width, bounds.image_height ) )
 			tmp_draw = mod_imagedraw.Draw( tmp_image )
 
+		print self
 		self.process_image( tmp_image, tmp_draw, bounds, antialiasing_coef )
 
 		if tmp_image != image or tmp_draw != draw:
