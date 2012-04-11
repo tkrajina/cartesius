@@ -195,12 +195,12 @@ class CoordinateSystem:
 			self.y_axis.draw( image = image, antialiasing_coef = antialiasing_coef, draw = draw, bounds = self.bounds )
 
 	def draw( self, width, height, axis_units_equal_length = True, hide_x_axis = False, hide_y_axis = False,
-			antialising = None ):
+			antialiasing = None ):
 		""" Returns a PIL image """
 
 		antialiasing_coef = 1
-		if antialising:
-			antialiasing_coef = float( antialising )
+		if antialiasing:
+			antialiasing_coef = 2
 			width = int( width * antialiasing_coef )
 			height = int( height * antialiasing_coef )
 
@@ -218,7 +218,7 @@ class CoordinateSystem:
 
 		self.__draw_elements( image = image, draw = draw, antialiasing_coef = antialiasing_coef, hide_x_axis = hide_x_axis, hide_y_axis = hide_y_axis )
 
-		if antialising:
+		if antialiasing:
 			image = image.resize( ( int( width / antialiasing_coef ), int( height / antialiasing_coef ) ), mod_image.ANTIALIAS )
 
 		return image
@@ -258,7 +258,6 @@ class CoordinateSystemElement:
 			tmp_image = mod_image.new( 'RGBA', ( bounds.image_width, bounds.image_height ) )
 			tmp_draw = mod_imagedraw.Draw( tmp_image )
 
-		print self
 		self.process_image( tmp_image, tmp_draw, bounds, antialiasing_coef )
 
 		if tmp_image != image or tmp_draw != draw:

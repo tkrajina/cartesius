@@ -18,15 +18,61 @@ logging.basicConfig( level = logging.DEBUG, format = '%(asctime)s %(name)-12s %(
 
 examples = []
 
+def test_circles():
+	"""50 random circles"""
+	coordinate_system = cartesius.CoordinateSystem()
+
+	for i in range( 50 ):
+		coordinate_system.add(
+			elements.Circle(
+				x = random.randint( -20, 20 ),
+				y = random.randint( 0, 20 ),
+				radius = random.randint( 1, 5 ),
+				transparency_mask = random.randint( 0, 255 ),
+				fill_color = ( random.randint( 0, 255 ), random.randint( 0, 255 ), random.randint( 0, 255 ) ),
+				color = ( random.randint( 0, 255 ), random.randint( 0, 255 ), random.randint( 0, 255 ) ) ) )
+
+	return coordinate_system.draw( 500, 250 )
+
+examples.append( test_circles )
+
+def test_circles_antialiasing():
+	"""50 random circles with antialiasing"""
+	coordinate_system = cartesius.CoordinateSystem()
+
+	for i in range( 10 ):
+		coordinate_system.add(
+			elements.Circle(
+				x = random.randint( -2, 2 ),
+				y = random.randint( -2, 2 ),
+				radius = random.randint( 1, 3 ),
+				transparency_mask = random.randint( 0, 255 ),
+				fill_color = ( random.randint( 0, 255 ), random.randint( 0, 255 ), random.randint( 0, 255 ) ),
+				color = ( random.randint( 0, 255 ), random.randint( 0, 255 ), random.randint( 0, 255 ) ) ) )
+
+	coordinate_system.add( elements.Function(
+			lambda x: math.sin( x ),
+			start = -4,
+			end = 5,
+			step = 0.02,
+			color = ( 0, 0, 255 ) ) )
+
+	coordinate_system.add( elements.Axis( horizontal = True, labels = 1, points = 0.25 ) )
+	coordinate_system.add( elements.Axis( vertical = True, labels = 2, points = 1 ) )
+
+	return coordinate_system.draw( 500, 250, antialiasing = True )
+
+examples.append( test_circles_antialiasing )
+
 def test_lines():
-	"""Lines of different colors"""
+	"""Lines of different colors. With and without antialiasing"""
 	coordinate_system = cartesius.CoordinateSystem()
 
 	coordinate_system.add( elements.Line( ( 0, 0 ), ( -.7, -.7 ) ) )
 	coordinate_system.add( elements.Line( ( .5, -.5 ), ( -.5, .5 ), color = ( 0, 255, 0 ) ) )
-	coordinate_system.add( elements.Line( ( 0, 0 ), ( 10, 1 ), color = ( 0, 0, 255 ) ) )
+	coordinate_system.add( elements.Line( ( 0, 0 ), ( 7, 3 ), color = ( 0, 0, 255 ) ) )
 
-	return coordinate_system.draw( 500, 250 )
+	return coordinate_system.draw( 250, 250 ), coordinate_system.draw( 250, 250, antialiasing = True )
 
 examples.append( test_lines )
 
@@ -158,53 +204,6 @@ def test_key_value_graphs():
 	return coordinate_system.draw( 500, 250 )
 
 examples.append( test_key_value_graphs )
-
-def test_circles():
-	"""50 random circles"""
-	coordinate_system = cartesius.CoordinateSystem()
-
-	for i in range( 50 ):
-		coordinate_system.add(
-			elements.Circle(
-				x = random.randint( -20, 20 ),
-				y = random.randint( 0, 20 ),
-				radius = random.randint( 1, 5 ),
-				transparency_mask = random.randint( 0, 255 ),
-				fill_color = ( random.randint( 0, 255 ), random.randint( 0, 255 ), random.randint( 0, 255 ) ),
-				color = ( random.randint( 0, 255 ), random.randint( 0, 255 ), random.randint( 0, 255 ) ) ) )
-
-	return coordinate_system.draw( 500, 250 )
-
-examples.append( test_circles )
-
-def test_circles_antialising():
-	"""50 random circles with antialiasing"""
-	coordinate_system = cartesius.CoordinateSystem()
-
-	for i in range( 10 ):
-		coordinate_system.add(
-			elements.Circle(
-				x = random.randint( -2, 2 ),
-				y = random.randint( -2, 2 ),
-				radius = random.randint( 1, 3 ),
-				transparency_mask = random.randint( 0, 255 ),
-				fill_color = ( random.randint( 0, 255 ), random.randint( 0, 255 ), random.randint( 0, 255 ) ),
-				color = ( random.randint( 0, 255 ), random.randint( 0, 255 ), random.randint( 0, 255 ) ) ) )
-
-	coordinate_system.add( elements.Function(
-			lambda x: math.sin( x ),
-			start = -4,
-			end = 5,
-			step = 0.02,
-			color = ( 0, 0, 255 ) ) )
-
-	coordinate_system.add( elements.Axis( horizontal = True, labels = 1, points = 0.25 ) )
-	coordinate_system.add( elements.Axis( vertical = True, labels = 2, points = 1 ) )
-
-	# Note that antialiasing must be an integer, the bigger the better the image, but more CPU used:
-	return coordinate_system.draw( 500, 250, antialising = 2 )
-
-examples.append( test_circles_antialising )
 
 def test_circles_2():
 	""" Another example with circles """

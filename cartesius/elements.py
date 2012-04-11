@@ -3,8 +3,15 @@
 import re as mod_re
 import math as mod_math
 
+import ImageFont as mod_imagefont
+
 import main as mod_main
 import utils as mod_utils
+
+# use a truetype font
+DEFAULT_FONT_NAME = 'LiberationSansNarrow-Regular.ttf'
+
+DEFAULT_FONT_SIZE = 11
 
 class Axis( mod_main.CoordinateSystemElement ):
 	"""
@@ -176,7 +183,9 @@ class Axis( mod_main.CoordinateSystemElement ):
 			label = str( i )
 			if self.labels_suffix:
 				label += self.labels_suffix
-		label_width, label_height = draw.textsize( label )
+
+		font = mod_imagefont.truetype( DEFAULT_FONT_NAME, int( DEFAULT_FONT_SIZE * antialiasing_coef ) )
+		label_width, label_height = font.getsize( label )
 
 		x, y = self.get_point( i )
 		x, y = x + self.center[ 0 ], y + self.center[ 1 ]
@@ -196,7 +205,7 @@ class Axis( mod_main.CoordinateSystemElement ):
 		elif self.label_position[ 1 ] == 1:
 			y = y - label_height - 2 * antialiasing_coef
 
-		draw.text( ( x, y ), label, mod_main.DEFAULT_LABEL_COLOR )
+		draw.text( ( x, y ), label, mod_main.DEFAULT_LABEL_COLOR, font = font )
 
 	def get_point( self, n ):
 		if self.horizontal:
