@@ -26,7 +26,6 @@ mod_distutilscore.setup(
 	author = 'Tomo Krajina',
 	author_email = 'tkrajina@gmail.com',
 	url = 'http://tkrajina.github.com/cartesius/',
-	packages = [
-		'cartesius',
-	],
+	packages = [ 'cartesius', ],
+	data_files = [ ( 'cartesius/fonts', [ 'cartesius/fonts/LiberationSansNarrow-Bold.ttf' ] ) ],
 )

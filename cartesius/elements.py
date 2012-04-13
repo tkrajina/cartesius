@@ -9,7 +9,13 @@ import main as mod_main
 import utils as mod_utils
 
 # use a truetype font
-DEFAULT_FONT_NAME = 'LiberationSansNarrow-Regular.ttf'
+DEFAULT_FONT_NAME = 'LiberationSansNarrow-Bold.ttf'
+
+package_location = mod_main.__file__[ 0 : mod_main.__file__.rfind( '/' ) ]
+
+DEFAULT_FONT_LOCATION = package_location + '/fonts/' + DEFAULT_FONT_NAME
+
+print DEFAULT_FONT_LOCATION
 
 DEFAULT_FONT_SIZE = 11
 
@@ -184,7 +190,7 @@ class Axis( mod_main.CoordinateSystemElement ):
 			if self.labels_suffix:
 				label += self.labels_suffix
 
-		font = mod_imagefont.truetype( DEFAULT_FONT_NAME, int( DEFAULT_FONT_SIZE * antialiasing_coef ) )
+		font = mod_imagefont.truetype( DEFAULT_FONT_LOCATION, int( DEFAULT_FONT_SIZE * antialiasing_coef ) )
 		label_width, label_height = font.getsize( label )
 
 		x, y = self.get_point( i )
