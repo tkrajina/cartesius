@@ -36,7 +36,7 @@ def test_circles():
 
 examples.append( test_circles )
 
-def test_lines_and_points():
+def test_lines():
 	"""Lines and points of different colors. With and without antialiasing"""
 	coordinate_system = cartesius.CoordinateSystem()
 
@@ -44,14 +44,26 @@ def test_lines_and_points():
 	coordinate_system.add( elements.Line( ( .5, -.5 ), ( -.5, .5 ), color = ( 0, 255, 0 ) ) )
 	coordinate_system.add( elements.Line( ( 0, 0 ), ( 7, 3 ), color = ( 0, 0, 255 ) ) )
 
-	coordinate_system.add( elements.Point( ( 2, 1 ), style = '.', color = ( 0, 0, 255 ) ) )
-	coordinate_system.add( elements.Point( ( 2, 2 ), style = 'x', color = ( 0, 0, 255 ) ) )
-	coordinate_system.add( elements.Point( ( 2, 3 ), style = '+', color = ( 0, 0, 255 ) ) )
-	coordinate_system.add( elements.Point( ( 2, 4 ), style = 'o', color = ( 0, 0, 255 ) ) )
+	coordinate_system.add( elements.Point( ( 2, 2 ), style = 'o' ) )
 
 	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
-examples.append( test_lines_and_points )
+examples.append( test_lines )
+
+def test_points():
+	"""Test points of different styles with/without label and different label positions"""
+	coordinate_system = cartesius.CoordinateSystem()
+
+	coordinate_system.add( elements.Point( ( 1, 1 ) ) )
+	coordinate_system.add( elements.Point( ( 2, 2 ), style = '.' ) )
+	coordinate_system.add( elements.Point( ( 3, 3 ), style = '+' ) )
+	coordinate_system.add( elements.Point( ( 4, 4 ), style = 'x' ) )
+	coordinate_system.add( elements.Point( ( 5, 5 ), style = 'o' ) )
+	coordinate_system.add( elements.Point( ( 6, 6 ), style = ' ' ) )
+
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
+
+examples.append( test_points )
 
 def test_function():
 	""" Function math.sin from -4 to 5"""

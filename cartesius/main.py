@@ -303,10 +303,13 @@ class PILHandler:
 		self.pil_image = image
 		self.pil_draw = draw
 	
-	def draw_point( self, x, y, color, style = '+' ):
+	def draw_point( self, x, y, color, style = '+', label = None, label_position = None ):
 		image_x, image_y = mod_utils.cartesius_to_image_coord( x, y, self.bounds )
 
-		if style == '.':
+		if label_position:
+			assert len( label_position ) == 2
+
+		if style == '.' or style == None:
 			self.pil_draw.point( ( image_x, image_y ), color )
 		elif style == 'x':
 			delta = 2 * self.antialiasing_coef
@@ -316,8 +319,13 @@ class PILHandler:
 			delta = 2 * self.antialiasing_coef
 			self.pil_draw.line( ( image_x - delta, image_y, image_x + delta, image_y ), color )
 			self.pil_draw.line( ( image_x, image_y + delta, image_x, image_y - delta ), color )
+		elif style == ' ':
+			# No point
+			pass
 		elif style == 'o':
 			delta = 2 * self.antialiasing_coef
+			import pdb;pdb.set_trace()
+			print delta
 			self.pil_draw.ellipse(
 					( image_x - delta, image_y - delta, image_x + delta, image_y + delta ),
 					fill = None,
@@ -325,6 +333,9 @@ class PILHandler:
 		else:
 			mod_logging.error( 'Invalid style: {0}, valid: ".", "x", "+" and "o"'.format( style ) )
 			self.pil_draw.point( ( image_x, image_y ), color )
+
+		if label:
+			self.draw_text( x, y, label, color, label_position = label_position )
 
 	def draw_line( self, x1, y1, x2, y2, color ):
 		image_x1, image_y1 = mod_utils.cartesius_to_image_coord( x1, y1, self.bounds )

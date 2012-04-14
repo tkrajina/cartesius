@@ -218,8 +218,6 @@ class Axis( mod_main.CoordinateSystemElement ):
 
 class Point( mod_main.CoordinateSystemElement ):
 	
-	STYLES = ( '.', '+', 'x', 'o' )
-
 	style = None
 	label_position = None
 	position = None
@@ -232,8 +230,6 @@ class Point( mod_main.CoordinateSystemElement ):
 		assert position and len( position ) == 2, 'Invalid position {0}'.format( position )
 		if label_position:
 			assert len( label_position ) == 2, 'Invalid label position {0}'.format( label_position )
-		if style:
-			assert style in self.STYLES, 'Invalid style \'{0}\', possible styles: {1}'.format( self.STYLES )
 		if color:
 			assert len( color ) == 3, 'Invalid color {0}'.format( color )
 
