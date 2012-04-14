@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os as mod_os
 import re as mod_re
 import math as mod_math
 
@@ -11,11 +12,10 @@ import utils as mod_utils
 # use a truetype font
 DEFAULT_FONT_NAME = 'LiberationSansNarrow-Bold.ttf'
 
-package_location = mod_main.__file__[ 0 : mod_main.__file__.rfind( '/' ) ]
+# Remove main.py from package to get package location:
+package_location = mod_main.__file__[ : mod_main.__file__.rfind( '/' ) ]
 
-DEFAULT_FONT_LOCATION = package_location + '/fonts/' + DEFAULT_FONT_NAME
-
-print DEFAULT_FONT_LOCATION
+DEFAULT_FONT_LOCATION = package_location + mod_os.sep + 'fonts' + mod_os.sep + DEFAULT_FONT_NAME
 
 DEFAULT_FONT_SIZE = 11
 
