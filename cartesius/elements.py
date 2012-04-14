@@ -388,19 +388,12 @@ class Circle( mod_main.CoordinateSystemElement ):
 		self.bounds.update( point = ( self.x, self.y - self.radius ) )
 
 	def process_image( self, pil_handler ):
-		x1, y1 = mod_utils.cartesius_to_image_coord(
-				x = self.x - self.radius / 2.,
-				y = self.y + self.radius / 2.,
-				bounds = pil_handler.bounds )
-		x2, y2 = mod_utils.cartesius_to_image_coord(
-				x = self.x + self.radius / 2.,
-				y = self.y - self.radius / 2.,
-				bounds = pil_handler.bounds )
-
-		pil_handler.pil_draw.ellipse(
-				( x1, y1, x2, y2 ),
-				fill = self.get_color_with_transparency( self.fill_color ),
-				outline = self.get_color_with_transparency( self.color ) )
+		pil_handler.draw_circle(
+				self.x,
+				self.y,
+				self.radius,
+				fill_color = self.get_color_with_transparency( self.fill_color ),
+				line_color = self.get_color_with_transparency( self.color ) )
 
 class KeyValueGraph( mod_main.CoordinateSystemElement ):
 

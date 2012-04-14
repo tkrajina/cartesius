@@ -353,3 +353,18 @@ class PILHandler:
 	def get_font( self ):
 		# TODO Cache!
 		return mod_imagefont.truetype( DEFAULT_FONT_LOCATION, int( DEFAULT_FONT_SIZE * self.antialiasing_coef ) )
+
+	def draw_circle( self, x, y, radius, line_color, fill_color ):
+		x1, y1 = mod_utils.cartesius_to_image_coord(
+				x = x - radius / 2.,
+				y = y + radius / 2.,
+				bounds = self.bounds )
+		x2, y2 = mod_utils.cartesius_to_image_coord(
+				x = x + radius / 2.,
+				y = y - radius / 2.,
+				bounds = self.bounds )
+
+		self.pil_draw.ellipse(
+				( x1, y1, x2, y2 ),
+				fill = fill_color,
+				outline = line_color )
