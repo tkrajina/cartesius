@@ -276,7 +276,6 @@ class CoordinateSystemElement:
 
 		pil_handler.update_pil_image_draw( tmp_image, tmp_draw )
 
-		print self
 		self.process_image( pil_handler )
 
 		if tmp_image != image or tmp_draw != draw:
