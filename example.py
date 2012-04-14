@@ -44,22 +44,45 @@ def test_lines():
 	coordinate_system.add( elements.Line( ( .5, -.5 ), ( -.5, .5 ), color = ( 0, 255, 0 ) ) )
 	coordinate_system.add( elements.Line( ( 0, 0 ), ( 7, 3 ), color = ( 0, 0, 255 ) ) )
 
-	coordinate_system.add( elements.Point( ( 2, 2 ), style = 'o' ) )
-
 	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_lines )
 
 def test_points():
 	"""Test points of different styles with/without label and different label positions"""
-	coordinate_system = cartesius.CoordinateSystem()
+	coordinate_system = cartesius.CoordinateSystem( bounds = ( -.5, 5, -.5, 5 ))
 
-	coordinate_system.add( elements.Point( ( 1, 1 ) ) )
-	coordinate_system.add( elements.Point( ( 2, 2 ), style = '.' ) )
-	coordinate_system.add( elements.Point( ( 3, 3 ), style = '+' ) )
-	coordinate_system.add( elements.Point( ( 4, 4 ), style = 'x' ) )
-	coordinate_system.add( elements.Point( ( 5, 5 ), style = 'o' ) )
-	coordinate_system.add( elements.Point( ( 6, 6 ), style = ' ' ) )
+	# Without labels:
+	coordinate_system.add( elements.Point( ( 1, 4 ), style = '.' ) )
+	coordinate_system.add( elements.Point( ( 2, 4 ), style = '+' ) )
+	coordinate_system.add( elements.Point( ( 3, 4 ), style = 'x' ) )
+	coordinate_system.add( elements.Point( ( 4, 4 ), style = 'o' ) )
+
+	# With labels:
+	coordinate_system.add( elements.Point( ( 1, 3 ), style = '.', label = 'A' ) )
+	coordinate_system.add( elements.Point( ( 2, 3 ), style = '+', label = 'B' ) )
+	coordinate_system.add( elements.Point( ( 3, 3 ), style = 'x', label = 'C' ) )
+	coordinate_system.add( elements.Point( ( 4, 3 ), style = 'o', label = 'D' ) )
+
+	# With labels and custom colors:
+	coordinate_system.add( elements.Point( ( 1, 2 ), style = '.', label = 'A',
+			color = ( 255, 0, 0 ) ) )
+	coordinate_system.add( elements.Point( ( 2, 2 ), style = '+', label = 'B',
+			color = ( 0, 255, 0 ) ) )
+	coordinate_system.add( elements.Point( ( 3, 2 ), style = 'x', label = 'C',
+			color = ( 0, 0, 255 ) ) )
+	coordinate_system.add( elements.Point( ( 4, 2 ), style = 'o', label = 'D',
+			color = ( 150, 150, 150 ) ) )
+
+	# With labels on custom positions:
+	coordinate_system.add( elements.Point( ( 1, 1 ), style = '.', label = 'A',
+			label_position = cartesius.RIGHT_CENTER ) )
+	coordinate_system.add( elements.Point( ( 2, 1 ), style = '+', label = 'B',
+			label_position = cartesius.LEFT_CENTER ) )
+	coordinate_system.add( elements.Point( ( 3, 1 ), style = 'x', label = 'C',
+			label_position = cartesius.CENTER_UP ) )
+	coordinate_system.add( elements.Point( ( 4, 1 ), style = 'o', label = 'D',
+			label_position = cartesius.CENTER_DOWN ) )
 
 	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 

@@ -21,6 +21,7 @@ DEFAULT_FONT_SIZE = 10
 
 DEFAULT_AXES_COLOR = ( 150, 150, 150 )
 DEFAULT_LABEL_COLOR = ( 150, 150, 150 )
+DEFAULT_POINT_COLOR = ( 150, 150, 150 )
 DEFAULT_GRID_COLOR = ( 235, 235, 235 )
 DEFAULT_ELEMENT_COLOR = ( 0, 0, 0 )
 
@@ -309,6 +310,9 @@ class PILHandler:
 		if label_position:
 			assert len( label_position ) == 2
 
+		if not color:
+			color = DEFAULT_POINT_COLOR
+
 		if style == '.' or style == None:
 			self.pil_draw.point( ( image_x, image_y ), color )
 		elif style == 'x':
@@ -324,8 +328,6 @@ class PILHandler:
 			pass
 		elif style == 'o':
 			delta = 2 * self.antialiasing_coef
-			import pdb;pdb.set_trace()
-			print delta
 			self.pil_draw.ellipse(
 					( image_x - delta, image_y - delta, image_x + delta, image_y + delta ),
 					fill = None,

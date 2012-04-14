@@ -230,6 +230,8 @@ class Point( mod_main.CoordinateSystemElement ):
 		assert position and len( position ) == 2, 'Invalid position {0}'.format( position )
 		if label_position:
 			assert len( label_position ) == 2, 'Invalid label position {0}'.format( label_position )
+		else:
+			label_position = mod_main.CENTER_DOWN
 		if color:
 			assert len( color ) == 3, 'Invalid color {0}'.format( color )
 
@@ -245,7 +247,8 @@ class Point( mod_main.CoordinateSystemElement ):
 		self.bounds.update( point = self.position )
 
 	def process_image( self, draw_handler ):
-		draw_handler.draw_point( self.position[ 0 ], self.position[ 1 ], style = self.style, color = self.color )
+		draw_handler.draw_point( self.position[ 0 ], self.position[ 1 ], style = self.style,
+				color = self.color, label = self.label, label_position = self.label_position )
 
 class Grid( mod_main.CoordinateSystemElement ):
 
