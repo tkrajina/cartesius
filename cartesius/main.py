@@ -1,9 +1,23 @@
 # -*- coding: utf-8 -*-
 
+import logging as mod_logging
+import os as mod_os
+
 import Image as mod_image
 import ImageDraw as mod_imagedraw
+import ImageFont as mod_imagefont
 
 import utils as mod_utils
+
+# use a truetype font
+DEFAULT_FONT_NAME = 'Oxygen-Regular.ttf'
+
+# Remove main.py from package to get package location:
+package_location = mod_utils.__file__[ : mod_utils.__file__.rfind( '/' ) ]
+
+DEFAULT_FONT_LOCATION = package_location + mod_os.sep + 'fonts' + mod_os.sep + DEFAULT_FONT_NAME
+
+DEFAULT_FONT_SIZE = 10 
 
 DEFAULT_AXES_COLOR = ( 150, 150, 150 )
 DEFAULT_LABEL_COLOR = ( 150, 150, 150 )
@@ -184,18 +198,26 @@ class CoordinateSystem:
 
 		assert self.bounds
 
-	def __draw_elements( self, image, draw, hide_x_axis = False, hide_y_axis = False ):
+	def __draw_elements( self, image, draw, draw_handler = None, hide_x_axis = False, hide_y_axis = False ):
 		for element in self.elements:
-			element.draw( image = image, draw = draw, bounds = self.bounds )
+			draw_handler.update_pil_image_draw( image, draw )
+			element.draw( image = image, draw = draw, draw_handler = draw_handler )
 
 		if not hide_x_axis and self.x_axis:
-			self.x_axis.draw( image = image, draw = draw, bounds = self.bounds )
+			self.x_axis.draw( image = image, draw = draw, draw_handler = draw_handler )
 
 		if not hide_y_axis and self.y_axis:
-			self.y_axis.draw( image = image, draw = draw, bounds = self.bounds )
+			self.y_axis.draw( image = image, draw = draw, draw_handler = draw_handler )
 
-	def draw( self, width, height, axis_units_equal_length = True, hide_x_axis = False, hide_y_axis = False ):
+	def draw( self, width, height, axis_units_equal_length = True, hide_x_axis = False, hide_y_axis = False,
+			antialiasing = None ):
 		""" Returns a PIL image """
+
+		antialiasing_coef = 1
+		if antialiasing:
+			antialiasing_coef = 2
+			width = int( width * antialiasing_coef )
+			height = int( height * antialiasing_coef )
 
 		self.bounds.image_width = width
 		self.bounds.image_height = height
@@ -206,10 +228,15 @@ class CoordinateSystem:
 		image = mod_image.new( 'RGBA', ( width, height ), ( 255, 255, 255, 255 ) )
 		draw = mod_imagedraw.Draw( image )
 
+		draw_handler = PILHandler( antialiasing_coef, self.bounds )
+
 		if self.resize_bounds:
 			self.bounds.update_to_image_size()
 
-		self.__draw_elements( image = image, draw = draw, hide_x_axis = hide_x_axis, hide_y_axis = hide_y_axis )
+		self.__draw_elements( image = image, draw = draw, draw_handler = draw_handler, hide_x_axis = hide_x_axis, hide_y_axis = hide_y_axis )
+
+		if antialiasing:
+			image = image.resize( ( int( width / antialiasing_coef ), int( height / antialiasing_coef ) ), mod_image.ANTIALIAS )
 
 		return image
 
@@ -228,7 +255,7 @@ class CoordinateSystemElement:
 		""" Will be called after the element is added to the coordinate system """
 		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
 	
-	def process_image( self, image, draw, bounds ):
+	def process_image( self, image, draw, bounds, draw_handler ):
 		""" Will be called after the element is added to the coordinate system """
 		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
 
@@ -241,15 +268,131 @@ class CoordinateSystemElement:
 
 		return ( color[ 0 ], color[ 1 ], color[ 2 ], self.transparency_mask )
 
-	def draw( self, image, draw, bounds ):
+	def draw( self, image, draw, draw_handler ):
 		if self.transparency_mask == 255:
 			tmp_image, tmp_draw = image, draw
 		else:
-			tmp_image = mod_image.new( 'RGBA', ( bounds.image_width, bounds.image_height ) )
+			tmp_image = mod_image.new( 'RGBA', ( draw_handler.bounds.image_width, draw_handler.bounds.image_height ) )
 			tmp_draw = mod_imagedraw.Draw( tmp_image )
 
-		self.process_image( tmp_image, tmp_draw, bounds )
+		draw_handler.update_pil_image_draw( tmp_image, tmp_draw )
+
+		self.process_image( draw_handler )
 
 		if tmp_image != image or tmp_draw != draw:
 			image.paste( tmp_image, mask = tmp_image )
 
+class PILHandler:
+	""" Elements are not expected to draw directly to PIL draw, but through methods in this class """
+
+	pil_image = None
+	pil_draw = None
+
+	antialiasing_coef = None
+
+	bounds = None
+
+	def __init__( self, antialiasing_coef, bounds ):
+		assert antialiasing_coef
+		assert bounds
+
+		self.antialiasing_coef = antialiasing_coef
+		self.bounds = bounds
+
+	def update_pil_image_draw( self, image, draw ):
+		self.pil_image = image
+		self.pil_draw = draw
+	
+	def draw_point( self, x, y, color, style = '+', label = None, label_position = None ):
+		image_x, image_y = mod_utils.cartesius_to_image_coord( x, y, self.bounds )
+
+		if label_position:
+			assert len( label_position ) == 2
+
+		if style == '.' or style == None:
+			self.pil_draw.point( ( image_x, image_y ), color )
+		elif style == 'x':
+			delta = 2 * self.antialiasing_coef
+			self.pil_draw.line( ( image_x - delta, image_y - delta, image_x + delta, image_y + delta ), color )
+			self.pil_draw.line( ( image_x - delta, image_y + delta, image_x + delta, image_y - delta ), color )
+		elif style == '+':
+			delta = 2 * self.antialiasing_coef
+			self.pil_draw.line( ( image_x - delta, image_y, image_x + delta, image_y ), color )
+			self.pil_draw.line( ( image_x, image_y + delta, image_x, image_y - delta ), color )
+		elif style == ' ':
+			# No point
+			pass
+		elif style == 'o':
+			delta = 2 * self.antialiasing_coef
+			import pdb;pdb.set_trace()
+			print delta
+			self.pil_draw.ellipse(
+					( image_x - delta, image_y - delta, image_x + delta, image_y + delta ),
+					fill = None,
+					outline = color )
+		else:
+			mod_logging.error( 'Invalid style: {0}, valid: ".", "x", "+" and "o"'.format( style ) )
+			self.pil_draw.point( ( image_x, image_y ), color )
+
+		if label:
+			self.draw_text( x, y, label, color, label_position = label_position )
+
+	def draw_line( self, x1, y1, x2, y2, color ):
+		image_x1, image_y1 = mod_utils.cartesius_to_image_coord( x1, y1, self.bounds )
+		image_x2, image_y2 = mod_utils.cartesius_to_image_coord( x2, y2, self.bounds )
+
+		self.pil_draw.line( ( image_x1, image_y1, image_x2, image_y2 ), color )
+	
+	def draw_polygon( self, points, fill_color ):
+		# TODO: antialiasing_coef
+		image_points = []
+		for x, y in points:
+			image_coordinates = mod_utils.cartesius_to_image_coord( x, y, self.bounds )
+			image_points.append( image_coordinates )
+		self.pil_draw.polygon( 
+			image_points,
+			fill = fill_color )
+
+	def draw_text( self, x, y, text, color, label_position = None ):
+		label_position = label_position if label_position else RIGHT_DOWN
+
+		image_x, image_y = mod_utils.cartesius_to_image_coord( x, y, self.bounds )
+
+		font = self.get_font()
+
+		label_width, label_height = font.getsize( text )
+
+		if label_position[ 0 ] == -1:
+			image_x = image_x - label_width - 4. * self.antialiasing_coef
+		elif label_position[ 0 ] == 0:
+			image_x = image_x - label_width / 2. 
+		elif label_position[ 0 ] == 1:
+			image_x += 4 * self.antialiasing_coef
+
+		if label_position[ 1 ] == -1:
+			image_y += 2 * self.antialiasing_coef
+		elif label_position[ 1 ] == 0:
+			image_y = image_y - label_height / 2.
+		elif label_position[ 1 ] == 1:
+			image_y = image_y - label_height - 2 * self.antialiasing_coef
+
+		self.pil_draw.text( ( image_x, image_y ), text, color, font )
+	
+	def get_font( self ):
+		# TODO Cache!
+		return mod_imagefont.truetype( DEFAULT_FONT_LOCATION, int( DEFAULT_FONT_SIZE * self.antialiasing_coef ) )
+
+	def draw_circle( self, x, y, radius, line_color, fill_color ):
+		x1, y1 = mod_utils.cartesius_to_image_coord(
+				x = x - radius / 2.,
+				y = y + radius / 2.,
+				bounds = self.bounds )
+		x2, y2 = mod_utils.cartesius_to_image_coord(
+				x = x + radius / 2.,
+				y = y - radius / 2.,
+				bounds = self.bounds )
+
+		self.pil_draw.ellipse(
+				( x1, y1, x2, y2 ),
+				fill = fill_color,
+				outline = line_color )

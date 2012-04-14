@@ -18,17 +18,52 @@ logging.basicConfig( level = logging.DEBUG, format = '%(asctime)s %(name)-12s %(
 
 examples = []
 
+def test_circles():
+	"""50 random circles"""
+	coordinate_system = cartesius.CoordinateSystem()
+
+	for i in range( 50 ):
+		coordinate_system.add(
+			elements.Circle(
+				x = random.randint( -20, 20 ),
+				y = random.randint( 0, 20 ),
+				radius = random.randint( 1, 5 ),
+				transparency_mask = random.randint( 0, 255 ),
+				fill_color = ( random.randint( 0, 255 ), random.randint( 0, 255 ), random.randint( 0, 255 ) ),
+				color = ( random.randint( 0, 255 ), random.randint( 0, 255 ), random.randint( 0, 255 ) ) ) )
+
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
+
+examples.append( test_circles )
+
 def test_lines():
-	"""Lines of different colors"""
+	"""Lines and points of different colors. With and without antialiasing"""
 	coordinate_system = cartesius.CoordinateSystem()
 
 	coordinate_system.add( elements.Line( ( 0, 0 ), ( -.7, -.7 ) ) )
 	coordinate_system.add( elements.Line( ( .5, -.5 ), ( -.5, .5 ), color = ( 0, 255, 0 ) ) )
-	coordinate_system.add( elements.Line( ( 0, 0 ), ( 10, 1 ), color = ( 0, 0, 255 ) ) )
+	coordinate_system.add( elements.Line( ( 0, 0 ), ( 7, 3 ), color = ( 0, 0, 255 ) ) )
 
-	return coordinate_system.draw( 500, 250 )
+	coordinate_system.add( elements.Point( ( 2, 2 ), style = 'o' ) )
+
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_lines )
+
+def test_points():
+	"""Test points of different styles with/without label and different label positions"""
+	coordinate_system = cartesius.CoordinateSystem()
+
+	coordinate_system.add( elements.Point( ( 1, 1 ) ) )
+	coordinate_system.add( elements.Point( ( 2, 2 ), style = '.' ) )
+	coordinate_system.add( elements.Point( ( 3, 3 ), style = '+' ) )
+	coordinate_system.add( elements.Point( ( 4, 4 ), style = 'x' ) )
+	coordinate_system.add( elements.Point( ( 5, 5 ), style = 'o' ) )
+	coordinate_system.add( elements.Point( ( 6, 6 ), style = ' ' ) )
+
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
+
+examples.append( test_points )
 
 def test_function():
 	""" Function math.sin from -4 to 5"""
@@ -37,7 +72,7 @@ def test_function():
 	f = lambda x : math.sin( x ) * 2
 	coordinate_system.add( elements.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
-	return coordinate_system.draw( 500, 250 )
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_function )
 
@@ -48,7 +83,7 @@ def test_function_with_custom_bounds():
 	f = lambda x : math.sin( x ) * 2
 	coordinate_system.add( elements.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
-	return coordinate_system.draw( 500, 250 )
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_function_with_custom_bounds )
 
@@ -62,7 +97,7 @@ def test_filled_function():
 	g = lambda x : math.sin( x ) * 2
 	coordinate_system.add( elements.Function( g, start = 1, end = 4, step = 0.02, fill_color = ( 200, 255, 200 ) ) )
 
-	return coordinate_system.draw( 500, 250 )
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_filled_function )
 
@@ -79,7 +114,7 @@ def test_filled_function():
 	g = lambda x : math.sin( x ) * 2
 	coordinate_system.add( elements.Function( g, start = 1, end = 4, step = 0.02, fill_color = ( 200, 255, 200 ) ) )
 
-	return coordinate_system.draw( 500, 250 )
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_filled_function )
 
@@ -105,7 +140,7 @@ def test_filled_transparent_graphs():
 					fill_color = ( 200, 255, 200 ),
 					transparency_mask = 100 ) )
 
-	return coordinate_system.draw( 500, 250 )
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_filled_transparent_graphs )
 
@@ -133,7 +168,7 @@ def test_filled_transparent_graphs_2():
 
 	coordinate_system.add( elements.Grid( 1, 1, transparency_mask = 140 ) )
 
-	return coordinate_system.draw( 500, 250 )
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_filled_transparent_graphs_2 )
 
@@ -155,27 +190,9 @@ def test_key_value_graphs():
 					color = ( 255, 0, 0 ),
 					transparency_mask = 150 ) )
 
-	return coordinate_system.draw( 500, 250 )
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_key_value_graphs )
-
-def test_circles():
-	"""50 random circles"""
-	coordinate_system = cartesius.CoordinateSystem()
-
-	for i in range( 50 ):
-		coordinate_system.add(
-			elements.Circle(
-				x = random.randint( -20, 20 ),
-				y = random.randint( 0, 20 ),
-				radius = random.randint( 1, 5 ),
-				transparency_mask = random.randint( 0, 255 ),
-				fill_color = ( random.randint( 0, 255 ), random.randint( 0, 255 ), random.randint( 0, 255 ) ),
-				color = ( random.randint( 0, 255 ), random.randint( 0, 255 ), random.randint( 0, 255 ) ) ) )
-
-	return coordinate_system.draw( 500, 250 )
-
-examples.append( test_circles )
 
 def test_circles_2():
 	""" Another example with circles """
@@ -186,7 +203,7 @@ def test_circles_2():
 		coordinate_system.add( elements.Circle( x, y = math.sin( x ), radius = math.sqrt( x ),
 				transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
 
-	return coordinate_system.draw( 500, 250 )
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_circles_2 )
 
@@ -201,7 +218,7 @@ def test_circles_3():
 		coordinate_system.add( elements.Circle( x, y = math.sin( x ), radius = math.sqrt( x ),
 				transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
 
-	return coordinate_system.draw( 500, 250 )
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_circles_3 )
 
@@ -216,7 +233,7 @@ def test_circles_4():
 		coordinate_system.add( elements.Circle( x, y = math.sin( x ), radius = math.sqrt( x ),
 				transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
 
-	return coordinate_system.draw( 500, 250 )
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_circles_4 )
 
@@ -231,7 +248,7 @@ def test_circles_5():
 		coordinate_system.add( elements.Circle( x, y = math.sin( x ), radius = math.sqrt( x ),
 				transparency_mask = 50, fill_color = ( i * 10, 2 * 10, i * 10 ), color = ( 0, 0, 0 ) ) )
 
-	return coordinate_system.draw( 500, 250 )
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_circles_5 )
 
@@ -245,7 +262,7 @@ def test_axis_with_custom_labels():
 	f = lambda x : math.sin( x ) * 2
 	coordinate_system.add( elements.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
-	return coordinate_system.draw( 500, 250 )
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_axis_with_custom_labels )
 
@@ -260,7 +277,7 @@ def test_axis_with_custom_labels_2():
 	coordinate_system.add( elements.Axis( vertical = True, labels = { 1000: 'one km', 500: 'half km' },
 			points = 100 ) )
 	
-	return coordinate_system.draw( 500, 250 )
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_axis_with_custom_labels_2 )
 
@@ -274,7 +291,7 @@ def test_axis_custom_colors():
 	f = lambda x : x * math.sin( x * x )
 	coordinate_system.add( elements.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
-	return coordinate_system.draw( 500, 250 )
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_axis_custom_colors )
 
@@ -288,7 +305,7 @@ def test_with_two_horizontal_grids():
 	f = lambda x : math.sin( x ) * 2
 	coordinate_system.add( elements.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
-	return coordinate_system.draw( 500, 250 )
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_with_two_horizontal_grids )
 
@@ -341,7 +358,7 @@ def test_hide_axis():
 			step = 0.02,
 			color = ( 0, 0, 255 ) ) )
 
-	return cs_1.draw( 150, 150 ), cs_2.draw( 150, 150 )
+	return cs_1.draw( 150, 150 ), cs_2.draw( 150, 150 ), cs_1.draw( 150, 150, antialiasing = True ), cs_2.draw( 150, 150, antialiasing = True )
 
 examples.append( test_hide_axis )
 
@@ -357,7 +374,7 @@ def test_hide_axis_positive_or_negative_parts():
 	cs_2.add( elements.Axis( horizontal = True, hide_negative = True ) )
 	cs_2.add( elements.Axis( vertical = True, hide_negative = True ) )
 
-	return cs_1.draw( 150, 150 ), cs_2.draw( 150, 150 )
+	return cs_1.draw( 150, 150 ), cs_2.draw( 150, 150 ), cs_1.draw( 150, 150, antialiasing = True ), cs_2.draw( 150, 150, antialiasing = True )
 
 examples.append( test_hide_axis_positive_or_negative_parts )
 
@@ -390,7 +407,7 @@ def test_detached_axes():
 	coordinate_system.add( elements.Axis( vertical = True, points = 2, labels = 2,
 			detached_center = detached_axes_center, hide_positive = True ) )
 
-	return coordinate_system.draw( 500, 250 )
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_detached_axes )
 
@@ -443,7 +460,11 @@ span.comment {color:#0000ff}
 <p>
 Cartesius is a small library for drawing 2d coordinate system images.
 More on <a href='http://github.com/tkrajina/cartesius'>http://github.com/tkrajina/cartesius</a>
-</p>"""
+</p>
+<p>
+Note, all examples come in two versions: normal and antialiased. Antialiased can be created ba adding <tt>antialiasing = True</tt> in <tt>CoordinateSystem.draw()</tt> but are more CPU intensive to create.
+</p>
+"""
 
 	for i, function in enumerate( examples ):
 		description = function.__doc__.strip()
