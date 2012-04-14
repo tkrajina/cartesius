@@ -197,16 +197,16 @@ class CoordinateSystem:
 
 		assert self.bounds
 
-	def __draw_elements( self, image, draw, pil_handler = None, hide_x_axis = False, hide_y_axis = False ):
+	def __draw_elements( self, image, draw, draw_handler = None, hide_x_axis = False, hide_y_axis = False ):
 		for element in self.elements:
-			pil_handler.update_pil_image_draw( image, draw )
-			element.draw( image = image, draw = draw, pil_handler = pil_handler )
+			draw_handler.update_pil_image_draw( image, draw )
+			element.draw( image = image, draw = draw, draw_handler = draw_handler )
 
 		if not hide_x_axis and self.x_axis:
-			self.x_axis.draw( image = image, draw = draw, pil_handler = pil_handler )
+			self.x_axis.draw( image = image, draw = draw, draw_handler = draw_handler )
 
 		if not hide_y_axis and self.y_axis:
-			self.y_axis.draw( image = image, draw = draw, pil_handler = pil_handler )
+			self.y_axis.draw( image = image, draw = draw, draw_handler = draw_handler )
 
 	def draw( self, width, height, axis_units_equal_length = True, hide_x_axis = False, hide_y_axis = False,
 			antialiasing = None ):
@@ -227,12 +227,12 @@ class CoordinateSystem:
 		image = mod_image.new( 'RGBA', ( width, height ), ( 255, 255, 255, 255 ) )
 		draw = mod_imagedraw.Draw( image )
 
-		pil_handler = PILHandler( antialiasing_coef, self.bounds )
+		draw_handler = PILHandler( antialiasing_coef, self.bounds )
 
 		if self.resize_bounds:
 			self.bounds.update_to_image_size()
 
-		self.__draw_elements( image = image, draw = draw, pil_handler = pil_handler, hide_x_axis = hide_x_axis, hide_y_axis = hide_y_axis )
+		self.__draw_elements( image = image, draw = draw, draw_handler = draw_handler, hide_x_axis = hide_x_axis, hide_y_axis = hide_y_axis )
 
 		if antialiasing:
 			image = image.resize( ( int( width / antialiasing_coef ), int( height / antialiasing_coef ) ), mod_image.ANTIALIAS )
@@ -254,7 +254,7 @@ class CoordinateSystemElement:
 		""" Will be called after the element is added to the coordinate system """
 		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
 	
-	def process_image( self, image, draw, bounds, pil_handler ):
+	def process_image( self, image, draw, bounds, draw_handler ):
 		""" Will be called after the element is added to the coordinate system """
 		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
 
@@ -267,16 +267,16 @@ class CoordinateSystemElement:
 
 		return ( color[ 0 ], color[ 1 ], color[ 2 ], self.transparency_mask )
 
-	def draw( self, image, draw, pil_handler ):
+	def draw( self, image, draw, draw_handler ):
 		if self.transparency_mask == 255:
 			tmp_image, tmp_draw = image, draw
 		else:
-			tmp_image = mod_image.new( 'RGBA', ( pil_handler.bounds.image_width, pil_handler.bounds.image_height ) )
+			tmp_image = mod_image.new( 'RGBA', ( draw_handler.bounds.image_width, draw_handler.bounds.image_height ) )
 			tmp_draw = mod_imagedraw.Draw( tmp_image )
 
-		pil_handler.update_pil_image_draw( tmp_image, tmp_draw )
+		draw_handler.update_pil_image_draw( tmp_image, tmp_draw )
 
-		self.process_image( pil_handler )
+		self.process_image( draw_handler )
 
 		if tmp_image != image or tmp_draw != draw:
 			image.paste( tmp_image, mask = tmp_image )

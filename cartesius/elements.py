@@ -110,59 +110,59 @@ class Axis( mod_main.CoordinateSystemElement ):
 
 		return start, end
 
-	def draw_dots( self, pil_handler ):
+	def draw_dots( self, draw_handler ):
 		if not self.points:
 			return
 
 		if self.horizontal:
 			dots_from, dots_to = self.get_start_end(
 					self.points,
-					pil_handler.bounds.left - self.center[ 0 ],
-					pil_handler.bounds.right - self.center[ 0 ] )
+					draw_handler.bounds.left - self.center[ 0 ],
+					draw_handler.bounds.right - self.center[ 0 ] )
 		else:
 			dots_from, dots_to = self.get_start_end(
 					self.points,
-					pil_handler.bounds.bottom - self.center[ 1 ],
-					pil_handler.bounds.top - self.center[ 1 ] )
+					draw_handler.bounds.bottom - self.center[ 1 ],
+					draw_handler.bounds.top - self.center[ 1 ] )
 
 		i = dots_from
 		while i <= dots_to:
-			self.draw_dot( i, pil_handler )
+			self.draw_dot( i, draw_handler )
 			i += self.points
 
-	def draw_dot( self, i, pil_handler ):
+	def draw_dot( self, i, draw_handler ):
 		if self.horizontal:
 			x, y = self.center[ 0 ] + i, self.center[ 1 ] + 0
 		else:
 			x, y = self.center[ 0 ] + 0, self.center[ 1 ] + i
 
-		pil_handler.draw_dot( x, y )
+		draw_handler.draw_dot( x, y )
 
-	def draw_labels( self, pil_handler ):
+	def draw_labels( self, draw_handler ):
 		if not self.labels:
 			return
 
 		if isinstance( self.labels, dict ):
 			for i, label in self.labels.items():
-				self.draw_label( i, pil_handler, label = label )
+				self.draw_label( i, draw_handler, label = label )
 		else:
 			if self.horizontal:
 				labels_from, labels_to = self.get_start_end(
 						self.labels,
-						pil_handler.bounds.left - self.center[ 0 ],
-						pil_handler.bounds.right - self.center[ 0 ] )
+						draw_handler.bounds.left - self.center[ 0 ],
+						draw_handler.bounds.right - self.center[ 0 ] )
 			else:
 				labels_from, labels_to = self.get_start_end(
 						self.labels,
-						pil_handler.bounds.bottom - self.center[ 1 ],
-						pil_handler.bounds.top - self.center[ 1 ] )
+						draw_handler.bounds.bottom - self.center[ 1 ],
+						draw_handler.bounds.top - self.center[ 1 ] )
 
 			i = labels_from
 			while i <= labels_to:
-				self.draw_label( i, pil_handler )
+				self.draw_label( i, draw_handler )
 				i += self.labels
 
-	def draw_label( self, i, pil_handler, label = None ):
+	def draw_label( self, i, draw_handler, label = None ):
 		if i == 0:
 			return
 
@@ -179,7 +179,7 @@ class Axis( mod_main.CoordinateSystemElement ):
 		x, y = self.get_point( i )
 		x, y = x + self.center[ 0 ], y + self.center[ 1 ]
 
-		pil_handler.draw_text( x, y, label, mod_main.DEFAULT_LABEL_COLOR, label_position = self.label_position )
+		draw_handler.draw_text( x, y, label, mod_main.DEFAULT_LABEL_COLOR, label_position = self.label_position )
 
 	def get_point( self, n ):
 		if self.horizontal:
@@ -187,10 +187,10 @@ class Axis( mod_main.CoordinateSystemElement ):
 		else:
 			return 0, n
 
-	def process_image( self, pil_handler ):
+	def process_image( self, draw_handler ):
 		if self.horizontal:
-			start = pil_handler.bounds.left
-			end = pil_handler.bounds.right
+			start = draw_handler.bounds.left
+			end = draw_handler.bounds.right
 
 			if self.hide_negative:
 				start = max( start, self.center[ 0 ] )
@@ -200,8 +200,8 @@ class Axis( mod_main.CoordinateSystemElement ):
 			axe_from_point = start, self.center[ 1 ]
 			axe_to_point = end, self.center[ 1 ]
 		else:
-			start = pil_handler.bounds.bottom
-			end = pil_handler.bounds.top
+			start = draw_handler.bounds.bottom
+			end = draw_handler.bounds.top
 
 			if self.hide_negative:
 				start = max( start, self.center[ 1 ] )
@@ -211,10 +211,10 @@ class Axis( mod_main.CoordinateSystemElement ):
 			axe_from_point = self.center[ 0 ], start
 			axe_to_point = self.center[ 0 ], end
 
-		self.draw_dots( pil_handler )
-		self.draw_labels( pil_handler )
+		self.draw_dots( draw_handler )
+		self.draw_labels( draw_handler )
 
-		pil_handler.draw_line( axe_from_point[ 0 ], axe_from_point[ 1 ], axe_to_point[ 0 ], axe_to_point[ 1 ], self.color )
+		draw_handler.draw_line( axe_from_point[ 0 ], axe_from_point[ 1 ], axe_to_point[ 0 ], axe_to_point[ 1 ], self.color )
 
 class Dot( mod_main.CoordinateSystemElement ):
 
@@ -250,25 +250,25 @@ class Grid( mod_main.CoordinateSystemElement ):
 		# not important
 		pass
 
-	def process_image( self, pil_handler ):
+	def process_image( self, draw_handler ):
 		if self.vertical:
-			axe_from_point = 0, pil_handler.bounds.bottom
-			axe_to_point = 0, pil_handler.bounds.top
-			i = mod_math.floor( pil_handler.bounds.left / self.vertical )
-			while i < mod_math.ceil( pil_handler.bounds.right ):
+			axe_from_point = 0, draw_handler.bounds.bottom
+			axe_to_point = 0, draw_handler.bounds.top
+			i = mod_math.floor( draw_handler.bounds.left / self.vertical )
+			while i < mod_math.ceil( draw_handler.bounds.right ):
 				x, y = i, 0
-				if i != 0 and i != pil_handler.bounds.left and i != pil_handler.bounds.right:
-					pil_handler.draw_line( x, axe_from_point[ 1 ], x, axe_to_point[ 1 ], self.get_color_with_transparency( self.color ) )
+				if i != 0 and i != draw_handler.bounds.left and i != draw_handler.bounds.right:
+					draw_handler.draw_line( x, axe_from_point[ 1 ], x, axe_to_point[ 1 ], self.get_color_with_transparency( self.color ) )
 				i += self.vertical
 
 		if self.horizontal:
-			axe_from_point = pil_handler.bounds.left, 0
-			axe_to_point = pil_handler.bounds.right, 0
-			i = mod_math.floor( pil_handler.bounds.bottom / self.horizontal )
-			while i < mod_math.ceil( pil_handler.bounds.top ):
+			axe_from_point = draw_handler.bounds.left, 0
+			axe_to_point = draw_handler.bounds.right, 0
+			i = mod_math.floor( draw_handler.bounds.bottom / self.horizontal )
+			while i < mod_math.ceil( draw_handler.bounds.top ):
 				x, y = 0, i
-				if i != 0 and i != pil_handler.bounds.bottom and i != pil_handler.bounds.top:
-					pil_handler.draw_line( axe_from_point[ 0 ], y, axe_to_point[ 0 ], y, self.get_color_with_transparency( self.color ) )
+				if i != 0 and i != draw_handler.bounds.bottom and i != draw_handler.bounds.top:
+					draw_handler.draw_line( axe_from_point[ 0 ], y, axe_to_point[ 0 ], y, self.get_color_with_transparency( self.color ) )
 				i += self.horizontal
 
 class Line( mod_main.CoordinateSystemElement ):
@@ -295,8 +295,8 @@ class Line( mod_main.CoordinateSystemElement ):
 		self.bounds.update( point = self.start )
 		self.bounds.update( point = self.end )
 
-	def process_image( self, pil_handler ):
-		pil_handler.draw_line( self.start[ 0 ], self.start[ 1 ], self.end[ 0 ], self.end[ 1 ], self.get_color_with_transparency( self.color ) )
+	def process_image( self, draw_handler ):
+		draw_handler.draw_line( self.start[ 0 ], self.start[ 1 ], self.end[ 0 ], self.end[ 1 ], self.get_color_with_transparency( self.color ) )
 
 class Function( mod_main.CoordinateSystemElement ):
 
@@ -341,7 +341,7 @@ class Function( mod_main.CoordinateSystemElement ):
 		for point in self.points:
 			self.bounds.update( point = point )
 	
-	def process_image( self, pil_handler ):
+	def process_image( self, draw_handler ):
 
 		for i, point in enumerate( self.points ):
 			if i > 0:
@@ -351,11 +351,11 @@ class Function( mod_main.CoordinateSystemElement ):
 				x2, y2 = point[ 0 ], point[ 1 ]
 
 				if self.fill_color:
-					pil_handler.draw_polygon( 
+					draw_handler.draw_polygon( 
 						[ ( x1, 0 ), ( x1, y1 ), ( x2, y2 ), ( x2, 0 ) ], 
 						fill_color = self.get_color_with_transparency( self.fill_color )
 					)
-				pil_handler.draw_line( x1, y1, x2, y2, self.get_color_with_transparency( self.color ) )
+				draw_handler.draw_line( x1, y1, x2, y2, self.get_color_with_transparency( self.color ) )
 
 class Circle( mod_main.CoordinateSystemElement ):
 
@@ -387,8 +387,8 @@ class Circle( mod_main.CoordinateSystemElement ):
 		self.bounds.update( point = ( self.x, self.y + self.radius ) )
 		self.bounds.update( point = ( self.x, self.y - self.radius ) )
 
-	def process_image( self, pil_handler ):
-		pil_handler.draw_circle(
+	def process_image( self, draw_handler ):
+		draw_handler.draw_circle(
 				self.x,
 				self.y,
 				self.radius,
@@ -432,7 +432,7 @@ class KeyValueGraph( mod_main.CoordinateSystemElement ):
 		for key, value in self.items:
 			self.bounds.update( point = ( key, value ) )
 
-	def process_image( self, pil_handler ):
+	def process_image( self, draw_handler ):
 		assert self.items
 
 		for i, point in enumerate( self.items ):
@@ -441,8 +441,8 @@ class KeyValueGraph( mod_main.CoordinateSystemElement ):
 				x1, y1 = previous[ 0 ], previous[ 1 ]
 				x2, y2 = point[ 0 ], point[ 1 ]
 				if self.fill_color:
-					pil_handler.draw_polygon(
+					draw_handler.draw_polygon(
 						[ ( x1, 0 ), ( x1, y1 ), ( x2, y2 ), ( x2, 0 ) ], 
 						fill_color = self.get_color_with_transparency( self.fill_color )
 					)
-				pil_handler.draw_line( x1, y1, x2, y2, self.get_color_with_transparency( self.color ) )
+				draw_handler.draw_line( x1, y1, x2, y2, self.get_color_with_transparency( self.color ) )
