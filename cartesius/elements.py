@@ -123,60 +123,59 @@ class Axis( mod_main.CoordinateSystemElement ):
 
 		return start, end
 
-	def draw_dots( self, bounds, draw, pil_handler ):
+	def draw_dots( self, pil_handler ):
 		if not self.points:
 			return
 
 		if self.horizontal:
 			dots_from, dots_to = self.get_start_end(
 					self.points,
-					bounds.left - self.center[ 0 ],
-					bounds.right - self.center[ 0 ] )
+					pil_handler.bounds.left - self.center[ 0 ],
+					pil_handler.bounds.right - self.center[ 0 ] )
 		else:
 			dots_from, dots_to = self.get_start_end(
 					self.points,
-					bounds.bottom - self.center[ 1 ],
-					bounds.top - self.center[ 1 ] )
+					pil_handler.bounds.bottom - self.center[ 1 ],
+					pil_handler.bounds.top - self.center[ 1 ] )
 
 		i = dots_from
 		while i <= dots_to:
-			self.draw_dot( i, bounds, draw, pil_handler )
+			self.draw_dot( i, pil_handler )
 			i += self.points
 
-	def draw_dot( self, i, bounds, draw, pil_handler ):
+	def draw_dot( self, i, pil_handler ):
 		if self.horizontal:
-			x, y = mod_utils.cartesius_to_image_coord( self.center[ 0 ] + i, self.center[ 1 ] + 0, bounds )
+			x, y = self.center[ 0 ] + i, self.center[ 1 ] + 0
 		else:
-			x, y = mod_utils.cartesius_to_image_coord( self.center[ 0 ] + 0, self.center[ 1 ] + i, bounds )
+			x, y = self.center[ 0 ] + 0, self.center[ 1 ] + i
 
-		draw.line( ( x - 2 * pil_handler.antialiasing_coef, y, x + 2 * pil_handler.antialiasing_coef, y ), mod_main.DEFAULT_AXES_COLOR )
-		draw.line( ( x, y + 2 * pil_handler.antialiasing_coef, x, y - 2 * pil_handler.antialiasing_coef ), mod_main.DEFAULT_AXES_COLOR )
+		pil_handler.draw_dot( x, y )
 
-	def draw_labels( self, bounds, draw, pil_handler ):
+	def draw_labels( self, pil_handler ):
 		if not self.labels:
 			return
 
 		if isinstance( self.labels, dict ):
 			for i, label in self.labels.items():
-				self.draw_label( i, bounds, draw, pil_handler, label = label )
+				self.draw_label( i, pil_handler, label = label )
 		else:
 			if self.horizontal:
 				labels_from, labels_to = self.get_start_end(
 						self.labels,
-						bounds.left - self.center[ 0 ],
-						bounds.right - self.center[ 0 ] )
+						pil_handler.bounds.left - self.center[ 0 ],
+						pil_handler.bounds.right - self.center[ 0 ] )
 			else:
 				labels_from, labels_to = self.get_start_end(
 						self.labels,
-						bounds.bottom - self.center[ 1 ],
-						bounds.top - self.center[ 1 ] )
+						pil_handler.bounds.bottom - self.center[ 1 ],
+						pil_handler.bounds.top - self.center[ 1 ] )
 
 			i = labels_from
 			while i <= labels_to:
-				self.draw_label( i, bounds, draw, pil_handler )
+				self.draw_label( i, pil_handler )
 				i += self.labels
 
-	def draw_label( self, i, bounds, draw, pil_handler, label = None ):
+	def draw_label( self, i, pil_handler, label = None ):
 		if i == 0:
 			return
 
@@ -195,7 +194,7 @@ class Axis( mod_main.CoordinateSystemElement ):
 
 		x, y = self.get_point( i )
 		x, y = x + self.center[ 0 ], y + self.center[ 1 ]
-		x, y = mod_utils.cartesius_to_image_coord( x, y, bounds )
+		x, y = mod_utils.cartesius_to_image_coord( x, y, pil_handler.bounds )
 
 		if self.label_position[ 0 ] == -1:
 			x = x - label_width - 4. * pil_handler.antialiasing_coef
@@ -211,7 +210,7 @@ class Axis( mod_main.CoordinateSystemElement ):
 		elif self.label_position[ 1 ] == 1:
 			y = y - label_height - 2 * pil_handler.antialiasing_coef
 
-		draw.text( ( x, y ), label, mod_main.DEFAULT_LABEL_COLOR, font = font )
+		pil_handler.pil_draw.text( ( x, y ), label, mod_main.DEFAULT_LABEL_COLOR, font = font )
 
 	def get_point( self, n ):
 		if self.horizontal:
@@ -219,34 +218,34 @@ class Axis( mod_main.CoordinateSystemElement ):
 		else:
 			return 0, n
 
-	def process_image( self, image, draw, bounds, pil_handler ):
+	def process_image( self, pil_handler ):
 		if self.horizontal:
-			start = bounds.left
-			end = bounds.right
+			start = pil_handler.bounds.left
+			end = pil_handler.bounds.right
 
 			if self.hide_negative:
 				start = max( start, self.center[ 0 ] )
 			if self.hide_positive:
 				end = min( end, self.center[ 0 ] )
 
-			axe_from_point = mod_utils.cartesius_to_image_coord( start, self.center[ 1 ], bounds )
-			axe_to_point = mod_utils.cartesius_to_image_coord( end, self.center[ 1 ], bounds )
+			axe_from_point = start, self.center[ 1 ]
+			axe_to_point = end, self.center[ 1 ]
 		else:
-			start = bounds.bottom
-			end = bounds.top
+			start = pil_handler.bounds.bottom
+			end = pil_handler.bounds.top
 
 			if self.hide_negative:
 				start = max( start, self.center[ 1 ] )
 			if self.hide_positive:
 				end = min( end, self.center[ 1 ] )
 
-			axe_from_point = mod_utils.cartesius_to_image_coord( self.center[ 0 ], start, bounds )
-			axe_to_point = mod_utils.cartesius_to_image_coord( self.center[ 0 ], end, bounds )
+			axe_from_point = self.center[ 0 ], start
+			axe_to_point = self.center[ 0 ], end
 
-		self.draw_dots( bounds, draw, pil_handler )
-		self.draw_labels( bounds, draw, pil_handler )
+		self.draw_dots( pil_handler )
+		self.draw_labels( pil_handler )
 
-		draw.line( ( axe_from_point[ 0 ], axe_from_point[ 1 ], axe_to_point[ 0 ], axe_to_point[ 1 ] ), self.color )
+		pil_handler.draw_line( axe_from_point[ 0 ], axe_from_point[ 1 ], axe_to_point[ 0 ], axe_to_point[ 1 ], self.color )
 
 class Dot( mod_main.CoordinateSystemElement ):
 
@@ -282,25 +281,25 @@ class Grid( mod_main.CoordinateSystemElement ):
 		# not important
 		pass
 
-	def process_image( self, image, draw, bounds, pil_handler ):
+	def process_image( self, pil_handler ):
 		if self.vertical:
-			axe_from_point = mod_utils.cartesius_to_image_coord( 0, bounds.bottom, bounds )
-			axe_to_point = mod_utils.cartesius_to_image_coord( 0, bounds.top, bounds )
-			i = mod_math.floor( bounds.left / self.vertical )
-			while i < mod_math.ceil( bounds.right ):
-				x, y = mod_utils.cartesius_to_image_coord( i, 0, bounds )
-				if i != 0 and i != bounds.left and i != bounds.right:
-					draw.line( ( x, axe_from_point[ 1 ], x, axe_to_point[ 1 ] ), self.get_color_with_transparency( self.color ) )
+			axe_from_point = 0, pil_handler.bounds.bottom
+			axe_to_point = 0, pil_handler.bounds.top
+			i = mod_math.floor( pil_handler.bounds.left / self.vertical )
+			while i < mod_math.ceil( pil_handler.bounds.right ):
+				x, y = i, 0
+				if i != 0 and i != pil_handler.bounds.left and i != pil_handler.bounds.right:
+					pil_handler.draw_line( x, axe_from_point[ 1 ], x, axe_to_point[ 1 ], self.get_color_with_transparency( self.color ) )
 				i += self.vertical
 
 		if self.horizontal:
-			axe_from_point = mod_utils.cartesius_to_image_coord( bounds.left, 0, bounds )
-			axe_to_point = mod_utils.cartesius_to_image_coord( bounds.right, 0, bounds )
-			i = mod_math.floor( bounds.bottom / self.horizontal )
-			while i < mod_math.ceil( bounds.top ):
-				x, y = mod_utils.cartesius_to_image_coord( 0, i, bounds )
-				if i != 0 and i != bounds.bottom and i != bounds.top:
-					draw.line( ( axe_from_point[ 0 ], y, axe_to_point[ 0 ], y ), self.get_color_with_transparency( self.color ) )
+			axe_from_point = pil_handler.bounds.left, 0
+			axe_to_point = pil_handler.bounds.right, 0
+			i = mod_math.floor( pil_handler.bounds.bottom / self.horizontal )
+			while i < mod_math.ceil( pil_handler.bounds.top ):
+				x, y = 0, i
+				if i != 0 and i != pil_handler.bounds.bottom and i != pil_handler.bounds.top:
+					pil_handler.draw_line( axe_from_point[ 0 ], y, axe_to_point[ 0 ], y, self.get_color_with_transparency( self.color ) )
 				i += self.horizontal
 
 class Line( mod_main.CoordinateSystemElement ):
@@ -327,10 +326,8 @@ class Line( mod_main.CoordinateSystemElement ):
 		self.bounds.update( point = self.start )
 		self.bounds.update( point = self.end )
 
-	def process_image( self, image, draw, bounds, pil_handler ):
-		x1, y1 = mod_utils.cartesius_to_image_coord( x = self.start[ 0 ], y = self.start[ 1 ], bounds = bounds )
-		x2, y2 = mod_utils.cartesius_to_image_coord( x = self.end[ 0 ], y = self.end[ 1 ], bounds = bounds )
-		draw.line( ( x1, y1, x2, y2 ), self.get_color_with_transparency( self.color ) )
+	def process_image( self, pil_handler ):
+		pil_handler.draw_line( self.start[ 0 ], self.start[ 1 ], self.end[ 0 ], self.end[ 1 ], self.get_color_with_transparency( self.color ) )
 
 class Function( mod_main.CoordinateSystemElement ):
 
@@ -375,22 +372,21 @@ class Function( mod_main.CoordinateSystemElement ):
 		for point in self.points:
 			self.bounds.update( point = point )
 	
-	def process_image( self, image, draw, bounds, pil_handler ):
+	def process_image( self, pil_handler ):
 
-		zero_point = mod_utils.cartesius_to_image_coord( 0, 0, bounds )
 		for i, point in enumerate( self.points ):
 			if i > 0:
 				previous = self.points[ i - 1 ]
-				x1, y1 = mod_utils.cartesius_to_image_coord( previous[ 0 ], previous[ 1 ], bounds )
-				x2, y2 = mod_utils.cartesius_to_image_coord( point[ 0 ], point[ 1 ], bounds )
+
+				x1, y1 = previous[ 0 ], previous[ 1 ]
+				x2, y2 = point[ 0 ], point[ 1 ]
+
 				if self.fill_color:
-					draw.polygon(
-						[ ( x1, zero_point[ 1 ] ), ( x1, y1 ), ( x2, y2 ), ( x2, zero_point[ 1 ] ) ], 
-						fill = self.get_color_with_transparency( self.fill_color )
+					pil_handler.draw_polygon( 
+						[ ( x1, 0 ), ( x1, y1 ), ( x2, y2 ), ( x2, 0 ) ], 
+						fill_color = self.get_color_with_transparency( self.fill_color )
 					)
-					draw.line( ( x1, y1, x2, y2 ), self.get_color_with_transparency( self.color ) )
-				else:
-					draw.line( ( x1, y1, x2, y2 ), self.get_color_with_transparency( self.color ) )
+				pil_handler.draw_line( x1, y1, x2, y2, self.get_color_with_transparency( self.color ) )
 
 class Circle( mod_main.CoordinateSystemElement ):
 
@@ -422,17 +418,17 @@ class Circle( mod_main.CoordinateSystemElement ):
 		self.bounds.update( point = ( self.x, self.y + self.radius ) )
 		self.bounds.update( point = ( self.x, self.y - self.radius ) )
 
-	def process_image( self, image, draw, bounds, pil_handler ):
+	def process_image( self, pil_handler ):
 		x1, y1 = mod_utils.cartesius_to_image_coord(
 				x = self.x - self.radius / 2.,
 				y = self.y + self.radius / 2.,
-				bounds = bounds )
+				bounds = pil_handler.bounds )
 		x2, y2 = mod_utils.cartesius_to_image_coord(
 				x = self.x + self.radius / 2.,
 				y = self.y - self.radius / 2.,
-				bounds = bounds )
+				bounds = pil_handler.bounds )
 
-		draw.ellipse(
+		pil_handler.pil_draw.ellipse(
 				( x1, y1, x2, y2 ),
 				fill = self.get_color_with_transparency( self.fill_color ),
 				outline = self.get_color_with_transparency( self.color ) )
@@ -474,21 +470,17 @@ class KeyValueGraph( mod_main.CoordinateSystemElement ):
 		for key, value in self.items:
 			self.bounds.update( point = ( key, value ) )
 
-	def process_image( self, image, draw, bounds, pil_handler ):
+	def process_image( self, pil_handler ):
 		assert self.items
-
-		zero_point = mod_utils.cartesius_to_image_coord( 0, 0, bounds )
 
 		for i, point in enumerate( self.items ):
 			if i > 0:
 				previous = self.items[ i - 1 ]
-				x1, y1 = mod_utils.cartesius_to_image_coord( previous[ 0 ], previous[ 1 ], bounds )
-				x2, y2 = mod_utils.cartesius_to_image_coord( point[ 0 ], point[ 1 ], bounds )
+				x1, y1 = previous[ 0 ], previous[ 1 ]
+				x2, y2 = point[ 0 ], point[ 1 ]
 				if self.fill_color:
-					draw.polygon(
-						[ ( x1, zero_point[ 1 ] ), ( x1, y1 ), ( x2, y2 ), ( x2, zero_point[ 1 ] ) ], 
-						fill = self.get_color_with_transparency( self.fill_color )
+					pil_handler.draw_polygon(
+						[ ( x1, 0 ), ( x1, y1 ), ( x2, y2 ), ( x2, 0 ) ], 
+						fill_color = self.get_color_with_transparency( self.fill_color )
 					)
-					draw.line( ( x1, y1, x2, y2 ), self.get_color_with_transparency( self.color ) )
-				else:
-					draw.line( ( x1, y1, x2, y2 ), self.get_color_with_transparency( self.color ) )
+				pil_handler.draw_line( x1, y1, x2, y2, self.get_color_with_transparency( self.color ) )

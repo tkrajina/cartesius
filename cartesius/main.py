@@ -186,13 +186,14 @@ class CoordinateSystem:
 
 	def __draw_elements( self, image, draw, pil_handler = None, hide_x_axis = False, hide_y_axis = False ):
 		for element in self.elements:
-			element.draw( image = image, pil_handler = pil_handler, draw = draw, bounds = self.bounds )
+			pil_handler.update_pil_image_draw( image, draw )
+			element.draw( image = image, draw = draw, pil_handler = pil_handler )
 
 		if not hide_x_axis and self.x_axis:
-			self.x_axis.draw( image = image, pil_handler = pil_handler, draw = draw, bounds = self.bounds )
+			self.x_axis.draw( image = image, draw = draw, pil_handler = pil_handler )
 
 		if not hide_y_axis and self.y_axis:
-			self.y_axis.draw( image = image, pil_handler = pil_handler, draw = draw, bounds = self.bounds )
+			self.y_axis.draw( image = image, draw = draw, pil_handler = pil_handler )
 
 	def draw( self, width, height, axis_units_equal_length = True, hide_x_axis = False, hide_y_axis = False,
 			antialiasing = None ):
@@ -204,8 +205,6 @@ class CoordinateSystem:
 			width = int( width * antialiasing_coef )
 			height = int( height * antialiasing_coef )
 
-		pil_handler = PILHandler( antialiasing_coef )
-
 		self.bounds.image_width = width
 		self.bounds.image_height = height
 
@@ -214,6 +213,8 @@ class CoordinateSystem:
 
 		image = mod_image.new( 'RGBA', ( width, height ), ( 255, 255, 255, 255 ) )
 		draw = mod_imagedraw.Draw( image )
+
+		pil_handler = PILHandler( antialiasing_coef, self.bounds )
 
 		if self.resize_bounds:
 			self.bounds.update_to_image_size()
@@ -253,23 +254,60 @@ class CoordinateSystemElement:
 
 		return ( color[ 0 ], color[ 1 ], color[ 2 ], self.transparency_mask )
 
-	def draw( self, image, draw, bounds, pil_handler ):
+	def draw( self, image, draw, pil_handler ):
 		if self.transparency_mask == 255:
 			tmp_image, tmp_draw = image, draw
 		else:
-			tmp_image = mod_image.new( 'RGBA', ( bounds.image_width, bounds.image_height ) )
+			tmp_image = mod_image.new( 'RGBA', ( pil_handler.bounds.image_width, pil_handler.bounds.image_height ) )
 			tmp_draw = mod_imagedraw.Draw( tmp_image )
 
-		self.process_image( tmp_image, tmp_draw, bounds, pil_handler )
+		pil_handler.update_pil_image_draw( tmp_image, tmp_draw )
+
+		print self
+		self.process_image( pil_handler )
 
 		if tmp_image != image or tmp_draw != draw:
 			image.paste( tmp_image, mask = tmp_image )
 
 class PILHandler:
+	""" Elements are not expected to draw directly to PIL draw, but through methods in this class """
+
+	pil_image = None
+	pil_draw = None
 
 	antialiasing_coef = None
 
-	def __init__( self, antialiasing_coef ):
+	bounds = None
+
+	def __init__( self, antialiasing_coef, bounds ):
 		assert antialiasing_coef
+		assert bounds
 
 		self.antialiasing_coef = antialiasing_coef
+		self.bounds = bounds
+
+	def update_pil_image_draw( self, image, draw ):
+		self.pil_image = image
+		self.pil_draw = draw
+	
+	def draw_dot( self, x, y ):
+		image_x, image_y = mod_utils.cartesius_to_image_coord( x, y, self.bounds )
+
+		self.pil_draw.line( ( image_x - 2 * self.antialiasing_coef, image_y, image_x + 2 * self.antialiasing_coef, image_y ), DEFAULT_AXES_COLOR )
+		self.pil_draw.line( ( image_x, image_y + 2 * self.antialiasing_coef, image_x, image_y - 2 * self.antialiasing_coef ), DEFAULT_AXES_COLOR )
+
+	def draw_line( self, x1, y1, x2, y2, color ):
+		image_x1, image_y1 = mod_utils.cartesius_to_image_coord( x1, y1, self.bounds )
+		image_x2, image_y2 = mod_utils.cartesius_to_image_coord( x2, y2, self.bounds )
+
+		self.pil_draw.line( ( image_x1, image_y1, image_x2, image_y2 ), color )
+	
+	def draw_polygon( self, points, fill_color ):
+		# TODO: antialiasing_coef
+		image_points = []
+		for x, y in points:
+			image_coordinates = mod_utils.cartesius_to_image_coord( x, y, self.bounds )
+			image_points.append( image_coordinates )
+		self.pil_draw.polygon( 
+			image_points,
+			fill = fill_color )
