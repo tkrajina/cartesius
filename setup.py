@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import distutils.core as mod_distutilscore
+import setuptools as mod_setuptools
 
 import cartesius as mod_cartesius
 
-mod_distutilscore.setup(
+mod_setuptools.setup(
 	name = 'cartesius',
 	version = mod_cartesius.__version__,
 	description = 'Cartesius 2D coordinate system drawing library',
@@ -26,6 +26,7 @@ mod_distutilscore.setup(
 	author = 'Tomo Krajina',
 	author_email = 'tkrajina@gmail.com',
 	url = 'http://tkrajina.github.com/cartesius/',
-	packages = [ 'cartesius', ],
-	data_files = [ ( 'cartesius/fonts', [ 'cartesius/fonts/LiberationSansNarrow-Bold.ttf' ] ) ],
+	packages = [ 'cartesius', 'cartesius/fonts' ],
+	package_data = { '': [ '*.ttf' ] },
+	include_package_data = True,
 )
