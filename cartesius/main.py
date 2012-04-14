@@ -293,6 +293,8 @@ class PILHandler:
 
 	bounds = None
 
+	__font = None
+
 	def __init__( self, antialiasing_coef, bounds ):
 		assert antialiasing_coef
 		assert bounds
@@ -381,8 +383,10 @@ class PILHandler:
 		self.pil_draw.text( ( image_x, image_y ), text, color, font )
 	
 	def get_font( self ):
-		# TODO Cache!
-		return mod_imagefont.truetype( DEFAULT_FONT_LOCATION, int( DEFAULT_FONT_SIZE * self.antialiasing_coef ) )
+		if not self.__font:
+			self.__font = mod_imagefont.truetype( DEFAULT_FONT_LOCATION, int( DEFAULT_FONT_SIZE * self.antialiasing_coef ) )
+
+		return self.__font
 
 	def draw_circle( self, x, y, radius, line_color, fill_color ):
 		x1, y1 = mod_utils.cartesius_to_image_coord(
