@@ -1,23 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import os as mod_os
 import re as mod_re
 import math as mod_math
 
-import ImageFont as mod_imagefont
-
 import main as mod_main
 import utils as mod_utils
-
-# use a truetype font
-DEFAULT_FONT_NAME = 'Oxygen-Regular.ttf'
-
-# Remove main.py from package to get package location:
-package_location = mod_main.__file__[ : mod_main.__file__.rfind( '/' ) ]
-
-DEFAULT_FONT_LOCATION = package_location + mod_os.sep + 'fonts' + mod_os.sep + DEFAULT_FONT_NAME
-
-DEFAULT_FONT_SIZE = 10 
 
 class Axis( mod_main.CoordinateSystemElement ):
 	"""
@@ -189,28 +176,10 @@ class Axis( mod_main.CoordinateSystemElement ):
 			if self.labels_suffix:
 				label += self.labels_suffix
 
-		font = mod_imagefont.truetype( DEFAULT_FONT_LOCATION, int( DEFAULT_FONT_SIZE * pil_handler.antialiasing_coef ) )
-		label_width, label_height = font.getsize( label )
-
 		x, y = self.get_point( i )
 		x, y = x + self.center[ 0 ], y + self.center[ 1 ]
-		x, y = mod_utils.cartesius_to_image_coord( x, y, pil_handler.bounds )
 
-		if self.label_position[ 0 ] == -1:
-			x = x - label_width - 4. * pil_handler.antialiasing_coef
-		elif self.label_position[ 0 ] == 0:
-			x = x - label_width / 2. 
-		elif self.label_position[ 0 ] == 1:
-			x += 4 * pil_handler.antialiasing_coef
-
-		if self.label_position[ 1 ] == -1:
-			y += 2 * pil_handler.antialiasing_coef
-		elif self.label_position[ 1 ] == 0:
-			y = y - label_height / 2.
-		elif self.label_position[ 1 ] == 1:
-			y = y - label_height - 2 * pil_handler.antialiasing_coef
-
-		pil_handler.pil_draw.text( ( x, y ), label, mod_main.DEFAULT_LABEL_COLOR, font = font )
+		pil_handler.draw_text( x, y, label, mod_main.DEFAULT_LABEL_COLOR, label_position = self.label_position )
 
 	def get_point( self, n ):
 		if self.horizontal:

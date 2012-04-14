@@ -1,9 +1,22 @@
 # -*- coding: utf-8 -*-
 
+import os as mod_os
+
 import Image as mod_image
 import ImageDraw as mod_imagedraw
+import ImageFont as mod_imagefont
 
 import utils as mod_utils
+
+# use a truetype font
+DEFAULT_FONT_NAME = 'Oxygen-Regular.ttf'
+
+# Remove main.py from package to get package location:
+package_location = mod_utils.__file__[ : mod_utils.__file__.rfind( '/' ) ]
+
+DEFAULT_FONT_LOCATION = package_location + mod_os.sep + 'fonts' + mod_os.sep + DEFAULT_FONT_NAME
+
+DEFAULT_FONT_SIZE = 10 
 
 DEFAULT_AXES_COLOR = ( 150, 150, 150 )
 DEFAULT_LABEL_COLOR = ( 150, 150, 150 )
@@ -311,3 +324,32 @@ class PILHandler:
 		self.pil_draw.polygon( 
 			image_points,
 			fill = fill_color )
+
+	def draw_text( self, x, y, text, color, label_position = None ):
+		label_position = label_position if label_position else RIGHT_DOWN
+
+		image_x, image_y = mod_utils.cartesius_to_image_coord( x, y, self.bounds )
+
+		font = self.get_font()
+
+		label_width, label_height = font.getsize( text )
+
+		if label_position[ 0 ] == -1:
+			image_x = image_x - label_width - 4. * self.antialiasing_coef
+		elif label_position[ 0 ] == 0:
+			image_x = image_x - label_width / 2. 
+		elif label_position[ 0 ] == 1:
+			image_x += 4 * self.antialiasing_coef
+
+		if label_position[ 1 ] == -1:
+			image_y += 2 * self.antialiasing_coef
+		elif label_position[ 1 ] == 0:
+			image_y = image_y - label_height / 2.
+		elif label_position[ 1 ] == 1:
+			image_y = image_y - label_height - 2 * self.antialiasing_coef
+
+		self.pil_draw.text( ( image_x, image_y ), text, color, font )
+	
+	def get_font( self ):
+		# TODO Cache!
+		return mod_imagefont.truetype( DEFAULT_FONT_LOCATION, int( DEFAULT_FONT_SIZE * self.antialiasing_coef ) )
