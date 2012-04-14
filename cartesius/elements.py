@@ -123,7 +123,7 @@ class Axis( mod_main.CoordinateSystemElement ):
 
 		return start, end
 
-	def draw_dots( self, bounds, draw, antialiasing_coef ):
+	def draw_dots( self, bounds, draw, pil_handler ):
 		if not self.points:
 			return
 
@@ -140,25 +140,25 @@ class Axis( mod_main.CoordinateSystemElement ):
 
 		i = dots_from
 		while i <= dots_to:
-			self.draw_dot( i, bounds, draw, antialiasing_coef )
+			self.draw_dot( i, bounds, draw, pil_handler )
 			i += self.points
 
-	def draw_dot( self, i, bounds, draw, antialiasing_coef ):
+	def draw_dot( self, i, bounds, draw, pil_handler ):
 		if self.horizontal:
 			x, y = mod_utils.cartesius_to_image_coord( self.center[ 0 ] + i, self.center[ 1 ] + 0, bounds )
 		else:
 			x, y = mod_utils.cartesius_to_image_coord( self.center[ 0 ] + 0, self.center[ 1 ] + i, bounds )
 
-		draw.line( ( x - 2 * antialiasing_coef, y, x + 2 * antialiasing_coef, y ), mod_main.DEFAULT_AXES_COLOR )
-		draw.line( ( x, y + 2 * antialiasing_coef, x, y - 2 * antialiasing_coef ), mod_main.DEFAULT_AXES_COLOR )
+		draw.line( ( x - 2 * pil_handler.antialiasing_coef, y, x + 2 * pil_handler.antialiasing_coef, y ), mod_main.DEFAULT_AXES_COLOR )
+		draw.line( ( x, y + 2 * pil_handler.antialiasing_coef, x, y - 2 * pil_handler.antialiasing_coef ), mod_main.DEFAULT_AXES_COLOR )
 
-	def draw_labels( self, bounds, draw, antialiasing_coef ):
+	def draw_labels( self, bounds, draw, pil_handler ):
 		if not self.labels:
 			return
 
 		if isinstance( self.labels, dict ):
 			for i, label in self.labels.items():
-				self.draw_label( i, bounds, draw, antialiasing_coef, label = label )
+				self.draw_label( i, bounds, draw, pil_handler, label = label )
 		else:
 			if self.horizontal:
 				labels_from, labels_to = self.get_start_end(
@@ -173,10 +173,10 @@ class Axis( mod_main.CoordinateSystemElement ):
 
 			i = labels_from
 			while i <= labels_to:
-				self.draw_label( i, bounds, draw, antialiasing_coef )
+				self.draw_label( i, bounds, draw, pil_handler )
 				i += self.labels
 
-	def draw_label( self, i, bounds, draw, antialiasing_coef, label = None ):
+	def draw_label( self, i, bounds, draw, pil_handler, label = None ):
 		if i == 0:
 			return
 
@@ -190,7 +190,7 @@ class Axis( mod_main.CoordinateSystemElement ):
 			if self.labels_suffix:
 				label += self.labels_suffix
 
-		font = mod_imagefont.truetype( DEFAULT_FONT_LOCATION, int( DEFAULT_FONT_SIZE * antialiasing_coef ) )
+		font = mod_imagefont.truetype( DEFAULT_FONT_LOCATION, int( DEFAULT_FONT_SIZE * pil_handler.antialiasing_coef ) )
 		label_width, label_height = font.getsize( label )
 
 		x, y = self.get_point( i )
@@ -198,18 +198,18 @@ class Axis( mod_main.CoordinateSystemElement ):
 		x, y = mod_utils.cartesius_to_image_coord( x, y, bounds )
 
 		if self.label_position[ 0 ] == -1:
-			x = x - label_width - 4. * antialiasing_coef
+			x = x - label_width - 4. * pil_handler.antialiasing_coef
 		elif self.label_position[ 0 ] == 0:
 			x = x - label_width / 2. 
 		elif self.label_position[ 0 ] == 1:
-			x += 4 * antialiasing_coef
+			x += 4 * pil_handler.antialiasing_coef
 
 		if self.label_position[ 1 ] == -1:
-			y += 2 * antialiasing_coef
+			y += 2 * pil_handler.antialiasing_coef
 		elif self.label_position[ 1 ] == 0:
 			y = y - label_height / 2.
 		elif self.label_position[ 1 ] == 1:
-			y = y - label_height - 2 * antialiasing_coef
+			y = y - label_height - 2 * pil_handler.antialiasing_coef
 
 		draw.text( ( x, y ), label, mod_main.DEFAULT_LABEL_COLOR, font = font )
 
@@ -219,7 +219,7 @@ class Axis( mod_main.CoordinateSystemElement ):
 		else:
 			return 0, n
 
-	def process_image( self, image, draw, bounds, antialiasing_coef ):
+	def process_image( self, image, draw, bounds, pil_handler ):
 		if self.horizontal:
 			start = bounds.left
 			end = bounds.right
@@ -243,8 +243,8 @@ class Axis( mod_main.CoordinateSystemElement ):
 			axe_from_point = mod_utils.cartesius_to_image_coord( self.center[ 0 ], start, bounds )
 			axe_to_point = mod_utils.cartesius_to_image_coord( self.center[ 0 ], end, bounds )
 
-		self.draw_dots( bounds, draw, antialiasing_coef )
-		self.draw_labels( bounds, draw, antialiasing_coef )
+		self.draw_dots( bounds, draw, pil_handler )
+		self.draw_labels( bounds, draw, pil_handler )
 
 		draw.line( ( axe_from_point[ 0 ], axe_from_point[ 1 ], axe_to_point[ 0 ], axe_to_point[ 1 ] ), self.color )
 
@@ -282,7 +282,7 @@ class Grid( mod_main.CoordinateSystemElement ):
 		# not important
 		pass
 
-	def process_image( self, image, draw, bounds, antialiasing_coef ):
+	def process_image( self, image, draw, bounds, pil_handler ):
 		if self.vertical:
 			axe_from_point = mod_utils.cartesius_to_image_coord( 0, bounds.bottom, bounds )
 			axe_to_point = mod_utils.cartesius_to_image_coord( 0, bounds.top, bounds )
@@ -327,7 +327,7 @@ class Line( mod_main.CoordinateSystemElement ):
 		self.bounds.update( point = self.start )
 		self.bounds.update( point = self.end )
 
-	def process_image( self, image, draw, bounds, antialiasing_coef ):
+	def process_image( self, image, draw, bounds, pil_handler ):
 		x1, y1 = mod_utils.cartesius_to_image_coord( x = self.start[ 0 ], y = self.start[ 1 ], bounds = bounds )
 		x2, y2 = mod_utils.cartesius_to_image_coord( x = self.end[ 0 ], y = self.end[ 1 ], bounds = bounds )
 		draw.line( ( x1, y1, x2, y2 ), self.get_color_with_transparency( self.color ) )
@@ -375,7 +375,7 @@ class Function( mod_main.CoordinateSystemElement ):
 		for point in self.points:
 			self.bounds.update( point = point )
 	
-	def process_image( self, image, draw, bounds, antialiasing_coef ):
+	def process_image( self, image, draw, bounds, pil_handler ):
 
 		zero_point = mod_utils.cartesius_to_image_coord( 0, 0, bounds )
 		for i, point in enumerate( self.points ):
@@ -422,7 +422,7 @@ class Circle( mod_main.CoordinateSystemElement ):
 		self.bounds.update( point = ( self.x, self.y + self.radius ) )
 		self.bounds.update( point = ( self.x, self.y - self.radius ) )
 
-	def process_image( self, image, draw, bounds, antialiasing_coef ):
+	def process_image( self, image, draw, bounds, pil_handler ):
 		x1, y1 = mod_utils.cartesius_to_image_coord(
 				x = self.x - self.radius / 2.,
 				y = self.y + self.radius / 2.,
@@ -474,7 +474,7 @@ class KeyValueGraph( mod_main.CoordinateSystemElement ):
 		for key, value in self.items:
 			self.bounds.update( point = ( key, value ) )
 
-	def process_image( self, image, draw, bounds, antialiasing_coef ):
+	def process_image( self, image, draw, bounds, pil_handler ):
 		assert self.items
 
 		zero_point = mod_utils.cartesius_to_image_coord( 0, 0, bounds )

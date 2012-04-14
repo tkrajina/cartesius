@@ -184,15 +184,15 @@ class CoordinateSystem:
 
 		assert self.bounds
 
-	def __draw_elements( self, image, draw, antialiasing_coef = None, hide_x_axis = False, hide_y_axis = False ):
+	def __draw_elements( self, image, draw, pil_handler = None, hide_x_axis = False, hide_y_axis = False ):
 		for element in self.elements:
-			element.draw( image = image, antialiasing_coef = antialiasing_coef, draw = draw, bounds = self.bounds )
+			element.draw( image = image, pil_handler = pil_handler, draw = draw, bounds = self.bounds )
 
 		if not hide_x_axis and self.x_axis:
-			self.x_axis.draw( image = image, antialiasing_coef = antialiasing_coef, draw = draw, bounds = self.bounds )
+			self.x_axis.draw( image = image, pil_handler = pil_handler, draw = draw, bounds = self.bounds )
 
 		if not hide_y_axis and self.y_axis:
-			self.y_axis.draw( image = image, antialiasing_coef = antialiasing_coef, draw = draw, bounds = self.bounds )
+			self.y_axis.draw( image = image, pil_handler = pil_handler, draw = draw, bounds = self.bounds )
 
 	def draw( self, width, height, axis_units_equal_length = True, hide_x_axis = False, hide_y_axis = False,
 			antialiasing = None ):
@@ -203,6 +203,8 @@ class CoordinateSystem:
 			antialiasing_coef = 2
 			width = int( width * antialiasing_coef )
 			height = int( height * antialiasing_coef )
+
+		pil_handler = PILHandler( antialiasing_coef )
 
 		self.bounds.image_width = width
 		self.bounds.image_height = height
@@ -216,7 +218,7 @@ class CoordinateSystem:
 		if self.resize_bounds:
 			self.bounds.update_to_image_size()
 
-		self.__draw_elements( image = image, draw = draw, antialiasing_coef = antialiasing_coef, hide_x_axis = hide_x_axis, hide_y_axis = hide_y_axis )
+		self.__draw_elements( image = image, draw = draw, pil_handler = pil_handler, hide_x_axis = hide_x_axis, hide_y_axis = hide_y_axis )
 
 		if antialiasing:
 			image = image.resize( ( int( width / antialiasing_coef ), int( height / antialiasing_coef ) ), mod_image.ANTIALIAS )
@@ -238,7 +240,7 @@ class CoordinateSystemElement:
 		""" Will be called after the element is added to the coordinate system """
 		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
 	
-	def process_image( self, image, draw, bounds, antialiasing_coef ):
+	def process_image( self, image, draw, bounds, pil_handler ):
 		""" Will be called after the element is added to the coordinate system """
 		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
 
@@ -251,15 +253,23 @@ class CoordinateSystemElement:
 
 		return ( color[ 0 ], color[ 1 ], color[ 2 ], self.transparency_mask )
 
-	def draw( self, image, draw, bounds, antialiasing_coef ):
+	def draw( self, image, draw, bounds, pil_handler ):
 		if self.transparency_mask == 255:
 			tmp_image, tmp_draw = image, draw
 		else:
 			tmp_image = mod_image.new( 'RGBA', ( bounds.image_width, bounds.image_height ) )
 			tmp_draw = mod_imagedraw.Draw( tmp_image )
 
-		self.process_image( tmp_image, tmp_draw, bounds, antialiasing_coef )
+		self.process_image( tmp_image, tmp_draw, bounds, pil_handler )
 
 		if tmp_image != image or tmp_draw != draw:
 			image.paste( tmp_image, mask = tmp_image )
 
+class PILHandler:
+
+	antialiasing_coef = None
+
+	def __init__( self, antialiasing_coef ):
+		assert antialiasing_coef
+
+		self.antialiasing_coef = antialiasing_coef
