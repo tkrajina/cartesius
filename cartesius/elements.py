@@ -10,14 +10,14 @@ import main as mod_main
 import utils as mod_utils
 
 # use a truetype font
-DEFAULT_FONT_NAME = 'LiberationSansNarrow-Bold.ttf'
+DEFAULT_FONT_NAME = 'Oxygen-Regular.ttf'
 
 # Remove main.py from package to get package location:
 package_location = mod_main.__file__[ : mod_main.__file__.rfind( '/' ) ]
 
 DEFAULT_FONT_LOCATION = package_location + mod_os.sep + 'fonts' + mod_os.sep + DEFAULT_FONT_NAME
 
-DEFAULT_FONT_SIZE = 11
+DEFAULT_FONT_SIZE = 10 
 
 class Axis( mod_main.CoordinateSystemElement ):
 	"""
