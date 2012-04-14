@@ -214,6 +214,9 @@ class CoordinateSystem:
 			antialiasing = None ):
 		""" Returns a PIL image """
 
+		# Antialiasing works like this. If it is set, the image will be drawn double the size (that's
+		# why antialiasing_coef is 2). Only later it will be resized to one half with PIL's ANTIALIAS
+		# flag:
 		antialiasing_coef = 1
 		if antialiasing:
 			antialiasing_coef = 2
@@ -271,8 +274,10 @@ class CoordinateSystemElement:
 
 	def draw( self, image, draw, draw_handler ):
 		if self.transparency_mask == 255:
+			# If no transparency, draw on same PIL draw object:
 			tmp_image, tmp_draw = image, draw
 		else:
+			# If transparency, draw on new PIL's draw object:
 			tmp_image = mod_image.new( 'RGBA', ( draw_handler.bounds.image_width, draw_handler.bounds.image_height ) )
 			tmp_draw = mod_imagedraw.Draw( tmp_image )
 
@@ -281,10 +286,15 @@ class CoordinateSystemElement:
 		self.process_image( draw_handler )
 
 		if tmp_image != image or tmp_draw != draw:
+			# Transparency => past this PIL's image over the old one:
 			image.paste( tmp_image, mask = tmp_image )
 
 class PILHandler:
-	""" Elements are not expected to draw directly to PIL draw, but through methods in this class """
+	"""
+	Elements are not expected to draw directly to PIL draw, but through methods in this class.
+	This class also contains all other data needed for different elements to be drawn (coordinate 
+	system bounds, antialiasing_coef, and so on).
+	"""
 
 	pil_image = None
 	pil_draw = None
@@ -348,7 +358,6 @@ class PILHandler:
 		self.pil_draw.line( ( image_x1, image_y1, image_x2, image_y2 ), color )
 	
 	def draw_polygon( self, points, fill_color ):
-		# TODO: antialiasing_coef
 		image_points = []
 		for x, y in points:
 			image_coordinates = mod_utils.cartesius_to_image_coord( x, y, self.bounds )

@@ -37,7 +37,7 @@ def test_circles():
 examples.append( test_circles )
 
 def test_lines():
-	"""Lines and points of different colors. With and without antialiasing"""
+	"""Lines different colors"""
 	coordinate_system = cartesius.CoordinateSystem()
 
 	coordinate_system.add( elements.Line( ( 0, 0 ), ( -.7, -.7 ) ) )
