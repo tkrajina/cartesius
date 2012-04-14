@@ -36,17 +36,22 @@ def test_circles():
 
 examples.append( test_circles )
 
-def test_lines():
-	"""Lines of different colors. With and without antialiasing"""
+def test_lines_and_points():
+	"""Lines and points of different colors. With and without antialiasing"""
 	coordinate_system = cartesius.CoordinateSystem()
 
 	coordinate_system.add( elements.Line( ( 0, 0 ), ( -.7, -.7 ) ) )
 	coordinate_system.add( elements.Line( ( .5, -.5 ), ( -.5, .5 ), color = ( 0, 255, 0 ) ) )
 	coordinate_system.add( elements.Line( ( 0, 0 ), ( 7, 3 ), color = ( 0, 0, 255 ) ) )
 
+	coordinate_system.add( elements.Point( ( 2, 1 ), style = '.', color = ( 0, 0, 255 ) ) )
+	coordinate_system.add( elements.Point( ( 2, 2 ), style = 'x', color = ( 0, 0, 255 ) ) )
+	coordinate_system.add( elements.Point( ( 2, 3 ), style = '+', color = ( 0, 0, 255 ) ) )
+	coordinate_system.add( elements.Point( ( 2, 4 ), style = 'o', color = ( 0, 0, 255 ) ) )
+
 	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
-examples.append( test_lines )
+examples.append( test_lines_and_points )
 
 def test_function():
 	""" Function math.sin from -4 to 5"""

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import logging as mod_logging
 import os as mod_os
 
 import Image as mod_image
@@ -302,11 +303,28 @@ class PILHandler:
 		self.pil_image = image
 		self.pil_draw = draw
 	
-	def draw_dot( self, x, y ):
+	def draw_point( self, x, y, color, style = '+' ):
 		image_x, image_y = mod_utils.cartesius_to_image_coord( x, y, self.bounds )
 
-		self.pil_draw.line( ( image_x - 2 * self.antialiasing_coef, image_y, image_x + 2 * self.antialiasing_coef, image_y ), DEFAULT_AXES_COLOR )
-		self.pil_draw.line( ( image_x, image_y + 2 * self.antialiasing_coef, image_x, image_y - 2 * self.antialiasing_coef ), DEFAULT_AXES_COLOR )
+		if style == '.':
+			self.pil_draw.point( ( image_x, image_y ), color )
+		elif style == 'x':
+			delta = 2 * self.antialiasing_coef
+			self.pil_draw.line( ( image_x - delta, image_y - delta, image_x + delta, image_y + delta ), color )
+			self.pil_draw.line( ( image_x - delta, image_y + delta, image_x + delta, image_y - delta ), color )
+		elif style == '+':
+			delta = 2 * self.antialiasing_coef
+			self.pil_draw.line( ( image_x - delta, image_y, image_x + delta, image_y ), color )
+			self.pil_draw.line( ( image_x, image_y + delta, image_x, image_y - delta ), color )
+		elif style == 'o':
+			delta = 2 * self.antialiasing_coef
+			self.pil_draw.ellipse(
+					( image_x - delta, image_y - delta, image_x + delta, image_y + delta ),
+					fill = None,
+					outline = color )
+		else:
+			mod_logging.error( 'Invalid style: {0}, valid: ".", "x", "+" and "o"'.format( style ) )
+			self.pil_draw.point( ( image_x, image_y ), color )
 
 	def draw_line( self, x1, y1, x2, y2, color ):
 		image_x1, image_y1 = mod_utils.cartesius_to_image_coord( x1, y1, self.bounds )

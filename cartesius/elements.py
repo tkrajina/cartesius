@@ -110,33 +110,33 @@ class Axis( mod_main.CoordinateSystemElement ):
 
 		return start, end
 
-	def draw_dots( self, draw_handler ):
+	def draw_points( self, draw_handler ):
 		if not self.points:
 			return
 
 		if self.horizontal:
-			dots_from, dots_to = self.get_start_end(
+			points_from, points_to = self.get_start_end(
 					self.points,
 					draw_handler.bounds.left - self.center[ 0 ],
 					draw_handler.bounds.right - self.center[ 0 ] )
 		else:
-			dots_from, dots_to = self.get_start_end(
+			points_from, points_to = self.get_start_end(
 					self.points,
 					draw_handler.bounds.bottom - self.center[ 1 ],
 					draw_handler.bounds.top - self.center[ 1 ] )
 
-		i = dots_from
-		while i <= dots_to:
-			self.draw_dot( i, draw_handler )
+		i = points_from
+		while i <= points_to:
+			self.draw_point( i, draw_handler )
 			i += self.points
 
-	def draw_dot( self, i, draw_handler ):
+	def draw_point( self, i, draw_handler ):
 		if self.horizontal:
 			x, y = self.center[ 0 ] + i, self.center[ 1 ] + 0
 		else:
 			x, y = self.center[ 0 ] + 0, self.center[ 1 ] + i
 
-		draw_handler.draw_dot( x, y )
+		draw_handler.draw_point( x, y, color = self.color, style = '+' )
 
 	def draw_labels( self, draw_handler ):
 		if not self.labels:
@@ -211,22 +211,45 @@ class Axis( mod_main.CoordinateSystemElement ):
 			axe_from_point = self.center[ 0 ], start
 			axe_to_point = self.center[ 0 ], end
 
-		self.draw_dots( draw_handler )
+		self.draw_points( draw_handler )
 		self.draw_labels( draw_handler )
 
 		draw_handler.draw_line( axe_from_point[ 0 ], axe_from_point[ 1 ], axe_to_point[ 0 ], axe_to_point[ 1 ], self.color )
 
-class Dot( mod_main.CoordinateSystemElement ):
+class Point( mod_main.CoordinateSystemElement ):
+	
+	STYLES = ( '.', '+', 'x', 'o' )
 
-	# TODO
+	style = None
+	label_position = None
+	position = None
+	color = None
 
-	pass
+	def __init__( self, position, label = None, label_position = None, style = None,
+			color = None, transparency_mask = None ):
+		mod_main.CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
-class Label( mod_main.CoordinateSystemElement ):
+		assert position and len( position ) == 2, 'Invalid position {0}'.format( position )
+		if label_position:
+			assert len( label_position ) == 2, 'Invalid label position {0}'.format( label_position )
+		if style:
+			assert style in self.STYLES, 'Invalid style \'{0}\', possible styles: {1}'.format( self.STYLES )
+		if color:
+			assert len( color ) == 3, 'Invalid color {0}'.format( color )
 
-	# TODO
+		self.position = position
+		self.label = str( label ) if label else None
+		self.label_position = label_position
+		self.style = style
+		self.color = color
 
-	pass
+		self.reload_bounds()
+
+	def reload_bounds( self ):
+		self.bounds.update( point = self.position )
+
+	def process_image( self, draw_handler ):
+		draw_handler.draw_point( self.position[ 0 ], self.position[ 1 ], style = self.style, color = self.color )
 
 class Grid( mod_main.CoordinateSystemElement ):
 
