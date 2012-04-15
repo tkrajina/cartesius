@@ -95,11 +95,22 @@ class PieChart( mod_main.CoordinateSystemElement ):
 		self.bounds.update( y = self.center[ 1 ] + self.radius )
 	
 	def process_image( self, draw_handler ):
-		draw_handler.draw_arc(
-				self.center[ 0 ], 
-				self.center[ 1 ],
-				radius = 1,
-				start_angle = 0,
-				end_angle = 50,
-				fill_color = self.fill_color,
-				color = self.color )
+		sum_values = 0.
+		for item in self.data:
+			value = item[ 0 ]
+			sum_values += value
+
+		current_angle = 0
+		for item in self.data:
+			value = item[ 0 ]
+			delta = 360 * value / sum_values
+			draw_handler.draw_pieslice(
+					self.center[ 0 ], 
+					self.center[ 1 ],
+					radius = 1,
+					start_angle = current_angle,
+					end_angle = current_angle + delta,
+					fill_color = self.fill_color,
+					color = self.color )
+
+			current_angle += delta

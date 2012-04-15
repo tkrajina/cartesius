@@ -451,7 +451,7 @@ def test_barchart_1():
 	barchart_data_2 = (
 		( -1, -.25 ), ( 0, .35 ), ( 1, 1 ), ( 2, 1.35 ), ( 3, 2 ), ( 4, 1.65 ), ( 5, 1 ), ( 6, .5 ), ( 7, -.6 )
 	)
-	barchart_2 = charts.BarChart( data = barchart_data_2, width = 0.75, fill_color = ( 250, 50, 250 ) )
+	barchart_2 = charts.BarChart( data = barchart_data_2, width = 0.75, fill_color = ( 0, 255, 0 ), color = ( 0, 0, 0 ) )
 	coordinate_system.add( barchart_2 )
 
 	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
@@ -479,9 +479,14 @@ def test_piechart():
 	piechart_data = (
 		( 1, 'abc' ),
 		( 2, 'cde' ),
+		( 4, 'qqq' ),
 	)
-	piechart = charts.PieChart( data = piechart_data )
+	piechart = charts.PieChart( data = piechart_data, fill_color = ( 200, 200, 200 ), color = ( 0, 0, 0 ) )
 	coordinate_system.add( piechart )
+
+	# No need for axes:
+	coordinate_system.add( elements.Axis( horizontal = True, hide = True ) )
+	coordinate_system.add( elements.Axis( vertical = True, hide = True ) )
 
 	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
 

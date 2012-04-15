@@ -438,7 +438,7 @@ class PILHandler:
 				fill = fill_color,
 				outline = line_color )
 
-	def draw_arc( self, x, y, radius, start_angle, end_angle, fill_color = None, color = None ):
+	def draw_pieslice( self, x, y, radius, start_angle, end_angle, fill_color = None, color = None ):
 		x1, y1 = mod_utils.cartesius_to_image_coord(
 				x = x - radius / 2.,
 				y = y + radius / 2.,
@@ -450,7 +450,7 @@ class PILHandler:
 
 		self.pil_draw.pieslice( 
 				( int( x1 ), int( y1 ), int( x2 ), int( y2 ) ),
-				start_angle,
-				end_angle, 
+				int( start_angle ),
+				int( end_angle ),
 				fill = fill_color,
 				outline = color )
