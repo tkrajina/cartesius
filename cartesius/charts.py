@@ -7,18 +7,20 @@ import main as mod_main
 class BarChart( mod_main.CoordinateSystemElement ):
 
 	color = None
+	fill_color = None
 
 	data = None
 	width = None
 
-	def __init__( self, data = None, width = None, color = None, transparency_mask = None ):
+	def __init__( self, data = None, width = None, color = None, fill_color = None, transparency_mask = None ):
 		mod_main.CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
 		assert data, 'Data must be set'
 
 		self.data = data
 		self.width = width
-		self.color = color if color else mod_main.DEFAULT_ELEMENT_COLOR
+		self.color = color
+		self.fill_color = fill_color if fill_color else mod_main.DEFAULT_ELEMENT_COLOR
 
 		self.reload_bounds()
 
@@ -45,7 +47,12 @@ class BarChart( mod_main.CoordinateSystemElement ):
 				start, end, value = item[ 0 ], item[ 1 ], item[ 2 ]
 
 			draw_handler.draw_polygon( 
-				( ( start, 0 ), ( start, value ), ( end, value ), ( end, 0 ) ), fill_color = self.color )
+				( ( start, 0 ), ( start, value ), ( end, value ), ( end, 0 ) ), fill_color = self.fill_color )
+
+			if self.color:
+				draw_handler.draw_line( start, 0, start, value, self.color )
+				draw_handler.draw_line( end, value, end, 0, self.color )
+				draw_handler.draw_line( start, value, end, value, self.color )
 
 # TODO:
 """
