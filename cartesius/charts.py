@@ -27,12 +27,14 @@ class BarChart( mod_main.CoordinateSystemElement ):
 	def reload_bounds( self ):
 		for item in self.data:
 			if self.width:
-				assert item and len( item ) == 2, 'With width given, data must countain (key, value) tuples'
+				assert item and len( item ) == 2, \
+						'With width, data must countain (key, value) tuples, found {0}'.format( item )
 				self.bounds.update( x = item[ 0 ] )
 				self.bounds.update( x = item[ 0 ] + self.width )
 				self.bounds.update( y = item[ 1 ] )
 			else:
-				assert item and len( item ) == 3, 'Without with given, data must contain (from, to, value) tuples'
+				assert item and len( item ) == 3, \
+						'Without width, data must contain (from, to, value) tuples, found {0}'.format( item )
 				self.bounds.update( x = item[ 0 ] )
 				self.bounds.update( x = item[ 1 ] )
 				self.bounds.update( y = item[ 2 ] )
