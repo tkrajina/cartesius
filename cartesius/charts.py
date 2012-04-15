@@ -4,7 +4,7 @@
 
 import main as mod_main
 
-class Histogram( mod_main.CoordinateSystemElement ):
+class BarChart( mod_main.CoordinateSystemElement ):
 
 	color = None
 
@@ -46,3 +46,24 @@ class Histogram( mod_main.CoordinateSystemElement ):
 
 			draw_handler.draw_polygon( 
 				( ( start, 0 ), ( start, value ), ( end, value ), ( end, 0 ) ), fill_color = self.color )
+
+# TODO:
+"""
+class PieChart( mod_main.CoordinateSystemElement ):
+
+	def __init__( self, ...params..., transparency_mask = None ):
+		mod_main.CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
+
+		...set local params...
+
+		# If this element will resize the current bounds, execute:
+		self.reload_bounds()
+
+	def reload_bounds( self ):
+		# Code to reload current bounds based on this element data:
+		...
+	
+	def process_image( self, draw_handler ):
+		# Use methods in draw_handler to draw this element.
+		# If you need the bounds of the current coordinate system, use draw_handler.bounds
+"""

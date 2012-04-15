@@ -8,7 +8,7 @@ import main as mod_main
 """
 # Element class template (use this for new elements):
 
-class MyElement:
+class MyElement( mod_main.CoordinateSystemElement ):
 	\"\"\" Abstract class, every subclass should detect bounds and have the code to draw this item \"\"\"
 
 	def __init__( self, ...params..., transparency_mask = None ):
