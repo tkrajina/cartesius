@@ -168,7 +168,7 @@ def test_filled_transparent_graphs():
 examples.append( test_filled_transparent_graphs )
 
 def test_filled_transparent_graphs_2():
-	""" Two functions with transparend grid over it """
+	""" Two functions with transparend grid over them """
 	coordinate_system = cartesius.CoordinateSystem()
 
 	coordinate_system.add(
