@@ -260,7 +260,7 @@ class CoordinateSystemElement:
 		don't have his own custom bounds, elements should resize the bounds so that all of them
 		fits on the image.
 		"""
-		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
+		raise Exception( 'Not implemented in {0}'.format( self.__class__ ) )
 	
 	def process_image( self, draw_handler ):
 		""" Will be called when the image is drawn """
