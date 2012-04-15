@@ -13,15 +13,11 @@ import sys
 
 import cartesius.main as cartesius
 import cartesius.elements as elements
+import cartesius.charts as charts
 
 logging.basicConfig( level = logging.DEBUG, format = '%(asctime)s %(name)-12s %(levelname)-8s %(message)s' )
 
 examples = []
-
-def test_histogram():
-	""" Histogram """
-
-examples.append( test_histogram )
 
 def test_circles():
 	"""50 random circles"""
@@ -442,6 +438,40 @@ def test_detached_axes():
 
 examples.append( test_detached_axes )
 
+def test_histogram_1():
+	""" Histograms with same column width """
+	coordinate_system = cartesius.CoordinateSystem()
+
+	histogram_data_1 = (
+		( -1, -.5 ), ( 0, .7 ), ( 1, 2 ), ( 2, 2.7 ), ( 3, 4 ), ( 4, 3.1 ), ( 5, 2.1 ), ( 6, 1 ), ( 7, -.3 )
+	)
+	histogram_1 = charts.Histogram( data = histogram_data_1, width = 0.95, color = ( 50, 50, 250 ) )
+	coordinate_system.add( histogram_1 )
+
+	histogram_data_2 = (
+		( -1, -.25 ), ( 0, .35 ), ( 1, 1 ), ( 2, 1.35 ), ( 3, 2 ), ( 4, 1.65 ), ( 5, 1 ), ( 6, .5 ), ( 7, -.6 )
+	)
+	histogram_2 = charts.Histogram( data = histogram_data_2, width = 0.75, color = ( 250, 50, 250 ) )
+	coordinate_system.add( histogram_2 )
+
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
+
+examples.append( test_histogram_1 )
+
+def test_histogram_2():
+	""" Histogram with different column widths """
+	coordinate_system = cartesius.CoordinateSystem()
+
+	histogram_data = (
+		( -5, -0.1, -.5 ), ( 0, 0.9, .7 ), ( 1, 2.9, 2 ), ( 3, 3.9, 4 ), ( 4, 5.2, 3.1 ), ( 6, 6.9, 2.1 ), ( 7, 8.9, 1 ),
+	)
+	histogram = charts.Histogram( data = histogram_data, color = ( 50, 50, 250 ) )
+	coordinate_system.add( histogram )
+
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
+
+examples.append( test_histogram_2 )
+
 if __name__ == '__main__':
 	args = sys.argv[ 1: ]
 
@@ -516,7 +546,7 @@ Note, all examples come in two versions: normal and antialiased. Antialiased can
 
 		html += '<p>Code:</p>'
 		html += '<pre style="font-size:0.8em;border-style:solid;border-color:gray;border-width:0px 0px 0px 1px;margin:2px 2px 10px 2px;padding:2px 2px 2px 10px;">' 
-		html += 'import cartesius.main as cartesius\nimport cartesius.elements as elements\n\n'
+		html += 'import cartesius.main as cartesius\nimport cartesius.elements as elements\nimport cartesius.charts as charts\n\n'
 		html += clean_source_lines( function ) 
 		html += '</pre>'
 
