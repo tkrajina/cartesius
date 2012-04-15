@@ -62,8 +62,11 @@ class PieChart( mod_main.CoordinateSystemElement ):
 	fill_color = None
 
  	data = None
+	center = None
+	radius = None
  
-	def __init__( self, data, transparency_mask = None, color = None, fill_color = None ):
+	def __init__( self, data, color = None, fill_color = None, center = None, radius = None,
+			transparency_mask = None ):
 		mod_main.CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
 		self.data = data
@@ -71,15 +74,32 @@ class PieChart( mod_main.CoordinateSystemElement ):
 		self.color = color
 		self.fill_color = fill_color if fill_color else mod_main.DEFAULT_ELEMENT_COLOR
 
+		if center:
+			assert len( center ) == 2, 'Invalid center {0}'.format( center )
+			self.center = center
+		else:
+			self.center = ( 0, 0 )
+
+		if radius:
+			self.radius = radius
+		else:
+			self.radius = 1
+
 		# If this element will resize the current bounds, execute:
 		self.reload_bounds()
 
 	def reload_bounds( self ):
-		# Code to reload current bounds based on this element data:
-		# TODO
-		self.bounds.update( x = 1, y = 1 )
-		self.bounds.update( x = 0, y = 0 )
+		self.bounds.update( x = self.center[ 0 ] - self.radius )
+		self.bounds.update( x = self.center[ 0 ] + self.radius )
+		self.bounds.update( y = self.center[ 1 ] - self.radius )
+		self.bounds.update( y = self.center[ 1 ] + self.radius )
 	
 	def process_image( self, draw_handler ):
-		draw_handler.draw_arc( 0, .5, radius = 1, start_angle = 0, end_angle = 50,
-				fill_color = self.fill_color, color = self.color )
+		draw_handler.draw_arc(
+				self.center[ 0 ], 
+				self.center[ 1 ],
+				radius = 1,
+				start_angle = 0,
+				end_angle = 50,
+				fill_color = self.fill_color,
+				color = self.color )
