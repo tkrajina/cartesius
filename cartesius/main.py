@@ -9,16 +9,16 @@ import ImageFont as mod_imagefont
 
 import utils as mod_utils
 
-# use a truetype font
-DEFAULT_FONT_NAME = 'Oxygen-Regular.ttf'
-
-# Remove main.py from package to get package location:
+# Get the package location:
 package_location = mod_utils.__file__[ : mod_utils.__file__.rfind( '/' ) ]
 
+# use a truetype font included with cartesius:
+DEFAULT_FONT_NAME = 'Oxygen-Regular.ttf'
 DEFAULT_FONT_LOCATION = package_location + mod_os.sep + 'fonts' + mod_os.sep + DEFAULT_FONT_NAME
 
 DEFAULT_FONT_SIZE = 10 
 
+# Default colors for important elements:
 DEFAULT_AXES_COLOR = ( 150, 150, 150 )
 DEFAULT_LABEL_COLOR = ( 150, 150, 150 )
 DEFAULT_POINT_COLOR = ( 150, 150, 150 )
@@ -35,7 +35,6 @@ CENTER_DOWN   = 0, -1
 RIGHT_UP      = 1, 1
 RIGHT_CENTER  = 1, 0
 RIGHT_DOWN    = 1, -1
-
 
 class Bounds:
 	"""
@@ -256,11 +255,15 @@ class CoordinateSystemElement:
 		self.transparency_mask = transparency_mask if transparency_mask else 255
 
 	def reload_bounds( self ):
-		""" Will be called after the element is added to the coordinate system """
+		"""
+		Will be called after the element is added to the coordinate system. By default (if the CS
+		don't have his own custom bounds, elements should resize the bounds so that all of them
+		fits on the image.
+		"""
 		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
 	
-	def process_image( self, image, draw, bounds, draw_handler ):
-		""" Will be called after the element is added to the coordinate system """
+	def process_image( self, draw_handler ):
+		""" Will be called when the image is drawn """
 		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
 
 	def get_color_with_transparency( self, color ):
@@ -273,6 +276,8 @@ class CoordinateSystemElement:
 		return ( color[ 0 ], color[ 1 ], color[ 2 ], self.transparency_mask )
 
 	def draw( self, image, draw, draw_handler ):
+		""" Draw this element. All custom code must be implemented in process_image() """
+
 		if self.transparency_mask == 255:
 			# If no transparency, draw on same PIL draw object:
 			tmp_image, tmp_draw = image, draw
@@ -286,7 +291,7 @@ class CoordinateSystemElement:
 		self.process_image( draw_handler )
 
 		if tmp_image != image or tmp_draw != draw:
-			# Transparency => past this PIL's image over the old one:
+			# Transparency => paste this PIL's image over the old one:
 			image.paste( tmp_image, mask = tmp_image )
 
 class PILHandler:
@@ -296,6 +301,8 @@ class PILHandler:
 	system bounds, antialiasing_coef, and so on).
 	"""
 
+	# Those two values may be changed during the lifetime of this object. If transparency
+	# is used then it will happen:
 	pil_image = None
 	pil_draw = None
 
@@ -312,11 +319,30 @@ class PILHandler:
 		self.antialiasing_coef = antialiasing_coef
 		self.bounds = bounds
 
+	def get_font( self ):
+		""" Load the font to be used for labels and point names. """
+		if not self.__font:
+			self.__font = mod_imagefont.truetype( DEFAULT_FONT_LOCATION, int( DEFAULT_FONT_SIZE * self.antialiasing_coef ) )
+
+		return self.__font
+
 	def update_pil_image_draw( self, image, draw ):
+		"""
+		When drawing the coordinate system for a custom element, the CS will "decide" if to use existing
+		PIL image and draw or set new ones with this method
+		"""
 		self.pil_image = image
 		self.pil_draw = draw
 	
 	def draw_point( self, x, y, color, style = '+', label = None, label_position = None ):
+		"""
+		Draw single point.
+
+		style: can be '.' (single pixel), '+', 'x', and 'o' (small circle)
+		label: text to be displayed
+		label_position: one of the label position constants (CENTER_UP, RIGHT_DOWN, ...). The default
+		is set in draw_text()
+		"""
 		image_x, image_y = mod_utils.cartesius_to_image_coord( x, y, self.bounds )
 
 		if label_position:
@@ -367,6 +393,13 @@ class PILHandler:
 			fill = fill_color )
 
 	def draw_text( self, x, y, text, color, label_position = None ):
+		"""
+		Draw text. 
+
+		label_position: one of the label position constants (CENTER_UP, RIGHT_DOWN, ...). The default
+		is RIGHT_DOWN
+		"""
+		is set in draw_text()
 		label_position = label_position if label_position else RIGHT_DOWN
 
 		image_x, image_y = mod_utils.cartesius_to_image_coord( x, y, self.bounds )
@@ -391,12 +424,6 @@ class PILHandler:
 
 		self.pil_draw.text( ( image_x, image_y ), text, color, font )
 	
-	def get_font( self ):
-		if not self.__font:
-			self.__font = mod_imagefont.truetype( DEFAULT_FONT_LOCATION, int( DEFAULT_FONT_SIZE * self.antialiasing_coef ) )
-
-		return self.__font
-
 	def draw_circle( self, x, y, radius, line_color, fill_color ):
 		x1, y1 = mod_utils.cartesius_to_image_coord(
 				x = x - radius / 2.,
