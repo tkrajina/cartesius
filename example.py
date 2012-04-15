@@ -18,6 +18,11 @@ logging.basicConfig( level = logging.DEBUG, format = '%(asctime)s %(name)-12s %(
 
 examples = []
 
+def test_histogram():
+	""" Histogram """
+
+examples.append( test_histogram )
+
 def test_circles():
 	"""50 random circles"""
 	coordinate_system = cartesius.CoordinateSystem()

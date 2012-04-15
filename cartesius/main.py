@@ -397,9 +397,8 @@ class PILHandler:
 		Draw text. 
 
 		label_position: one of the label position constants (CENTER_UP, RIGHT_DOWN, ...). The default
-		is RIGHT_DOWN
-		"""
 		is set in draw_text()
+		"""
 		label_position = label_position if label_position else RIGHT_DOWN
 
 		image_x, image_y = mod_utils.cartesius_to_image_coord( x, y, self.bounds )

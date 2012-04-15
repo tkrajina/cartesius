@@ -4,7 +4,17 @@
 
 import main as mod_main
 
-class Histogram( mod_main.CoordinateSystemElement ):
+class MyElement:
 
-	def __init__( self ):
-		mod_main.CoordinateSystemElements.__init__( self )
+	def __init__( self, data = None, transparency_mask = None ):
+		mod_main.CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
+
+		assert data, 'Data must be set'
+
+		self.reload_bounds()
+
+	def reload_bounds( self ):
+		pass
+	
+	def process_image( self, draw_handler ):
+		pass
