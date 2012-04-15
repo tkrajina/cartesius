@@ -402,10 +402,7 @@ def test_hide_axis_positive_or_negative_parts():
 examples.append( test_hide_axis_positive_or_negative_parts )
 
 def test_detached_axes():
-	"""
-	Detached axes; x and y axis with ( 1.3, -4 ) as center and anoher pair of detached axes but
-	showing only negativ/positive parts
-	"""
+	""" Detached axes"""
 	coordinate_system = cartesius.CoordinateSystem( bounds = ( -10, 10, -10, 10 ) )
 
 	coordinate_system.add( elements.Function( lambda x : x * math.sin( x * x ),
@@ -415,6 +412,12 @@ def test_detached_axes():
 	coordinate_system.add( elements.Axis( horizontal = True, points = 2 ) )
 	coordinate_system.add( elements.Axis( vertical = True, labels = 2 ) )
 
+	# You can have only one horizontal and one vertical standard axis and, if you add
+	# more -- the newer will overwrite the older.
+
+	# But, you can make as many as you want *detached axes*. These are just like normal
+	# ones, but their center is not (0,0).
+
 	# Detached:
 	detached_axes_center = ( -5, 4 )
 
@@ -423,7 +426,7 @@ def test_detached_axes():
 	coordinate_system.add( elements.Axis( vertical = True, points = 2, labels = 2,
 			detached_center = detached_axes_center, color = ( 0, 0, 255 ) ) )
 
-	# Another pair of detached axes:
+	# Another pair of detached axes with hidden negative/positive halfs:
 	detached_axes_center = ( 4, -5 )
 	coordinate_system.add( elements.Axis( horizontal = True, points = 2, labels = 2,
 			detached_center = detached_axes_center, hide_negative = True ) )
