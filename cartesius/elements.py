@@ -4,7 +4,29 @@ import re as mod_re
 import math as mod_math
 
 import main as mod_main
-import utils as mod_utils
+
+"""
+# Element class template (use this for new elements):
+
+class MyElement:
+	\"\"\" Abstract class, every subclass should detect bounds and have the code to draw this item \"\"\"
+
+	def __init__( self, ...params..., transparency_mask = None ):
+		mod_main.CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
+
+		...set local params...
+
+		# If this element will resize the current bounds, execute:
+		self.reload_bounds()
+
+	def reload_bounds( self ):
+		# Code to reload current bounds based on this element data:
+		...
+	
+	def process_image( self, draw_handler ):
+		# Use methods in draw_handler to draw this element.
+		# If you need the bounds of the current coordinate system, use draw_handler.bounds
+"""
 
 class Axis( mod_main.CoordinateSystemElement ):
 	"""

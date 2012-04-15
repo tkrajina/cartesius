@@ -259,7 +259,7 @@ class CoordinateSystemElement:
 		""" Will be called after the element is added to the coordinate system """
 		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
 	
-	def process_image( self, image, draw, bounds, draw_handler ):
+	def process_image( self, draw_handler ):
 		""" Will be called after the element is added to the coordinate system """
 		raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
 
