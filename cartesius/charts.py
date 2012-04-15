@@ -54,23 +54,30 @@ class BarChart( mod_main.CoordinateSystemElement ):
 				draw_handler.draw_line( end, value, end, 0, self.color )
 				draw_handler.draw_line( start, value, end, value, self.color )
 
-# TODO:
-"""
 class PieChart( mod_main.CoordinateSystemElement ):
 
-	def __init__( self, ...params..., transparency_mask = None ):
+	color = None
+	fill_color = None
+
+ 	data = None
+ 
+	def __init__( self, data, transparency_mask = None, color = None, fill_color = None ):
 		mod_main.CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
-		...set local params...
+		self.data = data
+
+		self.color = color
+		self.fill_color = fill_color if fill_color else mod_main.DEFAULT_ELEMENT_COLOR
 
 		# If this element will resize the current bounds, execute:
 		self.reload_bounds()
 
 	def reload_bounds( self ):
 		# Code to reload current bounds based on this element data:
-		...
+		# TODO
+		self.bounds.update( x = 1, y = 1 )
+		self.bounds.update( x = 0, y = 0 )
 	
 	def process_image( self, draw_handler ):
-		# Use methods in draw_handler to draw this element.
-		# If you need the bounds of the current coordinate system, use draw_handler.bounds
-"""
+		draw_handler.draw_arc( 0, .5, radius = 1, start_angle = 0, end_angle = 50,
+				fill_color = self.fill_color, color = self.color )

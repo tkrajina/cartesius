@@ -472,6 +472,21 @@ def test_barchart_2():
 
 examples.append( test_barchart_2 )
 
+def test_piechart():
+	""" PieChart """
+	coordinate_system = cartesius.CoordinateSystem()
+
+	piechart_data = (
+		( 1, 'abc' ),
+		( 2, 'cde' ),
+	)
+	piechart = charts.PieChart( data = piechart_data )
+	coordinate_system.add( piechart )
+
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
+
+examples.append( test_piechart )
+
 if __name__ == '__main__':
 	args = sys.argv[ 1: ]
 
