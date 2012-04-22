@@ -4,15 +4,23 @@
 
 import main as mod_main
 
+# Default color palete from: http://www.colourlovers.com/pattern/2429885/Spring_flower_aerial
+DEFAULT_COLORS = (
+		( 141, 198, 183 ),
+		( 207, 249, 117 ),
+		( 230, 193, 238 ),
+		( 242, 229, 229 ),
+)
+
 class BarChart( mod_main.CoordinateSystemElement ):
 
 	color = None
-	fill_color = None
+	fill_colors = None
 
 	data = None
 	width = None
 
-	def __init__( self, data = None, width = None, color = None, fill_color = None, transparency_mask = None ):
+	def __init__( self, data = None, width = None, color = None, fill_colors = None, transparency_mask = None ):
 		mod_main.CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
 		assert data, 'Data must be set'
@@ -20,7 +28,7 @@ class BarChart( mod_main.CoordinateSystemElement ):
 		self.data = data
 		self.width = width
 		self.color = color
-		self.fill_color = fill_color if fill_color else mod_main.DEFAULT_ELEMENT_COLOR
+		self.fill_colors = fill_colors if fill_colors else DEFAULT_COLORS
 
 		self.reload_bounds()
 
@@ -40,7 +48,7 @@ class BarChart( mod_main.CoordinateSystemElement ):
 				self.bounds.update( y = item[ 2 ] )
 
 	def process_image( self, draw_handler ):
-		for item in self.data:
+		for index, item in enumerate( self.data ):
 			if self.width:
 				assert item and len( item ) == 2, 'With width given, data must countain (key, value) tuples, found {0}'.format( item )
 				start, end, value = item[ 0 ], item[ 0 ] + self.width, item[ 1 ]
@@ -49,7 +57,7 @@ class BarChart( mod_main.CoordinateSystemElement ):
 				start, end, value = item[ 0 ], item[ 1 ], item[ 2 ]
 
 			draw_handler.draw_polygon( 
-				( ( start, 0 ), ( start, value ), ( end, value ), ( end, 0 ) ), fill_color = self.fill_color )
+				( ( start, 0 ), ( start, value ), ( end, value ), ( end, 0 ) ), fill_color = self.fill_colors[ index % len( self.fill_colors ) ] )
 
 			if self.color:
 				draw_handler.draw_line( start, 0, start, value, self.color )
@@ -59,20 +67,20 @@ class BarChart( mod_main.CoordinateSystemElement ):
 class PieChart( mod_main.CoordinateSystemElement ):
 
 	color = None
-	fill_color = None
+	fill_colors = None
 
  	data = None
 	center = None
 	radius = None
  
-	def __init__( self, data, color = None, fill_color = None, center = None, radius = None,
+	def __init__( self, data, color = None, fill_colors = None, center = None, radius = None,
 			transparency_mask = None ):
 		mod_main.CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
 
 		self.data = data
 
 		self.color = color
-		self.fill_color = fill_color if fill_color else mod_main.DEFAULT_ELEMENT_COLOR
+		self.fill_colors = fill_colors if fill_colors else DEFAULT_COLORS
 
 		if center:
 			assert len( center ) == 2, 'Invalid center {0}'.format( center )
@@ -101,7 +109,7 @@ class PieChart( mod_main.CoordinateSystemElement ):
 			sum_values += value
 
 		current_angle = 0
-		for item in self.data:
+		for index, item in enumerate( self.data ):
 			value = item[ 0 ]
 			delta = 360 * value / sum_values
 			draw_handler.draw_pieslice(
@@ -110,7 +118,7 @@ class PieChart( mod_main.CoordinateSystemElement ):
 					radius = 1,
 					start_angle = current_angle,
 					end_angle = current_angle + delta,
-					fill_color = self.fill_color,
+					fill_color = self.fill_colors[ index % len( self.fill_colors ) ],
 					color = self.color )
 
 			current_angle += delta

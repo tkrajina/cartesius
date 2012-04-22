@@ -445,13 +445,13 @@ def test_barchart_1():
 	barchart_data_1 = (
 		( -1, -.5 ), ( 0, .7 ), ( 1, 2 ), ( 2, 2.7 ), ( 3, 4 ), ( 4, 3.1 ), ( 5, 2.1 ), ( 6, 1 ), ( 7, -.3 )
 	)
-	barchart_1 = charts.BarChart( data = barchart_data_1, width = 0.95, fill_color = ( 50, 50, 250 ) )
+	barchart_1 = charts.BarChart( data = barchart_data_1, width = 0.95 )
 	coordinate_system.add( barchart_1 )
 
 	barchart_data_2 = (
 		( -1, -.25 ), ( 0, .35 ), ( 1, 1 ), ( 2, 1.35 ), ( 3, 2 ), ( 4, 1.65 ), ( 5, 1 ), ( 6, .5 ), ( 7, -.6 )
 	)
-	barchart_2 = charts.BarChart( data = barchart_data_2, width = 0.75, fill_color = ( 0, 255, 0 ), color = ( 0, 0, 0 ) )
+	barchart_2 = charts.BarChart( data = barchart_data_2, width = 0.75, color = ( 0, 0, 0 ) )
 	coordinate_system.add( barchart_2 )
 
 	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
@@ -465,7 +465,7 @@ def test_barchart_2():
 	barchart_data = (
 		( -5, -0, -.5 ), ( 0, 1, .7 ), ( 1, 3, 2 ), ( 3, 4, 4 ), ( 4, 5.5, 3.1 ), ( 6, 7, 2.1 ), ( 7, 9, 1 ),
 	)
-	barchart = charts.BarChart( data = barchart_data, fill_color = ( 50, 50, 250 ), color = ( 0, 0, 0 ) )
+	barchart = charts.BarChart( data = barchart_data, color = ( 0, 0, 0 ) )
 	coordinate_system.add( barchart )
 
 	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
@@ -481,7 +481,7 @@ def test_piechart():
 		( 2, 'cde' ),
 		( 4, 'qqq' ),
 	)
-	piechart = charts.PieChart( data = piechart_data, fill_color = ( 200, 200, 200 ), color = ( 0, 0, 0 ) )
+	piechart = charts.PieChart( data = piechart_data, color = ( 0, 0, 0 ) )
 	coordinate_system.add( piechart )
 
 	# No need for axes:
