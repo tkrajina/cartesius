@@ -99,32 +99,45 @@ class PieChart( mod_main.CoordinateSystemElement ):
 		self.reload_bounds()
 
 	def reload_bounds( self ):
-		self.bounds.update( x = self.center[ 0 ] - self.radius )
-		self.bounds.update( x = self.center[ 0 ] + self.radius )
-		self.bounds.update( y = self.center[ 1 ] - self.radius )
-		self.bounds.update( y = self.center[ 1 ] + self.radius )
+		self.bounds.update( x = self.center[ 0 ] - self.radius * 1.25 )
+		self.bounds.update( x = self.center[ 0 ] + self.radius * 1.25 )
+		self.bounds.update( y = self.center[ 1 ] - self.radius * 1.25 )
+		self.bounds.update( y = self.center[ 1 ] + self.radius * 1.25 )
 
-	def draw_label( self, angle, label, draw_handler, color ):
+	def draw_label( self, angle, label, draw_handler ):
 		assert label
 		assert draw_handler
 
 		angle = ( angle + 360 ) % 360
-		print label, angle
+
+		# TODO
+		color = ( 100, 100, 100 )
 
 		radian_angle = angle / 180. * mod_math.pi
 
 		x = mod_math.sin( radian_angle )
 		y = mod_math.cos( radian_angle )
 
-		draw_handler.draw_line( 0, 0, x, y, color )
+		x_from = x# * 0.9
+		y_from = y# * 0.9
+		x_to = x * 1.1
+		y_to = y * 1.1
+
+		draw_handler.draw_line( x_from, y_from, x_to, y_to, color )
 
 		if angle < 180:
-			draw_handler.draw_line( x, y, x + 0.5, y, color )
-			draw_handler.draw_text( x, y, label, ( 0, 0, 0 ), mod_main.RIGHT_UP )
+			draw_handler.draw_line( x_to, y_to, x_to + 0.3, y_to, color )
+			if angle < 90 or angle > 270:
+				draw_handler.draw_text( x_to, y_to, label, ( 0, 0, 0 ), mod_main.RIGHT_UP )
+			else:
+				draw_handler.draw_text( x_to, y_to, label, ( 0, 0, 0 ), mod_main.RIGHT_DOWN )
 		else:
-			draw_handler.draw_line( x, y, x - 0.5, y, color )
-			draw_handler.draw_text( x, y, label, ( 0, 0, 0 ), mod_main.LEFT_UP )
-	
+			draw_handler.draw_line( x_to, y_to, x_to - 0.3, y_to, color )
+			if angle < 90 or angle > 270:
+				draw_handler.draw_text( x_to, y_to, label, ( 0, 0, 0 ), mod_main.LEFT_UP )
+			else:
+				draw_handler.draw_text( x_to, y_to, label, ( 0, 0, 0 ), mod_main.LEFT_DOWN )
+
 	def process_image( self, draw_handler ):
 		sum_values = 0.
 		for item in self.data:
@@ -151,6 +164,6 @@ class PieChart( mod_main.CoordinateSystemElement ):
 					fill_color = fill_color,
 					color = self.color )
 
-			self.draw_label( ( start_angle + end_angle ) / 2., label, draw_handler, fill_color )
+			self.draw_label( ( start_angle + end_angle ) / 2., label, draw_handler )
 
 			current_angle += delta
