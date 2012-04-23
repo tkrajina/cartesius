@@ -440,12 +440,12 @@ class PILHandler:
 
 	def draw_pieslice( self, x, y, radius, start_angle, end_angle, fill_color = None, color = None ):
 		x1, y1 = mod_utils.cartesius_to_image_coord(
-				x = x - radius / 2.,
-				y = y + radius / 2.,
+				x = x - radius,
+				y = y + radius,
 				bounds = self.bounds )
 		x2, y2 = mod_utils.cartesius_to_image_coord(
-				x = x + radius / 2.,
-				y = y - radius / 2.,
+				x = x + radius,
+				y = y - radius,
 				bounds = self.bounds )
 
 		self.pil_draw.pieslice( 
