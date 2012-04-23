@@ -2,6 +2,8 @@
 
 """ Charts are normal CoordinateSystemElements """
 
+import math as mod_math
+
 import main as mod_main
 
 # Default color palete from: http://www.colourlovers.com/pattern/2429885/Spring_flower_aerial
@@ -101,6 +103,27 @@ class PieChart( mod_main.CoordinateSystemElement ):
 		self.bounds.update( x = self.center[ 0 ] + self.radius )
 		self.bounds.update( y = self.center[ 1 ] - self.radius )
 		self.bounds.update( y = self.center[ 1 ] + self.radius )
+
+	def draw_label( self, angle, label, draw_handler, color ):
+		assert label
+		assert draw_handler
+
+		angle = ( angle + 360 ) % 360
+		print label, angle
+
+		radian_angle = angle / 180. * mod_math.pi
+
+		x = mod_math.sin( radian_angle )
+		y = mod_math.cos( radian_angle )
+
+		draw_handler.draw_line( 0, 0, x, y, color )
+
+		if angle < 180:
+			draw_handler.draw_line( x, y, x + 0.5, y, color )
+			draw_handler.draw_text( x, y, label, ( 0, 0, 0 ), mod_main.RIGHT_UP )
+		else:
+			draw_handler.draw_line( x, y, x - 0.5, y, color )
+			draw_handler.draw_text( x, y, label, ( 0, 0, 0 ), mod_main.LEFT_UP )
 	
 	def process_image( self, draw_handler ):
 		sum_values = 0.
@@ -111,14 +134,23 @@ class PieChart( mod_main.CoordinateSystemElement ):
 		current_angle = 0
 		for index, item in enumerate( self.data ):
 			value = item[ 0 ]
+			label = str( item[ 1 ] )
 			delta = 360 * value / sum_values
+
+			start_angle = current_angle
+			end_angle = current_angle + delta
+
+			fill_color = self.fill_colors[ index % len( self.fill_colors ) ]
+
 			draw_handler.draw_pieslice(
 					self.center[ 0 ], 
 					self.center[ 1 ],
 					radius = 1,
-					start_angle = current_angle,
-					end_angle = current_angle + delta,
-					fill_color = self.fill_colors[ index % len( self.fill_colors ) ],
+					start_angle = start_angle - 90,
+					end_angle = end_angle - 90,
+					fill_color = fill_color,
 					color = self.color )
+
+			self.draw_label( ( start_angle + end_angle ) / 2., label, draw_handler, fill_color )
 
 			current_angle += delta

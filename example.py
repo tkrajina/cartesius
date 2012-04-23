@@ -479,7 +479,11 @@ def test_piechart():
 	piechart_data = (
 		( 1, 'abc' ),
 		( 2, 'cde' ),
-		( 4, 'qqq' ),
+		( 4, 'efg' ),
+		( 1, 'ijk' ),
+		( 5, 'lmn' ),
+		( 5, 'opq' ),
+		( 3, 'xyz' ),
 	)
 	piechart = charts.PieChart( data = piechart_data, color = ( 0, 0, 0 ) )
 	coordinate_system.add( piechart )
