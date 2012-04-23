@@ -16,6 +16,8 @@ DEFAULT_COLORS = (
 
 class BarChart( mod_main.CoordinateSystemElement ):
 
+	# TODO: vertical
+
 	color = None
 	fill_colors = None
 
