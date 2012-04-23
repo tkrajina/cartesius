@@ -439,7 +439,7 @@ def test_detached_axes():
 examples.append( test_detached_axes )
 
 def test_barchart_1():
-	""" Bar charts with same column width """
+	""" Bar charts with same column width. One with default and the other with custom colors """
 	coordinate_system = cartesius.CoordinateSystem()
 
 	barchart_data_1 = (
@@ -451,7 +451,7 @@ def test_barchart_1():
 	barchart_data_2 = (
 		( -1, -.25 ), ( 0, .35 ), ( 1, 1 ), ( 2, 1.35 ), ( 3, 2 ), ( 4, 1.65 ), ( 5, 1 ), ( 6, .5 ), ( 7, -.6 )
 	)
-	barchart_2 = charts.BarChart( data = barchart_data_2, width = 0.75, color = ( 0, 0, 0 ) )
+	barchart_2 = charts.BarChart( data = barchart_data_2, width = 0.75, color = ( 0, 0, 0 ), fill_colors = ( ( 100, 100, 200 ), ) )
 	coordinate_system.add( barchart_2 )
 
 	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
@@ -472,8 +472,8 @@ def test_barchart_2():
 
 examples.append( test_barchart_2 )
 
-def test_piechart():
-	""" PieChart """
+def test_piechart_1():
+	""" PieChart with default colors """
 	coordinate_system = cartesius.CoordinateSystem()
 
 	piechart_data = (
@@ -494,7 +494,35 @@ def test_piechart():
 
 	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
 
-examples.append( test_piechart )
+examples.append( test_piechart_1 )
+
+def test_piechart_2():
+	""" PieChart with custom colors """
+	coordinate_system = cartesius.CoordinateSystem()
+
+	piechart_data = (
+		( 1, 'abc' ),
+		( 2, 'cde' ),
+		( 5, 'efg' ),
+		( 3, 'ijk' ),
+	)
+	piechart = charts.PieChart( data = piechart_data, color = ( 0, 0, 0 ), 
+			fill_colors = (
+				( 255, 200, 200 ), 
+				( 200, 255, 200 ), 
+				( 200, 200, 255 ), 
+				( 255, 255, 255 ), 
+			) )
+	
+	coordinate_system.add( piechart )
+
+	# No need for axes:
+	coordinate_system.add( elements.Axis( horizontal = True, hide = True ) )
+	coordinate_system.add( elements.Axis( vertical = True, hide = True ) )
+
+	return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
+
+examples.append( test_piechart_2 )
 
 if __name__ == '__main__':
 	args = sys.argv[ 1: ]
