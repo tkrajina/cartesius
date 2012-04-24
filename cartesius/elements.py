@@ -22,7 +22,7 @@ class MyElement( mod_main.CoordinateSystemElement ):
     def reload_bounds( self ):
         # Code to reload current bounds based on this element data:
         ...
-	
+
     def process_image( self, draw_handler ):
         # Use methods in draw_handler to draw this element.
         # If you need the bounds of the current coordinate system, use draw_handler.bounds
@@ -105,7 +105,7 @@ class Axis( mod_main.CoordinateSystemElement ):
 
     def is_detached( self ):
         return self.center[ 0 ] != 0 or self.center[ 1 ] != 0
-	
+
     def reload_bounds( self ):
         # not important
         pass
@@ -239,7 +239,7 @@ class Axis( mod_main.CoordinateSystemElement ):
         draw_handler.draw_line( axe_from_point[ 0 ], axe_from_point[ 1 ], axe_to_point[ 0 ], axe_to_point[ 1 ], self.color )
 
 class Point( mod_main.CoordinateSystemElement ):
-	
+
     style = None
     label_position = None
     position = None
@@ -289,7 +289,7 @@ class Grid( mod_main.CoordinateSystemElement ):
 
         #Bounds are not important for axes:
         #self.reload_bounds()
-	
+
     def reload_bounds( self ):
         # not important
         pass
@@ -334,72 +334,13 @@ class Line( mod_main.CoordinateSystemElement ):
         self.color = color if color else mod_main.DEFAULT_ELEMENT_COLOR
 
         self.reload_bounds()
-	
+
     def reload_bounds( self ):
         self.bounds.update( point = self.start )
         self.bounds.update( point = self.end )
 
     def process_image( self, draw_handler ):
         draw_handler.draw_line( self.start[ 0 ], self.start[ 1 ], self.end[ 0 ], self.end[ 1 ], self.get_color_with_transparency( self.color ) )
-
-class Function( mod_main.CoordinateSystemElement ):
-
-    function = None
-    step = None
-    start = None
-    end = None
-    points = None
-    color = None
-    fill_color = None
-
-    def __init__( self, function, start = None, end = None, step = None, fill_color = False, color = None, transparency_mask = None ):
-        mod_main.CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
-
-        assert function
-
-        self.function = function
-        self.step = float( step if step else 0.1 )
-        self.start = start if start != None else -1
-        self.end = end if end != None else -1
-
-        self.fill_color = fill_color
-        self.color = color if color else mod_main.DEFAULT_ELEMENT_COLOR
-
-        self.points = []
-
-        assert self.start < self.end
-        assert self.step > 0
-
-        self.compute()
-
-    def compute( self ):
-        self.points = []
-        # TODO: int or floor/ceil ?
-        for i in range( int( ( self.end - self.start ) / self.step ) ):
-            x = self.start + i * self.step
-            y = self.function( x )
-            point = ( x, y )
-            self.points.append( point )
-	
-    def reload_bounds( self ):
-        for point in self.points:
-            self.bounds.update( point = point )
-	
-    def process_image( self, draw_handler ):
-
-        for i, point in enumerate( self.points ):
-            if i > 0:
-                previous = self.points[ i - 1 ]
-
-                x1, y1 = previous[ 0 ], previous[ 1 ]
-                x2, y2 = point[ 0 ], point[ 1 ]
-
-                if self.fill_color:
-                    draw_handler.draw_polygon( 
-                        [ ( x1, 0 ), ( x1, y1 ), ( x2, y2 ), ( x2, 0 ) ], 
-                        fill_color = self.get_color_with_transparency( self.fill_color )
-                    )
-                draw_handler.draw_line( x1, y1, x2, y2, self.get_color_with_transparency( self.color ) )
 
 class Circle( mod_main.CoordinateSystemElement ):
 
@@ -424,7 +365,7 @@ class Circle( mod_main.CoordinateSystemElement ):
         self.fill_color = fill_color
 
         self.reload_bounds()
-	
+
     def reload_bounds( self ):
         self.bounds.update( point = ( self.x + self.radius, self.y ) )
         self.bounds.update( point = ( self.x - self.radius, self.y ) )
@@ -439,54 +380,3 @@ class Circle( mod_main.CoordinateSystemElement ):
                 fill_color = self.get_color_with_transparency( self.fill_color ),
                 line_color = self.get_color_with_transparency( self.color ) )
 
-class KeyValueGraph( mod_main.CoordinateSystemElement ):
-
-    color = None
-    fill_color = None
-
-    items = None
-
-    def __init__( self, values, color = None, fill_color = False, transparency_mask = None ):
-        mod_main.CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
-
-        assert values 
-
-        self.color = color
-        self.fill_color = fill_color
-
-        self.items = []
-
-        if hasattr( values, 'keys' ) and callable( getattr( values, 'keys' ) ):
-            keys = values.keys()
-            keys.sort()
-
-            for key in keys:
-                item = ( key, values[ key ] )
-                self.items.append( item )
-        else:
-            self.items = values
-
-        for item in self.items:
-            assert len( item ) == 2
-
-        self.reload_bounds()
-	
-    def reload_bounds( self ):
-        assert self.items
-        for key, value in self.items:
-            self.bounds.update( point = ( key, value ) )
-
-    def process_image( self, draw_handler ):
-        assert self.items
-
-        for i, point in enumerate( self.items ):
-            if i > 0:
-                previous = self.items[ i - 1 ]
-                x1, y1 = previous[ 0 ], previous[ 1 ]
-                x2, y2 = point[ 0 ], point[ 1 ]
-                if self.fill_color:
-                    draw_handler.draw_polygon(
-                        [ ( x1, 0 ), ( x1, y1 ), ( x2, y2 ), ( x2, 0 ) ], 
-                        fill_color = self.get_color_with_transparency( self.fill_color )
-                    )
-                draw_handler.draw_line( x1, y1, x2, y2, self.get_color_with_transparency( self.color ) )

@@ -60,7 +60,7 @@ class BarChart( mod_main.CoordinateSystemElement ):
                 assert item and len( item ) == 3, 'Without with given, data must contain (from, to, value) tuples, found {0}'.format( item )
                 start, end, value = item[ 0 ], item[ 1 ], item[ 2 ]
 
-            draw_handler.draw_polygon( 
+            draw_handler.draw_polygon(
                 ( ( start, 0 ), ( start, value ), ( end, value ), ( end, 0 ) ), fill_color = self.fill_colors[ index % len( self.fill_colors ) ] )
 
             if self.color:
@@ -76,7 +76,7 @@ class PieChart( mod_main.CoordinateSystemElement ):
     data = None
     center = None
     radius = None
- 
+
     def __init__( self, data, color = None, fill_colors = None, center = None, radius = None,
             transparency_mask = None ):
         mod_main.CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
@@ -158,7 +158,7 @@ class PieChart( mod_main.CoordinateSystemElement ):
             fill_color = self.fill_colors[ index % len( self.fill_colors ) ]
 
             draw_handler.draw_pieslice(
-                    self.center[ 0 ], 
+                    self.center[ 0 ],
                     self.center[ 1 ],
                     radius = 1,
                     start_angle = start_angle - 90,
@@ -169,3 +169,115 @@ class PieChart( mod_main.CoordinateSystemElement ):
             self.draw_label( ( start_angle + end_angle ) / 2., label, draw_handler )
 
             current_angle += delta
+
+class LineChart( mod_main.CoordinateSystemElement ):
+
+    color = None
+    fill_color = None
+
+    items = None
+
+    def __init__( self, values, color = None, fill_color = False, transparency_mask = None ):
+        mod_main.CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
+
+        assert values
+
+        self.color = color
+        self.fill_color = fill_color
+
+        self.items = []
+
+        if hasattr( values, 'keys' ) and callable( getattr( values, 'keys' ) ):
+            keys = values.keys()
+            keys.sort()
+
+            for key in keys:
+                item = ( key, values[ key ] )
+                self.items.append( item )
+        else:
+            self.items = values
+
+        for item in self.items:
+            assert len( item ) == 2
+
+        self.reload_bounds()
+
+    def reload_bounds( self ):
+        assert self.items
+        for key, value in self.items:
+            self.bounds.update( point = ( key, value ) )
+
+    def process_image( self, draw_handler ):
+        assert self.items
+
+        for i, point in enumerate( self.items ):
+            if i > 0:
+                previous = self.items[ i - 1 ]
+                x1, y1 = previous[ 0 ], previous[ 1 ]
+                x2, y2 = point[ 0 ], point[ 1 ]
+                if self.fill_color:
+                    draw_handler.draw_polygon(
+                        [ ( x1, 0 ), ( x1, y1 ), ( x2, y2 ), ( x2, 0 ) ],
+                        fill_color = self.get_color_with_transparency( self.fill_color )
+                    )
+                draw_handler.draw_line( x1, y1, x2, y2, self.get_color_with_transparency( self.color ) )
+
+class Function( mod_main.CoordinateSystemElement ):
+
+    function = None
+    step = None
+    start = None
+    end = None
+    points = None
+    color = None
+    fill_color = None
+
+    def __init__( self, function, start = None, end = None, step = None, fill_color = False, color = None, transparency_mask = None ):
+        mod_main.CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
+
+        assert function
+
+        self.function = function
+        self.step = float( step if step else 0.1 )
+        self.start = start if start != None else -1
+        self.end = end if end != None else -1
+
+        self.fill_color = fill_color
+        self.color = color if color else mod_main.DEFAULT_ELEMENT_COLOR
+
+        self.points = []
+
+        assert self.start < self.end
+        assert self.step > 0
+
+        self.compute()
+
+    def compute( self ):
+        self.points = []
+        # TODO: int or floor/ceil ?
+        for i in range( int( ( self.end - self.start ) / self.step ) ):
+            x = self.start + i * self.step
+            y = self.function( x )
+            point = ( x, y )
+            self.points.append( point )
+
+    def reload_bounds( self ):
+        for point in self.points:
+            self.bounds.update( point = point )
+
+    def process_image( self, draw_handler ):
+
+        for i, point in enumerate( self.points ):
+            if i > 0:
+                previous = self.points[ i - 1 ]
+
+                x1, y1 = previous[ 0 ], previous[ 1 ]
+                x2, y2 = point[ 0 ], point[ 1 ]
+
+                if self.fill_color:
+                    draw_handler.draw_polygon(
+                        [ ( x1, 0 ), ( x1, y1 ), ( x2, y2 ), ( x2, 0 ) ],
+                        fill_color = self.get_color_with_transparency( self.fill_color )
+                    )
+                draw_handler.draw_line( x1, y1, x2, y2, self.get_color_with_transparency( self.color ) )
+

@@ -16,7 +16,7 @@ package_location = mod_utils.__file__[ : mod_utils.__file__.rfind( '/' ) ]
 DEFAULT_FONT_NAME = 'Oxygen-Regular.ttf'
 DEFAULT_FONT_LOCATION = package_location + mod_os.sep + 'fonts' + mod_os.sep + DEFAULT_FONT_NAME
 
-DEFAULT_FONT_SIZE = 10 
+DEFAULT_FONT_SIZE = 10
 
 # Default colors for important elements:
 DEFAULT_AXES_COLOR = ( 150, 150, 150 )
@@ -261,7 +261,7 @@ class CoordinateSystemElement:
         fits on the image.
         """
         raise Exception( 'Not implemented in {0}'.format( self.__class__ ) )
-	
+
     def process_image( self, draw_handler ):
         """ Will be called when the image is drawn """
         raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
@@ -297,7 +297,7 @@ class CoordinateSystemElement:
 class PILHandler:
     """
     Elements are not expected to draw directly to PIL draw, but through methods in this class.
-    This class also contains all other data needed for different elements to be drawn (coordinate 
+    This class also contains all other data needed for different elements to be drawn (coordinate
     system bounds, antialiasing_coef, and so on).
     """
 
@@ -333,7 +333,7 @@ class PILHandler:
         """
         self.pil_image = image
         self.pil_draw = draw
-	
+
     def draw_point( self, x, y, color, style = '+', label = None, label_position = None ):
         """
         Draw single point.
@@ -382,19 +382,19 @@ class PILHandler:
         image_x2, image_y2 = mod_utils.cartesius_to_image_coord( x2, y2, self.bounds )
 
         self.pil_draw.line( ( image_x1, image_y1, image_x2, image_y2 ), color )
-	
+
     def draw_polygon( self, points, fill_color ):
         image_points = []
         for x, y in points:
             image_coordinates = mod_utils.cartesius_to_image_coord( x, y, self.bounds )
             image_points.append( image_coordinates )
-        self.pil_draw.polygon( 
+        self.pil_draw.polygon(
             image_points,
             fill = fill_color )
 
     def draw_text( self, x, y, text, color, label_position = None ):
         """
-        Draw text. 
+        Draw text.
 
         label_position: one of the label position constants (CENTER_UP, RIGHT_DOWN, ...). The default
         is set in draw_text()
@@ -410,7 +410,7 @@ class PILHandler:
         if label_position[ 0 ] == -1:
             image_x = image_x - label_width - 4. * self.antialiasing_coef
         elif label_position[ 0 ] == 0:
-            image_x = image_x - label_width / 2. 
+            image_x = image_x - label_width / 2.
         elif label_position[ 0 ] == 1:
             image_x += 4 * self.antialiasing_coef
 
@@ -422,7 +422,7 @@ class PILHandler:
             image_y = image_y - label_height - 2 * self.antialiasing_coef
 
         self.pil_draw.text( ( image_x, image_y ), text, color, font )
-	
+
     def draw_circle( self, x, y, radius, line_color, fill_color ):
         x1, y1 = mod_utils.cartesius_to_image_coord(
                 x = x - radius / 2.,
@@ -448,7 +448,7 @@ class PILHandler:
                 y = y - radius,
                 bounds = self.bounds )
 
-        self.pil_draw.pieslice( 
+        self.pil_draw.pieslice(
                 ( int( x1 ), int( y1 ), int( x2 ), int( y2 ) ),
                 int( start_angle ),
                 int( end_angle ),

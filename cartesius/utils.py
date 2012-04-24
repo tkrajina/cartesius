@@ -27,6 +27,6 @@ def min_max( *n ):
                 min_result = i
             if max_result == None or i > max_result:
                 max_result = i
-				
+
     return min_result, max_result
 

@@ -94,7 +94,7 @@ def test_function():
     coordinate_system = cartesius.CoordinateSystem()
 
     f = lambda x : math.sin( x ) * 2
-    coordinate_system.add( elements.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+    coordinate_system.add( charts.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
     return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
@@ -105,7 +105,7 @@ def test_function_with_custom_bounds():
     coordinate_system = cartesius.CoordinateSystem( bounds = ( -32, 20, -3, 3 ))
 
     f = lambda x : math.sin( x ) * 2
-    coordinate_system.add( elements.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+    coordinate_system.add( charts.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
     return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
@@ -116,10 +116,10 @@ def test_filled_function():
     coordinate_system = cartesius.CoordinateSystem()
 
     f = lambda x : math.sin( x ) * 2
-    coordinate_system.add( elements.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+    coordinate_system.add( charts.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
     g = lambda x : math.sin( x ) * 2
-    coordinate_system.add( elements.Function( g, start = 1, end = 4, step = 0.02, fill_color = ( 200, 255, 200 ) ) )
+    coordinate_system.add( charts.Function( g, start = 1, end = 4, step = 0.02, fill_color = ( 200, 255, 200 ) ) )
 
     return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
@@ -133,10 +133,10 @@ def test_filled_function():
     coordinate_system.add( elements.Grid( 1, 1 ) )
 
     f = lambda x : math.sin( x ) * 2
-    coordinate_system.add( elements.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+    coordinate_system.add( charts.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
     g = lambda x : math.sin( x ) * 2
-    coordinate_system.add( elements.Function( g, start = 1, end = 4, step = 0.02, fill_color = ( 200, 255, 200 ) ) )
+    coordinate_system.add( charts.Function( g, start = 1, end = 4, step = 0.02, fill_color = ( 200, 255, 200 ) ) )
 
     return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
@@ -147,7 +147,7 @@ def test_filled_transparent_graphs():
     coordinate_system = cartesius.CoordinateSystem()
 
     coordinate_system.add(
-            elements.Function(
+            charts.Function(
                     math.sin,
                     start = -4,
                     end = 5,
@@ -156,7 +156,7 @@ def test_filled_transparent_graphs():
                     transparency_mask = 100 ) )
 
     coordinate_system.add(
-            elements.Function(
+            charts.Function(
                     math.cos,
                     start = -4,
                     end = 5,
@@ -173,7 +173,7 @@ def test_filled_transparent_graphs_2():
     coordinate_system = cartesius.CoordinateSystem()
 
     coordinate_system.add(
-            elements.Function(
+            charts.Function(
                     math.sin,
                     start = -4,
                     end = 5,
@@ -182,7 +182,7 @@ def test_filled_transparent_graphs_2():
                     transparency_mask = 100 ) )
 
     coordinate_system.add(
-            elements.Function(
+            charts.Function(
                     math.cos,
                     start = -4,
                     end = 5,
@@ -196,32 +196,32 @@ def test_filled_transparent_graphs_2():
 
 examples.append( test_filled_transparent_graphs_2 )
 
-def test_key_value_graphs():
-    """ Key-value graphs"""
+def test_line_charts():
+    """ Line charts"""
     coordinate_system = cartesius.CoordinateSystem()
 
     # With dict:
     coordinate_system.add(
-            elements.KeyValueGraph(
+            charts.LineChart(
                     values = { -2: 1, 0: -1, 3: 1.2, 7: 1.2 },
                     fill_color = ( 50, 50, 50 ),
                     transparency_mask = 50 ) )
 
     # With pairs of tuples
-    coordinate_system.add( 
-            elements.KeyValueGraph( 
+    coordinate_system.add(
+            charts.LineChart(
                     values = ( ( 0, 0 ), ( 1, -3 ), ( 4, 3 ), ( 5, -2 ), ( 7, 0 ) ),
                     color = ( 255, 0, 0 ),
                     transparency_mask = 150 ) )
 
     return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
-examples.append( test_key_value_graphs )
+examples.append( test_line_charts )
 
 def test_circles_2():
     """ Another example with circles """
     coordinate_system = cartesius.CoordinateSystem()
-	
+
     for i in range( 1, 20 ):
         x = i / 2.
         coordinate_system.add( elements.Circle( x, y = math.sin( x ), radius = math.sqrt( x ),
@@ -234,7 +234,7 @@ examples.append( test_circles_2 )
 def test_circles_3():
     """ Circles with horizontal grid """
     coordinate_system = cartesius.CoordinateSystem()
-	
+
     coordinate_system.add( elements.Grid( 1, None, transparency_mask = 200 ) )
 
     for i in range( 1, 20 ):
@@ -249,7 +249,7 @@ examples.append( test_circles_3 )
 def test_circles_4():
     """ Circles with horizontal grid every 2 """
     coordinate_system = cartesius.CoordinateSystem()
-	
+
     coordinate_system.add( elements.Grid( 2, None, transparency_mask = 200 ) )
 
     for i in range( 1, 20 ):
@@ -264,7 +264,7 @@ examples.append( test_circles_4 )
 def test_circles_5():
     """ Circles with vertical grid every 0.5 """
     coordinate_system = cartesius.CoordinateSystem()
-	
+
     coordinate_system.add( elements.Grid( None, 0.5, transparency_mask = 200 ) )
 
     for i in range( 1, 20 ):
@@ -282,9 +282,9 @@ def test_axis_with_custom_labels():
 
     coordinate_system.add( elements.Axis( horizontal = True, labels = 1, points = 0.25 ) )
     coordinate_system.add( elements.Axis( vertical = True, labels = 2, points = 1 ) )
-	
+
     f = lambda x : math.sin( x ) * 2
-    coordinate_system.add( elements.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+    coordinate_system.add( charts.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
     return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
@@ -300,7 +300,7 @@ def test_axis_with_custom_labels_2():
     # Custom labels on custom positions:
     coordinate_system.add( elements.Axis( vertical = True, labels = { 1000: 'one km', 500: 'half km' },
             points = 100 ) )
-	
+
     return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_axis_with_custom_labels_2 )
@@ -311,9 +311,9 @@ def test_axis_custom_colors():
 
     coordinate_system.add( elements.Axis( horizontal = True, color = ( 255, 0, 0 ), labels = 1, points = 0.25 ) )
     coordinate_system.add( elements.Axis( vertical = True, color = ( 0, 255, 0 ), labels = 2, points = 1 ) )
-	
+
     f = lambda x : x * math.sin( x * x )
-    coordinate_system.add( elements.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+    coordinate_system.add( charts.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
     return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
@@ -327,7 +327,7 @@ def test_with_two_horizontal_grids():
     coordinate_system.add( elements.Grid( 1, None, color = ( 250, 50, 50 ) ) )
 
     f = lambda x : math.sin( x ) * 2
-    coordinate_system.add( elements.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+    coordinate_system.add( charts.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
     return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
@@ -365,7 +365,7 @@ def test_hide_axis():
     cs_1 = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
     cs_1.add( elements.Axis( horizontal = True, hide = True ) )
     cs_1.add( elements.Axis( vertical = True ) )
-    cs_1.add( elements.Function(
+    cs_1.add( charts.Function(
             lambda x : x * math.sin( x * x ),
             start = -4,
             end = 5,
@@ -375,7 +375,7 @@ def test_hide_axis():
     cs_2 = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
     cs_2.add( elements.Axis( horizontal = True ) )
     cs_2.add( elements.Axis( vertical = True, hide = True ) )
-    cs_2.add( elements.Function(
+    cs_2.add( charts.Function(
             lambda x : x * math.sin( x * x ),
             start = -4,
             end = 5,
@@ -389,12 +389,12 @@ examples.append( test_hide_axis )
 def test_hide_axis_positive_or_negative_parts():
     """Hide positive and/or negative parts of axes"""
     cs_1 = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
-    cs_1.add( elements.Function( lambda x : x * math.sin( x * x ), start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+    cs_1.add( charts.Function( lambda x : x * math.sin( x * x ), start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
     cs_1.add( elements.Axis( horizontal = True, hide_positive = True ) )
     cs_1.add( elements.Axis( vertical = True, hide_positive = True ) )
 
     cs_2 = cartesius.CoordinateSystem( bounds = ( -2.5, 2.5, -2.5, 2.5 ) )
-    cs_2.add( elements.Function( lambda x : x * math.sin( x * x ), start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+    cs_2.add( charts.Function( lambda x : x * math.sin( x * x ), start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
     cs_2.add( elements.Axis( horizontal = True, hide_negative = True ) )
     cs_2.add( elements.Axis( vertical = True, hide_negative = True ) )
 
@@ -406,7 +406,7 @@ def test_detached_axes():
     """ Detached axes"""
     coordinate_system = cartesius.CoordinateSystem( bounds = ( -10, 10, -10, 10 ) )
 
-    coordinate_system.add( elements.Function( lambda x : x * math.sin( x * x ),
+    coordinate_system.add( charts.Function( lambda x : x * math.sin( x * x ),
             start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
 
     # Standard axes:
@@ -506,14 +506,14 @@ def test_piechart_2():
         ( 5, 'efg' ),
         ( 3, 'ijk' ),
     )
-    piechart = charts.PieChart( data = piechart_data, color = ( 0, 0, 0 ), 
+    piechart = charts.PieChart( data = piechart_data, color = ( 0, 0, 0 ),
             fill_colors = (
-                ( 255, 200, 200 ), 
-                ( 200, 255, 200 ), 
-                ( 200, 200, 255 ), 
-                ( 255, 255, 255 ), 
+                ( 255, 200, 200 ),
+                ( 200, 255, 200 ),
+                ( 200, 200, 255 ),
+                ( 255, 255, 255 ),
             ) )
-	
+
     coordinate_system.add( piechart )
 
     # No need for axes:
@@ -584,7 +584,7 @@ Note, all examples come in two versions: normal and antialiased. Antialiased can
         images = function()
 
         if not isinstance( images, tuple ) and not isinstance( images, list ):
-            images = [ images ]	
+            images = [ images ]
 
         html += '<h2>{0}:</h2>'.format( description )
 
@@ -597,9 +597,9 @@ Note, all examples come in two versions: normal and antialiased. Antialiased can
         html += '</p>'
 
         html += '<p>Code:</p>'
-        html += '<pre style="font-size:0.8em;border-style:solid;border-color:gray;border-width:0px 0px 0px 1px;margin:2px 2px 10px 2px;padding:2px 2px 2px 10px;">' 
+        html += '<pre style="font-size:0.8em;border-style:solid;border-color:gray;border-width:0px 0px 0px 1px;margin:2px 2px 10px 2px;padding:2px 2px 2px 10px;">'
         html += 'import cartesius.main as cartesius\nimport cartesius.elements as elements\nimport cartesius.charts as charts\n\n'
-        html += clean_source_lines( function ) 
+        html += clean_source_lines( function )
         html += '</pre>'
 
     html += '</body>'
