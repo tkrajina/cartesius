@@ -37,6 +37,58 @@ def test_circles():
 
 examples.append( test_circles )
 
+def test_piechart_1():
+    """ PieChart with default colors """
+    coordinate_system = cartesius.CoordinateSystem()
+
+    piechart_data = (
+        ( 1, 'abc' ),
+        ( 2, 'cde' ),
+        ( 4, 'efg' ),
+        ( 1, 'ijk' ),
+        ( 5, 'lmn' ),
+        ( 5, 'opq' ),
+        ( 3, 'xyz' ),
+    )
+    piechart = charts.PieChart( data = piechart_data, color = ( 0, 0, 0 ) )
+    coordinate_system.add( piechart )
+
+    # No need for axes:
+    coordinate_system.add( elements.Axis( horizontal = True, hide = True ) )
+    coordinate_system.add( elements.Axis( vertical = True, hide = True ) )
+
+    return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
+
+examples.append( test_piechart_1 )
+
+def test_piechart_2():
+    """ PieChart with custom colors """
+    coordinate_system = cartesius.CoordinateSystem()
+
+    piechart_data = (
+        ( 1, 'abc' ),
+        ( 2, 'cde' ),
+        ( 5, 'efg' ),
+        ( 3, 'ijk' ),
+    )
+    piechart = charts.PieChart( data = piechart_data, color = ( 0, 0, 0 ),
+            fill_colors = (
+                ( 255, 200, 200 ),
+                ( 200, 255, 200 ),
+                ( 200, 200, 255 ),
+                ( 255, 255, 255 ),
+            ) )
+
+    coordinate_system.add( piechart )
+
+    # No need for axes:
+    coordinate_system.add( elements.Axis( horizontal = True, hide = True ) )
+    coordinate_system.add( elements.Axis( vertical = True, hide = True ) )
+
+    return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
+
+examples.append( test_piechart_2 )
+
 def test_barchart_1():
     """ Bar charts with same column width. One with default and the other with custom colors """
     coordinate_system = cartesius.CoordinateSystem()
@@ -91,110 +143,6 @@ def test_barchart_horizontal():
     return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True),
 
 examples.append(test_barchart_horizontal)
-
-def test_piechart_1():
-    """ PieChart with default colors """
-    coordinate_system = cartesius.CoordinateSystem()
-
-    piechart_data = (
-        ( 1, 'abc' ),
-        ( 2, 'cde' ),
-        ( 4, 'efg' ),
-        ( 1, 'ijk' ),
-        ( 5, 'lmn' ),
-        ( 5, 'opq' ),
-        ( 3, 'xyz' ),
-    )
-    piechart = charts.PieChart( data = piechart_data, color = ( 0, 0, 0 ) )
-    coordinate_system.add( piechart )
-
-    # No need for axes:
-    coordinate_system.add( elements.Axis( horizontal = True, hide = True ) )
-    coordinate_system.add( elements.Axis( vertical = True, hide = True ) )
-
-    return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
-
-examples.append( test_piechart_1 )
-
-def test_piechart_2():
-    """ PieChart with custom colors """
-    coordinate_system = cartesius.CoordinateSystem()
-
-    piechart_data = (
-        ( 1, 'abc' ),
-        ( 2, 'cde' ),
-        ( 5, 'efg' ),
-        ( 3, 'ijk' ),
-    )
-    piechart = charts.PieChart( data = piechart_data, color = ( 0, 0, 0 ),
-            fill_colors = (
-                ( 255, 200, 200 ),
-                ( 200, 255, 200 ),
-                ( 200, 200, 255 ),
-                ( 255, 255, 255 ),
-            ) )
-
-    coordinate_system.add( piechart )
-
-    # No need for axes:
-    coordinate_system.add( elements.Axis( horizontal = True, hide = True ) )
-    coordinate_system.add( elements.Axis( vertical = True, hide = True ) )
-
-    return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
-
-examples.append( test_piechart_2 )
-
-def test_lines():
-    """Lines different colors"""
-    coordinate_system = cartesius.CoordinateSystem()
-
-    coordinate_system.add(elements.Line((0, 0), (-.7, -.7)))
-    coordinate_system.add(elements.Line((.5, -.5), (-.5, .5), color = (0, 255, 0)))
-    coordinate_system.add(elements.Line((0, 0), (7, 3), color = (0, 0, 255)))
-
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing = True)
-
-examples.append(test_lines)
-
-def test_points():
-    """Test points of different styles with/without label and different label positions"""
-    coordinate_system = cartesius.CoordinateSystem( bounds = ( -.5, 5, -.5, 5 ))
-
-    # Without labels:
-    coordinate_system.add( elements.Point( ( 1, 4 ), style = '.' ) )
-    coordinate_system.add( elements.Point( ( 2, 4 ), style = '+' ) )
-    coordinate_system.add( elements.Point( ( 3, 4 ), style = 'x' ) )
-    coordinate_system.add( elements.Point( ( 4, 4 ), style = 'o' ) )
-
-    # With labels:
-    coordinate_system.add( elements.Point( ( 1, 3 ), style = '.', label = 'A' ) )
-    coordinate_system.add( elements.Point( ( 2, 3 ), style = '+', label = 'B' ) )
-    coordinate_system.add( elements.Point( ( 3, 3 ), style = 'x', label = 'C' ) )
-    coordinate_system.add( elements.Point( ( 4, 3 ), style = 'o', label = 'D' ) )
-
-    # With labels and custom colors:
-    coordinate_system.add( elements.Point( ( 1, 2 ), style = '.', label = 'A',
-            color = ( 255, 0, 0 ) ) )
-    coordinate_system.add( elements.Point( ( 2, 2 ), style = '+', label = 'B',
-            color = ( 0, 255, 0 ) ) )
-    coordinate_system.add( elements.Point( ( 3, 2 ), style = 'x', label = 'C',
-            color = ( 0, 0, 255 ) ) )
-    coordinate_system.add( elements.Point( ( 4, 2 ), style = 'o', label = 'D',
-            color = ( 150, 150, 150 ) ) )
-
-    # With labels on custom positions:
-    coordinate_system.add( elements.Point( ( 1, 1 ), style = '.', label = 'A',
-            label_position = cartesius.RIGHT_CENTER ) )
-    coordinate_system.add( elements.Point( ( 2, 1 ), style = '+', label = 'B',
-            label_position = cartesius.LEFT_CENTER ) )
-    coordinate_system.add( elements.Point( ( 3, 1 ), style = 'x', label = 'C',
-            label_position = cartesius.CENTER_UP ) )
-    coordinate_system.add( elements.Point( ( 4, 1 ), style = 'o', label = 'D',
-            label_position = cartesius.CENTER_DOWN ) )
-
-    return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
-
-examples.append( test_points )
 
 def test_function():
     """ Function math.sin from -4 to 5"""
@@ -544,6 +492,58 @@ def test_detached_axes():
     return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 
 examples.append( test_detached_axes )
+
+def test_lines():
+    """Lines different colors"""
+    coordinate_system = cartesius.CoordinateSystem()
+
+    coordinate_system.add(elements.Line((0, 0), (-.7, -.7)))
+    coordinate_system.add(elements.Line((.5, -.5), (-.5, .5), color = (0, 255, 0)))
+    coordinate_system.add(elements.Line((0, 0), (7, 3), color = (0, 0, 255)))
+
+    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing = True)
+
+examples.append(test_lines)
+
+def test_points():
+    """Test points of different styles with/without label and different label positions"""
+    coordinate_system = cartesius.CoordinateSystem( bounds = ( -.5, 5, -.5, 5 ))
+
+    # Without labels:
+    coordinate_system.add( elements.Point( ( 1, 4 ), style = '.' ) )
+    coordinate_system.add( elements.Point( ( 2, 4 ), style = '+' ) )
+    coordinate_system.add( elements.Point( ( 3, 4 ), style = 'x' ) )
+    coordinate_system.add( elements.Point( ( 4, 4 ), style = 'o' ) )
+
+    # With labels:
+    coordinate_system.add( elements.Point( ( 1, 3 ), style = '.', label = 'A' ) )
+    coordinate_system.add( elements.Point( ( 2, 3 ), style = '+', label = 'B' ) )
+    coordinate_system.add( elements.Point( ( 3, 3 ), style = 'x', label = 'C' ) )
+    coordinate_system.add( elements.Point( ( 4, 3 ), style = 'o', label = 'D' ) )
+
+    # With labels and custom colors:
+    coordinate_system.add( elements.Point( ( 1, 2 ), style = '.', label = 'A',
+            color = ( 255, 0, 0 ) ) )
+    coordinate_system.add( elements.Point( ( 2, 2 ), style = '+', label = 'B',
+            color = ( 0, 255, 0 ) ) )
+    coordinate_system.add( elements.Point( ( 3, 2 ), style = 'x', label = 'C',
+            color = ( 0, 0, 255 ) ) )
+    coordinate_system.add( elements.Point( ( 4, 2 ), style = 'o', label = 'D',
+            color = ( 150, 150, 150 ) ) )
+
+    # With labels on custom positions:
+    coordinate_system.add( elements.Point( ( 1, 1 ), style = '.', label = 'A',
+            label_position = cartesius.RIGHT_CENTER ) )
+    coordinate_system.add( elements.Point( ( 2, 1 ), style = '+', label = 'B',
+            label_position = cartesius.LEFT_CENTER ) )
+    coordinate_system.add( elements.Point( ( 3, 1 ), style = 'x', label = 'C',
+            label_position = cartesius.CENTER_UP ) )
+    coordinate_system.add( elements.Point( ( 4, 1 ), style = 'o', label = 'D',
+            label_position = cartesius.CENTER_DOWN ) )
+
+    return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
+
+examples.append( test_points )
 
 if __name__ == '__main__':
     args = sys.argv[ 1: ]
