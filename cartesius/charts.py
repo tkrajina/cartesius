@@ -192,28 +192,29 @@ class PieChart( mod_main.CoordinateSystemElement ):
             sum_values += value
 
         current_angle = 0
-        for index, item in enumerate( self.data ):
-            value = item[ 0 ]
-            label = str( item[ 1 ] )
-            delta = 360 * value / sum_values
+        for index, item in enumerate(self.data):
+            value = item[0]
+            if value > 0:
+                label = str(item[1])
+                delta = 360 * value / sum_values
 
-            start_angle = current_angle
-            end_angle = current_angle + delta
+                start_angle = current_angle
+                end_angle = current_angle + delta
 
-            fill_color = self.fill_colors[ index % len( self.fill_colors ) ]
+                fill_color = self.fill_colors[index % len(self.fill_colors)]
 
-            draw_handler.draw_pieslice(
-                    self.center[ 0 ],
-                    self.center[ 1 ],
-                    radius = 1,
-                    start_angle = start_angle - 90,
-                    end_angle = end_angle - 90,
-                    fill_color = fill_color,
-                    color = self.color )
+                draw_handler.draw_pieslice(
+                        self.center[0],
+                        self.center[1],
+                        radius = 1,
+                        start_angle = start_angle - 90,
+                        end_angle = end_angle - 90,
+                        fill_color = fill_color,
+                        color = self.color )
 
-            self.draw_label( ( start_angle + end_angle ) / 2., label, draw_handler )
+                self.draw_label((start_angle + end_angle) / 2., label, draw_handler)
 
-            current_angle += delta
+                current_angle += delta
 
 class LineChart( mod_main.CoordinateSystemElement ):
 
