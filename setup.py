@@ -19,14 +19,14 @@ import setuptools as mod_setuptools
 import cartesius as mod_cartesius
 
 mod_setuptools.setup(
-	name = 'cartesius',
-	version = mod_cartesius.__version__,
-	description = 'Cartesius 2D coordinate system drawing library',
-	license = 'Apache License, Version 2.0',
-	author = 'Tomo Krajina',
-	author_email = 'tkrajina@gmail.com',
-	url = 'http://tkrajina.github.com/cartesius/',
-	packages = [ 'cartesius', 'cartesius/fonts' ],
-	package_data = { '': [ '*.ttf' ] },
-	include_package_data = True,
+    name = 'cartesius',
+    version = mod_cartesius.__version__,
+    description = 'Cartesius 2D coordinate system drawing library',
+    license = 'Apache License, Version 2.0',
+    author = 'Tomo Krajina',
+    author_email = 'tkrajina@gmail.com',
+    url = 'http://tkrajina.github.com/cartesius/',
+    packages = [ 'cartesius', 'cartesius/fonts' ],
+    package_data = { '': [ '*.ttf' ] },
+    include_package_data = True,
 )
