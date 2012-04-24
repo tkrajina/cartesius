@@ -274,14 +274,13 @@ class CoordinateSystemElement:
 
         if isinstance(color, int):
             temp = color
+            blue = temp % 256
 
-            blue = temp % 16
-            temp = temp / 16
+            temp = temp / 256
+            green = temp % 256
 
-            green = temp % 16
-            temp = temp / 16
-
-            red = temp % 16
+            temp = temp / 256
+            red = temp % 256
 
             return (red, green, blue)
 
