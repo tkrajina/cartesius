@@ -65,8 +65,8 @@ class Axis( mod_main.CoordinateSystemElement ):
 
         self.horizontal = horizontal
 
-        self.color = color if color else mod_main.DEFAULT_AXES_COLOR
-        self.label_color = label_color if label_color else mod_main.DEFAULT_LABEL_COLOR
+        self.color = self.get_color(color if color else mod_main.DEFAULT_AXES_COLOR)
+        self.label_color = self.get_color(label_color if label_color else mod_main.DEFAULT_LABEL_COLOR)
 
         if isinstance( labels, str ) or isinstance( labels, unicode ):
             groups = mod_re.findall( '([0-9\.]+)(.*)', labels )
@@ -254,14 +254,12 @@ class Point( mod_main.CoordinateSystemElement ):
             assert len( label_position ) == 2, 'Invalid label position {0}'.format( label_position )
         else:
             label_position = mod_main.CENTER_DOWN
-        if color:
-            assert len( color ) == 3, 'Invalid color {0}'.format( color )
 
         self.position = position
         self.label = str( label ) if label else None
         self.label_position = label_position
         self.style = style
-        self.color = color
+        self.color = self.get_color(color)
 
         self.reload_bounds()
 
@@ -285,7 +283,7 @@ class Grid( mod_main.CoordinateSystemElement ):
 
         self.horizontal = float( horizontal ) if horizontal else None
         self.vertical = float( vertical ) if vertical else None
-        self.color = color if color else mod_main.DEFAULT_GRID_COLOR
+        self.color = self.get_color(color if color else mod_main.DEFAULT_GRID_COLOR)
 
         #Bounds are not important for axes:
         #self.reload_bounds()
@@ -331,7 +329,7 @@ class Line( mod_main.CoordinateSystemElement ):
 
         self.start = start
         self.end = end
-        self.color = color if color else mod_main.DEFAULT_ELEMENT_COLOR
+        self.color = self.get_color(color if color else mod_main.DEFAULT_ELEMENT_COLOR)
 
         self.reload_bounds()
 
@@ -361,8 +359,8 @@ class Circle( mod_main.CoordinateSystemElement ):
         self.y = y
         self.radius = radius
 
-        self.color = color if color else DEFAULT_ELEMENT_COLOR
-        self.fill_color = fill_color
+        self.color = self.get_color(color if color else DEFAULT_ELEMENT_COLOR)
+        self.fill_color = self.get_color(fill_color)
 
         self.reload_bounds()
 

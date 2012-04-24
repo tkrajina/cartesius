@@ -8,10 +8,10 @@ import main as mod_main
 
 # Default color palete from: http://www.colourlovers.com/pattern/2429885/Spring_flower_aerial
 DEFAULT_COLORS = (
-        ( 141, 198, 183 ),
-        ( 207, 249, 117 ),
-        ( 230, 193, 238 ),
-        ( 242, 229, 229 ),
+        (141, 198, 183),
+        (207, 249, 117),
+        (230, 193, 238),
+        (242, 229, 229),
 )
 
 class BarChart( mod_main.CoordinateSystemElement ):
@@ -36,8 +36,14 @@ class BarChart( mod_main.CoordinateSystemElement ):
 
         self.data = data
         self.width = width
-        self.color = color
-        self.fill_colors = fill_colors if fill_colors else DEFAULT_COLORS
+        self.color = self.get_color(color)
+
+        if fill_colors:
+            self.fill_colors = []
+            for fill_color in fill_colors:
+                self.fill_colors.append(self.get_color(fill_color))
+        else:
+            self.fill_colors = DEFAULT_COLORS
 
         self.reload_bounds()
 
@@ -116,8 +122,14 @@ class PieChart( mod_main.CoordinateSystemElement ):
 
         self.data = data
 
-        self.color = color
-        self.fill_colors = fill_colors if fill_colors else DEFAULT_COLORS
+        self.color = self.get_color(color)
+
+        if fill_colors:
+            self.fill_colors = []
+            for fill_color in fill_colors:
+                self.fill_colors.append(self.get_color(fill_color))
+        else:
+            self.fill_colors = DEFAULT_COLORS
 
         if center:
             assert len( center ) == 2, 'Invalid center {0}'.format( center )
@@ -215,8 +227,8 @@ class LineChart( mod_main.CoordinateSystemElement ):
 
         assert values
 
-        self.color = color
-        self.fill_color = fill_color
+        self.color = self.get_color(color)
+        self.fill_color = self.get_color(fill_color)
 
         self.items = []
 
@@ -275,8 +287,8 @@ class Function( mod_main.CoordinateSystemElement ):
         self.start = start if start != None else -1
         self.end = end if end != None else -1
 
-        self.fill_color = fill_color
-        self.color = color if color else mod_main.DEFAULT_ELEMENT_COLOR
+        self.fill_color = self.get_color(fill_color)
+        self.color = self.get_color(color if color else mod_main.DEFAULT_ELEMENT_COLOR)
 
         self.points = []
 

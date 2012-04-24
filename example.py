@@ -73,7 +73,7 @@ def test_barchart_2():
 examples.append( test_barchart_2 )
 
 def test_barchart_horizontal():
-    """ Bar charts with same column width. One with default and the other with custom colors """
+    """ Horizontal bar charts """
     coordinate_system = cartesius.CoordinateSystem()
 
     barchart_data_1 = (
@@ -148,13 +148,13 @@ def test_lines():
     """Lines different colors"""
     coordinate_system = cartesius.CoordinateSystem()
 
-    coordinate_system.add( elements.Line( ( 0, 0 ), ( -.7, -.7 ) ) )
-    coordinate_system.add( elements.Line( ( .5, -.5 ), ( -.5, .5 ), color = ( 0, 255, 0 ) ) )
-    coordinate_system.add( elements.Line( ( 0, 0 ), ( 7, 3 ), color = ( 0, 0, 255 ) ) )
+    coordinate_system.add(elements.Line((0, 0), (-.7, -.7)))
+    coordinate_system.add(elements.Line((.5, -.5), (-.5, .5), color = (0, 255, 0)))
+    coordinate_system.add(elements.Line((0, 0), (7, 3), color = (0, 0, 255)))
 
-    return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
+    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing = True)
 
-examples.append( test_lines )
+examples.append(test_lines)
 
 def test_points():
     """Test points of different styles with/without label and different label positions"""
@@ -200,16 +200,16 @@ def test_function():
     """ Function math.sin from -4 to 5"""
     coordinate_system = cartesius.CoordinateSystem()
 
-    f = lambda x : math.sin( x ) * 2
-    coordinate_system.add( charts.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+    f = lambda x : math.sin(x) * 2
+    coordinate_system.add(charts.Function(f, start = -4, end = 5, step = 0.02, color = 0x0000ff))
 
-    return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
+    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing = True)
 
 examples.append( test_function )
 
 def test_function_with_custom_bounds():
     """Same function, but with custom coordinate system bounds"""
-    coordinate_system = cartesius.CoordinateSystem( bounds = ( -32, 20, -3, 3 ))
+    coordinate_system = cartesius.CoordinateSystem(bounds=(-32, 20, -3, 3))
 
     f = lambda x : math.sin( x ) * 2
     coordinate_system.add( charts.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
@@ -222,11 +222,11 @@ def test_filled_function():
     """ Line function and normal function but with filled graph"""
     coordinate_system = cartesius.CoordinateSystem()
 
-    f = lambda x : math.sin( x ) * 2
-    coordinate_system.add( charts.Function( f, start = -4, end = 5, step = 0.02, color = ( 0, 0, 255 ) ) )
+    f = lambda x : math.sin(x) * 2
+    coordinate_system.add(charts.Function(f, start=-4, end=5, step=0.02, color=0x0000ff))
 
-    g = lambda x : math.sin( x ) * 2
-    coordinate_system.add( charts.Function( g, start = 1, end = 4, step = 0.02, fill_color = ( 200, 255, 200 ) ) )
+    g = lambda x : math.sin(x) * 2
+    coordinate_system.add(charts.Function(g, start=1, end=4, step=0.02, fill_color=(200, 255, 200)))
 
     return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True )
 

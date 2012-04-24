@@ -266,6 +266,28 @@ class CoordinateSystemElement:
         """ Will be called when the image is drawn """
         raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
 
+    def get_color(self, color):
+        """ Do use this method on all colors given in constructors. Possible color values are integers
+        (best given as hex 0xRRGGBB) or tuples (RRR, GGG, BB)"""
+        if not color:
+            return None
+
+        if isinstance(color, int):
+            temp = color
+
+            blue = temp % 16
+            temp = temp / 16
+
+            green = temp % 16
+            temp = temp / 16
+
+            red = temp % 16
+
+            return (red, green, blue)
+
+        assert len(color) == 3, 'Invalid color {0}'.format(color)
+        return color
+
     def get_color_with_transparency( self, color ):
         """ Use this to get color with appropriate transparency taken from this element. """
         if not color:
