@@ -16,7 +16,7 @@ DEFAULT_COLORS = (
 
 class BarChart( mod_main.CoordinateSystemElement ):
 
-    # TODO: vertical
+    horizontal = None
 
     color = None
     fill_colors = None
@@ -24,10 +24,15 @@ class BarChart( mod_main.CoordinateSystemElement ):
     data = None
     width = None
 
-    def __init__( self, data = None, width = None, color = None, fill_colors = None, transparency_mask = None ):
-        mod_main.CoordinateSystemElement.__init__( self, transparency_mask = transparency_mask )
+    def __init__(self, horizontal=None, vertical=None, data=None, width=None, color=None, fill_colors=None,
+                 transparency_mask=None):
+        mod_main.CoordinateSystemElement.__init__(self, transparency_mask=transparency_mask)
+
+        assert bool( horizontal ) != bool( vertical ), 'Bar chart must be be horizontal or vertical'
 
         assert data, 'Data must be set'
+
+        self.horizontal = horizontal
 
         self.data = data
         self.width = width
@@ -36,20 +41,42 @@ class BarChart( mod_main.CoordinateSystemElement ):
 
         self.reload_bounds()
 
-    def reload_bounds( self ):
+    def is_horizontal(self):
+        return bool(self.horizontal)
+
+    def is_vertical(self):
+        return not self.is_horizontal()
+
+    def get_point(self, x, y):
+        if self.horizontal:
+            return y, x
+        else:
+            return x, y
+
+    def reload_bounds(self):
         for item in self.data:
             if self.width:
-                assert item and len( item ) == 2, \
-                        'With width, data must countain (key, value) tuples, found {0}'.format( item )
-                self.bounds.update( x = item[ 0 ] )
-                self.bounds.update( x = item[ 0 ] + self.width )
-                self.bounds.update( y = item[ 1 ] )
+                assert item and len(item) == 2, \
+                       'With width, data must countain (key, value) tuples, found {0}'.format(item)
+                if self.horizontal:
+                    self.bounds.update(y=item[0])
+                    self.bounds.update(y=item[0] + self.width)
+                    self.bounds.update(x=item[1])
+                else:
+                    self.bounds.update(x=item[0])
+                    self.bounds.update(x=item[0] + self.width)
+                    self.bounds.update(y=item[1])
             else:
-                assert item and len( item ) == 3, \
-                        'Without width, data must contain (from, to, value) tuples, found {0}'.format( item )
-                self.bounds.update( x = item[ 0 ] )
-                self.bounds.update( x = item[ 1 ] )
-                self.bounds.update( y = item[ 2 ] )
+                assert item and len(item) == 3, \
+                       'Without width, data must contain (from, to, value) tuples, found {0}'.format(item)
+                if self.horizontal:
+                    self.bounds.update(y=item[0])
+                    self.bounds.update(y=item[1])
+                    self.bounds.update(x=item[2])
+                else:
+                    self.bounds.update(x=item[0])
+                    self.bounds.update(x=item[1])
+                    self.bounds.update(y=item[2])
 
     def process_image( self, draw_handler ):
         for index, item in enumerate( self.data ):
@@ -61,12 +88,18 @@ class BarChart( mod_main.CoordinateSystemElement ):
                 start, end, value = item[ 0 ], item[ 1 ], item[ 2 ]
 
             draw_handler.draw_polygon(
-                ( ( start, 0 ), ( start, value ), ( end, value ), ( end, 0 ) ), fill_color = self.fill_colors[ index % len( self.fill_colors ) ] )
+                (self.get_point(start, 0), self.get_point(start, value), self.get_point(end, value), self.get_point(end, 0)),
+                fill_color = self.fill_colors[index % len(self.fill_colors)])
 
             if self.color:
-                draw_handler.draw_line( start, 0, start, value, self.color )
-                draw_handler.draw_line( end, value, end, 0, self.color )
-                draw_handler.draw_line( start, value, end, value, self.color )
+                if self.horizontal:
+                    draw_handler.draw_line(0, start, value, start, self.color)
+                    draw_handler.draw_line(value, end, 0, end, self.color)
+                    draw_handler.draw_line(value, start, value, end, self.color)
+                else:
+                    draw_handler.draw_line(start, 0, start, value, self.color)
+                    draw_handler.draw_line(end, value, end, 0, self.color)
+                    draw_handler.draw_line(start, value, end, value, self.color)
 
 class PieChart( mod_main.CoordinateSystemElement ):
 

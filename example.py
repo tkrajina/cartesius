@@ -37,6 +37,113 @@ def test_circles():
 
 examples.append( test_circles )
 
+def test_barchart_1():
+    """ Bar charts with same column width. One with default and the other with custom colors """
+    coordinate_system = cartesius.CoordinateSystem()
+
+    barchart_data_1 = (
+        (-1, -.5), (0, .7), (1, 2), (2, 2.7), (3, 4), (4, 3.1), (5, 2.1), (6, 1), (7, -.3)
+    )
+    barchart_1 = charts.BarChart(vertical=True, data=barchart_data_1, width=0.95)
+    coordinate_system.add( barchart_1 )
+
+    barchart_data_2 = (
+        (-1, -.25), (0, .35), (1, 1), (2, 1.35), (3, 2), (4, 1.65), (5, 1), (6, .5), (7, -.6)
+    )
+    barchart_2 = charts.BarChart(vertical=True, data=barchart_data_2, width=0.75, color=(0, 0, 0), fill_colors=((100, 100, 200),))
+    coordinate_system.add(barchart_2)
+
+    return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
+
+examples.append( test_barchart_1 )
+
+def test_barchart_2():
+    """ BarChart with different column widths """
+    coordinate_system = cartesius.CoordinateSystem()
+
+    barchart_data = (
+        (-5, -0, -.5), (0, 1, .7), (1, 3, 2), (3, 4, 4), (4, 5.5, 3.1), (6, 7, 2.1), (7, 9, 1),
+
+    )
+    barchart = charts.BarChart(vertical=True, data=barchart_data, color=(0, 0, 0))
+    coordinate_system.add( barchart )
+
+    return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
+
+examples.append( test_barchart_2 )
+
+def test_barchart_horizontal():
+    """ Bar charts with same column width. One with default and the other with custom colors """
+    coordinate_system = cartesius.CoordinateSystem()
+
+    barchart_data_1 = (
+        (-1, -.5), (0, .7), (1, 2), (2, 2.7), (3, 4), (4, 3.1), (5, 2.1), (6, 1), (7, -.3)
+    )
+    barchart_1 = charts.BarChart(horizontal=True, data=barchart_data_1, width=0.95)
+    coordinate_system.add( barchart_1 )
+
+    barchart_data_2 = (
+        (-1, -.25), (0, .35), (1, 1), (2, 1.35), (3, 2), (4, 1.65), (5, 1), (6, .5), (7, -.6)
+    )
+    barchart_2 = charts.BarChart(horizontal=True, data=barchart_data_2, width=0.75, color=(0, 0, 0), fill_colors=((100, 100, 200),))
+    coordinate_system.add(barchart_2)
+
+    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True),
+
+examples.append(test_barchart_horizontal)
+
+def test_piechart_1():
+    """ PieChart with default colors """
+    coordinate_system = cartesius.CoordinateSystem()
+
+    piechart_data = (
+        ( 1, 'abc' ),
+        ( 2, 'cde' ),
+        ( 4, 'efg' ),
+        ( 1, 'ijk' ),
+        ( 5, 'lmn' ),
+        ( 5, 'opq' ),
+        ( 3, 'xyz' ),
+    )
+    piechart = charts.PieChart( data = piechart_data, color = ( 0, 0, 0 ) )
+    coordinate_system.add( piechart )
+
+    # No need for axes:
+    coordinate_system.add( elements.Axis( horizontal = True, hide = True ) )
+    coordinate_system.add( elements.Axis( vertical = True, hide = True ) )
+
+    return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
+
+examples.append( test_piechart_1 )
+
+def test_piechart_2():
+    """ PieChart with custom colors """
+    coordinate_system = cartesius.CoordinateSystem()
+
+    piechart_data = (
+        ( 1, 'abc' ),
+        ( 2, 'cde' ),
+        ( 5, 'efg' ),
+        ( 3, 'ijk' ),
+    )
+    piechart = charts.PieChart( data = piechart_data, color = ( 0, 0, 0 ),
+            fill_colors = (
+                ( 255, 200, 200 ),
+                ( 200, 255, 200 ),
+                ( 200, 200, 255 ),
+                ( 255, 255, 255 ),
+            ) )
+
+    coordinate_system.add( piechart )
+
+    # No need for axes:
+    coordinate_system.add( elements.Axis( horizontal = True, hide = True ) )
+    coordinate_system.add( elements.Axis( vertical = True, hide = True ) )
+
+    return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
+
+examples.append( test_piechart_2 )
+
 def test_lines():
     """Lines different colors"""
     coordinate_system = cartesius.CoordinateSystem()
@@ -438,92 +545,6 @@ def test_detached_axes():
 
 examples.append( test_detached_axes )
 
-def test_barchart_1():
-    """ Bar charts with same column width. One with default and the other with custom colors """
-    coordinate_system = cartesius.CoordinateSystem()
-
-    barchart_data_1 = (
-        ( -1, -.5 ), ( 0, .7 ), ( 1, 2 ), ( 2, 2.7 ), ( 3, 4 ), ( 4, 3.1 ), ( 5, 2.1 ), ( 6, 1 ), ( 7, -.3 )
-    )
-    barchart_1 = charts.BarChart( data = barchart_data_1, width = 0.95 )
-    coordinate_system.add( barchart_1 )
-
-    barchart_data_2 = (
-        ( -1, -.25 ), ( 0, .35 ), ( 1, 1 ), ( 2, 1.35 ), ( 3, 2 ), ( 4, 1.65 ), ( 5, 1 ), ( 6, .5 ), ( 7, -.6 )
-    )
-    barchart_2 = charts.BarChart( data = barchart_data_2, width = 0.75, color = ( 0, 0, 0 ), fill_colors = ( ( 100, 100, 200 ), ) )
-    coordinate_system.add( barchart_2 )
-
-    return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
-
-examples.append( test_barchart_1 )
-
-def test_barchart_2():
-    """ BarChart with different column widths """
-    coordinate_system = cartesius.CoordinateSystem()
-
-    barchart_data = (
-        ( -5, -0, -.5 ), ( 0, 1, .7 ), ( 1, 3, 2 ), ( 3, 4, 4 ), ( 4, 5.5, 3.1 ), ( 6, 7, 2.1 ), ( 7, 9, 1 ),
-    )
-    barchart = charts.BarChart( data = barchart_data, color = ( 0, 0, 0 ) )
-    coordinate_system.add( barchart )
-
-    return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
-
-examples.append( test_barchart_2 )
-
-def test_piechart_1():
-    """ PieChart with default colors """
-    coordinate_system = cartesius.CoordinateSystem()
-
-    piechart_data = (
-        ( 1, 'abc' ),
-        ( 2, 'cde' ),
-        ( 4, 'efg' ),
-        ( 1, 'ijk' ),
-        ( 5, 'lmn' ),
-        ( 5, 'opq' ),
-        ( 3, 'xyz' ),
-    )
-    piechart = charts.PieChart( data = piechart_data, color = ( 0, 0, 0 ) )
-    coordinate_system.add( piechart )
-
-    # No need for axes:
-    coordinate_system.add( elements.Axis( horizontal = True, hide = True ) )
-    coordinate_system.add( elements.Axis( vertical = True, hide = True ) )
-
-    return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
-
-examples.append( test_piechart_1 )
-
-def test_piechart_2():
-    """ PieChart with custom colors """
-    coordinate_system = cartesius.CoordinateSystem()
-
-    piechart_data = (
-        ( 1, 'abc' ),
-        ( 2, 'cde' ),
-        ( 5, 'efg' ),
-        ( 3, 'ijk' ),
-    )
-    piechart = charts.PieChart( data = piechart_data, color = ( 0, 0, 0 ),
-            fill_colors = (
-                ( 255, 200, 200 ),
-                ( 200, 255, 200 ),
-                ( 200, 200, 255 ),
-                ( 255, 255, 255 ),
-            ) )
-
-    coordinate_system.add( piechart )
-
-    # No need for axes:
-    coordinate_system.add( elements.Axis( horizontal = True, hide = True ) )
-    coordinate_system.add( elements.Axis( vertical = True, hide = True ) )
-
-    return coordinate_system.draw( 400, 250 ), coordinate_system.draw( 400, 250, antialiasing = True ),
-
-examples.append( test_piechart_2 )
-
 if __name__ == '__main__':
     args = sys.argv[ 1: ]
 
@@ -582,6 +603,7 @@ Note, all examples come in two versions: normal and antialiased. Antialiased can
     for i, function in enumerate( examples ):
         description = function.__doc__.strip()
         images = function()
+        print 'Processing %s' % function.func_name
 
         if not isinstance( images, tuple ) and not isinstance( images, list ):
             images = [ images ]
