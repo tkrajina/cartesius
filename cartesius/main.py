@@ -10,7 +10,7 @@ import ImageFont as mod_imagefont
 import utils as mod_utils
 
 # Get the package location:
-package_location = mod_utils.__file__[ : mod_utils.__file__.rfind( '/' ) ]
+package_location = mod_utils.__file__[: mod_utils.__file__.rfind('/')]
 
 # use a truetype font included with cartesius:
 DEFAULT_FONT_NAME = 'Oxygen-Regular.ttf'
@@ -19,11 +19,11 @@ DEFAULT_FONT_LOCATION = package_location + mod_os.sep + 'fonts' + mod_os.sep + D
 DEFAULT_FONT_SIZE = 10
 
 # Default colors for important elements:
-DEFAULT_AXES_COLOR = ( 150, 150, 150 )
-DEFAULT_LABEL_COLOR = ( 150, 150, 150 )
-DEFAULT_POINT_COLOR = ( 150, 150, 150 )
-DEFAULT_GRID_COLOR = ( 235, 235, 235 )
-DEFAULT_ELEMENT_COLOR = ( 50, 50, 50 )
+DEFAULT_AXES_COLOR = (150, 150, 150)
+DEFAULT_LABEL_COLOR = (150, 150, 150)
+DEFAULT_POINT_COLOR = (150, 150, 150)
+DEFAULT_GRID_COLOR = (235, 235, 235)
+DEFAULT_ELEMENT_COLOR = (50, 50, 50)
 
 # Possible label positions:
 LEFT_UP       = -1, 1
@@ -50,7 +50,7 @@ class Bounds:
     bottom = None
     top = None
 
-    def __init__( self, left = None, right = None, bottom = None, top = None, image_width = None, image_height = None ):
+    def __init__(self, left=None, right=None, bottom=None, top=None, image_width=None, image_height=None):
         self.reset()
 
         self.left = left
@@ -59,14 +59,14 @@ class Bounds:
         self.top = top
 
         if self.bottom != None and self.top != None:
-            assert self.bottom < self.top, 'Bottom bound ({0}) greater than top bound ({1})'.format( self.bottom, self.top )
+            assert self.bottom < self.top, 'Bottom bound ({0}) greater than top bound ({1})'.format(self.bottom, self.top)
         if self.left != None and self.right != None:
-            assert self.left < self.right, 'Left bound ({0}) greater than right bound ({1})'.format( self.left, self.right )
+            assert self.left < self.right, 'Left bound ({0}) greater than right bound ({1})'.format(self.left, self.right)
 
         self.image_width = image_width
         self.image_height = image_height
 
-    def get_width_height( self ):
+    def get_width_height(self):
         assert self.left != None
         assert self.right != None
         assert self.bottom != None
@@ -76,51 +76,51 @@ class Bounds:
 
         return self.right - self.left, self.top - self.bottom
 
-    def reset( self ):
+    def reset(self):
         self.left_bound, self.right_bound, self.lower_bound, self.upper_bound = None, None, None, None
 
-    def update_to_image_size( self ):
+    def update_to_image_size(self):
         assert self.image_width
         assert self.image_height
 
         width, height = self.get_width_height()
 
-        desired_width_height_ratio = self.image_width / float( self.image_height )
+        desired_width_height_ratio = self.image_width / float(self.image_height)
 
-        if desired_width_height_ratio < width / float( height ):
+        if desired_width_height_ratio < width / float(height):
             desired_height = width / desired_width_height_ratio
-            self.bottom = self.bottom - ( desired_height - height ) / 2
-            self.top = self.top + ( desired_height - height ) / 2
+            self.bottom = self.bottom - (desired_height - height) / 2
+            self.top = self.top + (desired_height - height) / 2
         else:
             desired_width = height * desired_width_height_ratio
-            self.left = self.left - ( desired_width - width ) / 2
-            self.right = self.right + ( desired_width - width ) / 2
+            self.left = self.left - (desired_width - width) / 2
+            self.right = self.right + (desired_width - width) / 2
 
-    def update( self, bounds = None, x = None, y = None, point = None ):
+    def update(self, bounds=None, x=None, y=None, point=None):
         if point != None:
-            assert len( point ) == 2
-            x = point[ 0 ]
-            y = point[ 1 ]
+            assert len(point) == 2
+            x = point[0]
+            y = point[1]
 
         if x != None:
-            self.left, self.right = mod_utils.min_max( x, self.left, self.right )
+            self.left, self.right = mod_utils.min_max(x, self.left, self.right)
         if y != None:
-            self.bottom, self.top = mod_utils.min_max( y, self.bottom, self.top )
+            self.bottom, self.top = mod_utils.min_max(y, self.bottom, self.top)
 
         if bounds:
-            self.update( x = bounds.left, y = bounds.top )
-            self.update( x = bounds.right, y = bounds.bottom )
+            self.update(x=bounds.left, y=bounds.top)
+            self.update(x=bounds.right, y=bounds.bottom)
 
         if self.bottom != None and self.top != None:
             assert self.bottom <= self.top
         if self.left != None and self.right != None:
             assert self.left <= self.right
 
-    def is_set( self ):
+    def is_set(self):
         return self.left != None and self.right != None and self.bottom != None and self.top != None
 
-    def __str__( self ):
-        return '[bounds:{0},{1},{2},{3}, image:{4},{5}]'.format( self.left, self.right, self.bottom, self.top, self.image_width, self.image_height )
+    def __str__(self):
+        return '[bounds:{0},{1},{2},{3}, image:{4},{5}]'.format(self.left, self.right, self.bottom, self.top, self.image_width, self.image_height)
 
 class CoordinateSystem:
 
@@ -136,29 +136,29 @@ class CoordinateSystem:
 
     resize_bounds = None
 
-    def __init__( self, bounds = None ):
+    def __init__(self, bounds=None):
         """ If custom bounds are given, they won't be resized according to new elements. """
         import elements as mod_elements
         self.elements = []
 
         # Set default bounds
         if bounds:
-            if isinstance( bounds, Bounds ):
+            if isinstance(bounds, Bounds):
                 self.bounds = bounds
                 self.resize_bounds = False
             else:
-                assert len( bounds ) == 4, 'Bounds must be a 4 element tuple/list'
-                self.bounds = Bounds( left = bounds[ 0 ], right = bounds[ 1 ], bottom = bounds[ 2 ], top = bounds[ 3 ] )
+                assert len(bounds) == 4, 'Bounds must be a 4 element tuple/list'
+                self.bounds = Bounds(left=bounds[0], right=bounds[1], bottom=bounds[2], top=bounds[3])
                 self.resize_bounds = False
         else:
             self.bounds = Bounds()
             self.resize_bounds = True
 
         # By default, axes are on:
-        self.x_axis = mod_elements.Axis( horizontal = True, points = 1 )
-        self.y_axis = mod_elements.Axis( vertical = True, points = 1 )
+        self.x_axis = mod_elements.Axis(horizontal=True, points=1)
+        self.y_axis = mod_elements.Axis(vertical=True, points=1)
 
-    def add( self, element ):
+    def add(self, element):
         """
         Add element on coordinate system.
 
@@ -167,11 +167,11 @@ class CoordinateSystem:
         """
         import elements as mod_elements
         assert element
-        assert isinstance( element, CoordinateSystemElement )
+        assert isinstance(element, CoordinateSystemElement)
 
-        if isinstance( element, mod_elements.Axis ):
+        if isinstance(element, mod_elements.Axis):
             if element.is_detached():
-                self.elements.append( element )
+                self.elements.append(element)
             else:
                 if element.is_horizontal():
                     self.x_axis = element
@@ -179,10 +179,10 @@ class CoordinateSystem:
                     self.y_axis = element
         else:
             element.reload_bounds()
-            self.elements.append( element )
+            self.elements.append(element)
             self.reload_bounds()
 
-    def reload_bounds( self ):
+    def reload_bounds(self):
         if not self.resize_bounds:
             return
 
@@ -194,23 +194,23 @@ class CoordinateSystem:
             return
 
         for element in self.elements:
-            self.bounds.update( element.bounds )
+            self.bounds.update(element.bounds)
 
         assert self.bounds
 
-    def __draw_elements( self, image, draw, draw_handler = None, hide_x_axis = False, hide_y_axis = False ):
+    def __draw_elements(self, image, draw, draw_handler=None, hide_x_axis=False, hide_y_axis=False):
         for element in self.elements:
-            draw_handler.update_pil_image_draw( image, draw )
-            element.draw( image = image, draw = draw, draw_handler = draw_handler )
+            draw_handler.update_pil_image_draw(image, draw)
+            element.draw(image=image, draw=draw, draw_handler=draw_handler)
 
         if not hide_x_axis and self.x_axis:
-            self.x_axis.draw( image = image, draw = draw, draw_handler = draw_handler )
+            self.x_axis.draw(image=image, draw=draw, draw_handler=draw_handler)
 
         if not hide_y_axis and self.y_axis:
-            self.y_axis.draw( image = image, draw = draw, draw_handler = draw_handler )
+            self.y_axis.draw(image=image, draw=draw, draw_handler=draw_handler)
 
-    def draw( self, width, height, axis_units_equal_length = True, hide_x_axis = False, hide_y_axis = False,
-            antialiasing = None ):
+    def draw(self, width, height, axis_units_equal_length=True, hide_x_axis=False, hide_y_axis=False,
+            antialiasing=None):
         """ Returns a PIL image """
 
         # Antialiasing works like this. If it is set, the image will be drawn double the size (that's
@@ -219,8 +219,8 @@ class CoordinateSystem:
         antialiasing_coef = 1
         if antialiasing:
             antialiasing_coef = 2
-            width = int( width * antialiasing_coef )
-            height = int( height * antialiasing_coef )
+            width = int(width * antialiasing_coef)
+            height = int(height * antialiasing_coef)
 
         self.bounds.image_width = width
         self.bounds.image_height = height
@@ -228,18 +228,18 @@ class CoordinateSystem:
         if axis_units_equal_length:
             self.reload_bounds()
 
-        image = mod_image.new( 'RGBA', ( width, height ), ( 255, 255, 255, 255 ) )
-        draw = mod_imagedraw.Draw( image )
+        image = mod_image.new('RGBA', (width, height), (255, 255, 255, 255))
+        draw = mod_imagedraw.Draw(image)
 
-        draw_handler = PILHandler( antialiasing_coef, self.bounds )
+        draw_handler = PILHandler(antialiasing_coef, self.bounds)
 
         if self.resize_bounds:
             self.bounds.update_to_image_size()
 
-        self.__draw_elements( image = image, draw = draw, draw_handler = draw_handler, hide_x_axis = hide_x_axis, hide_y_axis = hide_y_axis )
+        self.__draw_elements(image=image, draw=draw, draw_handler=draw_handler, hide_x_axis=hide_x_axis, hide_y_axis=hide_y_axis)
 
         if antialiasing:
-            image = image.resize( ( int( width / antialiasing_coef ), int( height / antialiasing_coef ) ), mod_image.ANTIALIAS )
+            image = image.resize((int(width / antialiasing_coef), int(height / antialiasing_coef)), mod_image.ANTIALIAS)
 
         return image
 
@@ -249,22 +249,22 @@ class CoordinateSystemElement:
     bounds = None
     transparency_mask = None
 
-    def __init__( self, transparency_mask = None ):
+    def __init__(self, transparency_mask=None):
         self.bounds = Bounds()
 
         self.transparency_mask = transparency_mask if transparency_mask else 255
 
-    def reload_bounds( self ):
+    def reload_bounds(self):
         """
         Will be called after the element is added to the coordinate system. By default (if the CS
         don't have his own custom bounds, elements should resize the bounds so that all of them
         fits on the image.
         """
-        raise Exception( 'Not implemented in {0}'.format( self.__class__ ) )
+        raise Exception('Not implemented in {0}'.format(self.__class__))
 
-    def process_image( self, draw_handler ):
+    def process_image(self, draw_handler):
         """ Will be called when the image is drawn """
-        raise Error( 'Not implemented in {0}'.format( self.__class__ ) )
+        raise Error('Not implemented in {0}'.format(self.__class__))
 
     def get_color(self, color):
         """ Do use this method on all colors given in constructors. Possible color values are integers
@@ -287,16 +287,16 @@ class CoordinateSystemElement:
         assert len(color) == 3, 'Invalid color {0}'.format(color)
         return color
 
-    def get_color_with_transparency( self, color ):
+    def get_color_with_transparency(self, color):
         """ Use this to get color with appropriate transparency taken from this element. """
         if not color:
             return None
 
-        assert len( color ) >= 3
+        assert len(color) >= 3
 
-        return ( color[ 0 ], color[ 1 ], color[ 2 ], self.transparency_mask )
+        return (color[0], color[1], color[2], self.transparency_mask)
 
-    def draw( self, image, draw, draw_handler ):
+    def draw(self, image, draw, draw_handler):
         """ Draw this element. All custom code must be implemented in process_image() """
 
         if self.transparency_mask == 255:
@@ -304,16 +304,16 @@ class CoordinateSystemElement:
             tmp_image, tmp_draw = image, draw
         else:
             # If transparency, draw on new PIL's draw object:
-            tmp_image = mod_image.new( 'RGBA', ( draw_handler.bounds.image_width, draw_handler.bounds.image_height ) )
-            tmp_draw = mod_imagedraw.Draw( tmp_image )
+            tmp_image = mod_image.new('RGBA', (draw_handler.bounds.image_width, draw_handler.bounds.image_height))
+            tmp_draw = mod_imagedraw.Draw(tmp_image)
 
-        draw_handler.update_pil_image_draw( tmp_image, tmp_draw )
+        draw_handler.update_pil_image_draw(tmp_image, tmp_draw)
 
-        self.process_image( draw_handler )
+        self.process_image(draw_handler)
 
         if tmp_image != image or tmp_draw != draw:
             # Transparency => paste this PIL's image over the old one:
-            image.paste( tmp_image, mask = tmp_image )
+            image.paste(tmp_image, mask=tmp_image)
 
 class PILHandler:
     """
@@ -333,21 +333,21 @@ class PILHandler:
 
     __font = None
 
-    def __init__( self, antialiasing_coef, bounds ):
+    def __init__(self, antialiasing_coef, bounds):
         assert antialiasing_coef
         assert bounds
 
         self.antialiasing_coef = antialiasing_coef
         self.bounds = bounds
 
-    def get_font( self ):
+    def get_font(self):
         """ Load the font to be used for labels and point names. """
         if not self.__font:
-            self.__font = mod_imagefont.truetype( DEFAULT_FONT_LOCATION, int( DEFAULT_FONT_SIZE * self.antialiasing_coef ) )
+            self.__font = mod_imagefont.truetype(DEFAULT_FONT_LOCATION, int(DEFAULT_FONT_SIZE * self.antialiasing_coef))
 
         return self.__font
 
-    def update_pil_image_draw( self, image, draw ):
+    def update_pil_image_draw(self, image, draw):
         """
         When drawing the coordinate system for a custom element, the CS will "decide" if to use existing
         PIL image and draw or set new ones with this method
@@ -355,7 +355,7 @@ class PILHandler:
         self.pil_image = image
         self.pil_draw = draw
 
-    def draw_point( self, x, y, color, style = '+', label = None, label_position = None ):
+    def draw_point(self, x, y, color, style='+', label=None, label_position=None):
         """
         Draw single point.
 
@@ -364,56 +364,56 @@ class PILHandler:
         label_position: one of the label position constants (CENTER_UP, RIGHT_DOWN, ...). The default
         is set in draw_text()
         """
-        image_x, image_y = mod_utils.cartesius_to_image_coord( x, y, self.bounds )
+        image_x, image_y = mod_utils.cartesius_to_image_coord(x, y, self.bounds)
 
         if label_position:
-            assert len( label_position ) == 2
+            assert len(label_position) == 2
 
         if not color:
             color = DEFAULT_POINT_COLOR
 
         if style == '.' or style == None:
-            self.pil_draw.point( ( image_x, image_y ), color )
+            self.pil_draw.point((image_x, image_y), color)
         elif style == 'x':
             delta = 2 * self.antialiasing_coef
-            self.pil_draw.line( ( image_x - delta, image_y - delta, image_x + delta, image_y + delta ), color )
-            self.pil_draw.line( ( image_x - delta, image_y + delta, image_x + delta, image_y - delta ), color )
+            self.pil_draw.line((image_x - delta, image_y - delta, image_x + delta, image_y + delta), color)
+            self.pil_draw.line((image_x - delta, image_y + delta, image_x + delta, image_y - delta), color)
         elif style == '+':
             delta = 2 * self.antialiasing_coef
-            self.pil_draw.line( ( image_x - delta, image_y, image_x + delta, image_y ), color )
-            self.pil_draw.line( ( image_x, image_y + delta, image_x, image_y - delta ), color )
+            self.pil_draw.line((image_x - delta, image_y, image_x + delta, image_y), color)
+            self.pil_draw.line((image_x, image_y + delta, image_x, image_y - delta), color)
         elif style == ' ':
             # No point
             pass
         elif style == 'o':
             delta = 2 * self.antialiasing_coef
             self.pil_draw.ellipse(
-                    ( image_x - delta, image_y - delta, image_x + delta, image_y + delta ),
-                    fill = None,
-                    outline = color )
+                    (image_x - delta, image_y - delta, image_x + delta, image_y + delta),
+                    fill=None,
+                    outline=color)
         else:
-            mod_logging.error( 'Invalid style: {0}, valid: ".", "x", "+" and "o"'.format( style ) )
-            self.pil_draw.point( ( image_x, image_y ), color )
+            mod_logging.error('Invalid style: {0}, valid: ".", "x", "+" and "o"'.format(style))
+            self.pil_draw.point((image_x, image_y), color)
 
         if label:
-            self.draw_text( x, y, label, color, label_position = label_position )
+            self.draw_text(x, y, label, color, label_position=label_position)
 
-    def draw_line( self, x1, y1, x2, y2, color ):
-        image_x1, image_y1 = mod_utils.cartesius_to_image_coord( x1, y1, self.bounds )
-        image_x2, image_y2 = mod_utils.cartesius_to_image_coord( x2, y2, self.bounds )
+    def draw_line(self, x1, y1, x2, y2, color):
+        image_x1, image_y1 = mod_utils.cartesius_to_image_coord(x1, y1, self.bounds)
+        image_x2, image_y2 = mod_utils.cartesius_to_image_coord(x2, y2, self.bounds)
 
-        self.pil_draw.line( ( image_x1, image_y1, image_x2, image_y2 ), color )
+        self.pil_draw.line((image_x1, image_y1, image_x2, image_y2), color)
 
-    def draw_polygon( self, points, fill_color ):
+    def draw_polygon(self, points, fill_color):
         image_points = []
         for x, y in points:
-            image_coordinates = mod_utils.cartesius_to_image_coord( x, y, self.bounds )
-            image_points.append( image_coordinates )
+            image_coordinates = mod_utils.cartesius_to_image_coord(x, y, self.bounds)
+            image_points.append(image_coordinates)
         self.pil_draw.polygon(
             image_points,
-            fill = fill_color )
+            fill=fill_color)
 
-    def draw_text( self, x, y, text, color, label_position = None ):
+    def draw_text(self, x, y, text, color, label_position=None):
         """
         Draw text.
 
@@ -422,56 +422,57 @@ class PILHandler:
         """
         label_position = label_position if label_position else RIGHT_DOWN
 
-        image_x, image_y = mod_utils.cartesius_to_image_coord( x, y, self.bounds )
+        image_x, image_y = mod_utils.cartesius_to_image_coord(x, y, self.bounds)
 
         font = self.get_font()
 
-        label_width, label_height = font.getsize( text )
+        label_width, label_height = font.getsize(text)
 
-        if label_position[ 0 ] == -1:
+        if label_position[0] == -1:
             image_x = image_x - label_width - 4. * self.antialiasing_coef
-        elif label_position[ 0 ] == 0:
+        elif label_position[0] == 0:
             image_x = image_x - label_width / 2.
-        elif label_position[ 0 ] == 1:
+        elif label_position[0] == 1:
             image_x += 4 * self.antialiasing_coef
 
-        if label_position[ 1 ] == -1:
+        if label_position[1] == -1:
             image_y += 2 * self.antialiasing_coef
-        elif label_position[ 1 ] == 0:
+        elif label_position[1] == 0:
             image_y = image_y - label_height / 2.
-        elif label_position[ 1 ] == 1:
+        elif label_position[1] == 1:
             image_y = image_y - label_height - 2 * self.antialiasing_coef
 
-        self.pil_draw.text( ( image_x, image_y ), text, color, font )
+        self.pil_draw.text((image_x, image_y), text, color, font)
 
-    def draw_circle( self, x, y, radius, line_color, fill_color ):
+    def draw_circle(self, x, y, radius, line_color, fill_color):
         x1, y1 = mod_utils.cartesius_to_image_coord(
                 x = x - radius / 2.,
                 y = y + radius / 2.,
-                bounds = self.bounds )
+                bounds = self.bounds)
         x2, y2 = mod_utils.cartesius_to_image_coord(
                 x = x + radius / 2.,
                 y = y - radius / 2.,
-                bounds = self.bounds )
+                bounds = self.bounds)
 
         self.pil_draw.ellipse(
-                ( x1, y1, x2, y2 ),
+                (x1, y1, x2, y2),
                 fill = fill_color,
-                outline = line_color )
+                outline = line_color)
 
-    def draw_pieslice( self, x, y, radius, start_angle, end_angle, fill_color = None, color = None ):
+    def draw_pieslice(self, x, y, radius, start_angle, end_angle, fill_color=None, color=None):
         x1, y1 = mod_utils.cartesius_to_image_coord(
-                x = x - radius,
-                y = y + radius,
-                bounds = self.bounds )
+                x=x - radius,
+                y=y + radius,
+                bounds=self.bounds)
         x2, y2 = mod_utils.cartesius_to_image_coord(
-                x = x + radius,
-                y = y - radius,
-                bounds = self.bounds )
+                x=x + radius,
+                y=y - radius,
+                bounds=self.bounds)
 
         self.pil_draw.pieslice(
-                ( int( x1 ), int( y1 ), int( x2 ), int( y2 ) ),
-                int( start_angle ),
-                int( end_angle ),
-                fill = fill_color,
-                outline = color )
+                (int(x1), int(y1), int(x2), int(y2)),
+                int(start_angle),
+                int(end_angle),
+                fill=fill_color,
+                outline=color)
+

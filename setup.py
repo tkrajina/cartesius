@@ -26,7 +26,8 @@ mod_setuptools.setup(
     author = 'Tomo Krajina',
     author_email = 'tkrajina@gmail.com',
     url = 'http://tkrajina.github.com/cartesius/',
-    packages = [ 'cartesius', 'cartesius/fonts' ],
-    package_data = { '': [ '*.ttf' ] },
+    packages = ['cartesius', 'cartesius/fonts'],
+    package_data = {'': ['*.ttf']},
     include_package_data = True,
 )
+
