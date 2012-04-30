@@ -41,6 +41,7 @@ def test_piechart_1():
     """ PieChart with default colors """
     coordinate_system = cartesius.CoordinateSystem()
 
+    # list or tuple of two-element tuples (value, label):
     piechart_data = (
         (1, 'abc'),
         (2, 'cde'),
