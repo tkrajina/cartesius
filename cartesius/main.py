@@ -8,6 +8,7 @@ import ImageDraw as mod_imagedraw
 import ImageFont as mod_imagefont
 
 import utils as mod_utils
+import colors as mod_colors
 
 # Get the package location:
 package_location = mod_utils.__file__[: mod_utils.__file__.rfind('/')]
@@ -269,23 +270,7 @@ class CoordinateSystemElement:
     def get_color(self, color):
         """ Do use this method on all colors given in constructors. Possible color values are integers
         (best given as hex 0xRRGGBB) or tuples (RRR, GGG, BB)"""
-        if not color:
-            return None
-
-        if isinstance(color, int):
-            temp = color
-            blue = temp % 256
-
-            temp = temp / 256
-            green = temp % 256
-
-            temp = temp / 256
-            red = temp % 256
-
-            return (red, green, blue)
-
-        assert len(color) == 3, 'Invalid color {0}'.format(color)
-        return color
+        return mod_colors.get_color(color)
 
     def get_color_with_transparency(self, color):
         """ Use this to get color with appropriate transparency taken from this element. """
