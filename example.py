@@ -566,7 +566,7 @@ if __name__ == '__main__':
                 source_started = True
             elif source_started:
                 if not line.strip().startswith('return'):
-                    if line.startswith('\t'):
+                    if line.startswith('\t') or line.startswith('    '):
                         line = line[1:]
                         if line.strip().startswith('#'):
                             result += '<span class="comment">{0}</span>'.format(line)
