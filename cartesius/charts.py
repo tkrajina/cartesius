@@ -120,6 +120,8 @@ class PieChart(mod_main.CoordinateSystemElement):
             transparency_mask=None):
         mod_main.CoordinateSystemElement.__init__(self, transparency_mask=transparency_mask)
 
+        assert isinstance(data, (tuple, list)), 'Data must be a tuple, found: {0}'.format(data)
+
         self.data = data
 
         self.color = self.get_color(color)
@@ -187,6 +189,7 @@ class PieChart(mod_main.CoordinateSystemElement):
 
     def process_image(self, draw_handler):
         sum_values = 0.
+
         for item in self.data:
             value = item[0]
             sum_values += value
