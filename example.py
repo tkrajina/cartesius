@@ -276,12 +276,21 @@ examples.append(test_line_charts)
 
 def test_circles_2():
     """ Another example with circles """
+
+    # The colors package contain e few utility functions for colors:
+    import cartesius.colors as colors
+
     coordinate_system = cartesius.CoordinateSystem()
 
-    for i in range(1, 20):
+    from_color = (255, 0, 255)
+    to_color = (0, 255, 0)
+
+    iterations = 20
+    for i in range(1, iterations):
         x = i / 2.
+        color = colors.get_color_between(from_color, to_color, i/float(iterations))
         coordinate_system.add(elements.Circle(x, y=math.sin(x), radius=math.sqrt(x),
-                transparency_mask=50, fill_color=(i * 10, 2 * 10, i * 10), color=(0, 0, 0)))
+                transparency_mask=50, fill_color=color, color=(0, 0, 0)))
 
     return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
 
