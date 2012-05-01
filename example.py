@@ -50,7 +50,7 @@ def test_piechart_1():
         (5, 'lmn'),
         (5, 'opq'),
         (3, 'xyz'),
-   )
+    )
     piechart = charts.PieChart(data=piechart_data, color=(0, 0, 0))
     coordinate_system.add(piechart)
 
@@ -71,7 +71,7 @@ def test_piechart_2():
         (2, 'cde'),
         (5, 'efg'),
         (3, 'ijk'),
-   )
+    )
     piechart = charts.PieChart(data=piechart_data, color=(0, 0, 0),
             fill_colors = (
                 (255, 200, 200),
@@ -96,13 +96,13 @@ def test_barchart_1():
 
     barchart_data_1 = (
         (-1, -.5), (0, .7), (1, 2), (2, 2.7), (3, 4), (4, 3.1), (5, 2.1), (6, 1), (7, -.3)
-   )
+    )
     barchart_1 = charts.BarChart(vertical=True, data=barchart_data_1, width=0.95)
     coordinate_system.add(barchart_1)
 
     barchart_data_2 = (
         (-1, -.25), (0, .35), (1, 1), (2, 1.35), (3, 2), (4, 1.65), (5, 1), (6, .5), (7, -.6)
-   )
+    )
     barchart_2 = charts.BarChart(vertical=True, data=barchart_data_2, width=0.75, color=(0, 0, 0), fill_colors=((100, 100, 200),))
     coordinate_system.add(barchart_2)
 
@@ -117,7 +117,7 @@ def test_barchart_2():
     barchart_data = (
         (-5, -0, -.5), (0, 1, .7), (1, 3, 2), (3, 4, 4), (4, 5.5, 3.1), (6, 7, 2.1), (7, 9, 1),
 
-   )
+    )
     barchart = charts.BarChart(vertical=True, data=barchart_data, color=(0, 0, 0))
     coordinate_system.add(barchart)
 
@@ -131,19 +131,37 @@ def test_barchart_horizontal():
 
     barchart_data_1 = (
         (-1, -.5), (0, .7), (1, 2), (2, 2.7), (3, 4), (4, 3.1), (5, 2.1), (6, 1), (7, -.3)
-   )
+    )
     barchart_1 = charts.BarChart(horizontal=True, data=barchart_data_1, width=0.95)
     coordinate_system.add(barchart_1)
 
     barchart_data_2 = (
         (-1, -.25), (0, .35), (1, 1), (2, 1.35), (3, 2), (4, 1.65), (5, 1), (6, .5), (7, -.6)
-   )
+    )
     barchart_2 = charts.BarChart(horizontal=True, data=barchart_data_2, width=0.75, color=(0, 0, 0), fill_colors=((100, 100, 200),))
     coordinate_system.add(barchart_2)
 
     return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True),
 
 examples.append(test_barchart_horizontal)
+
+def test_barchart_with_generator():
+    """ Bar charts with data given as generator function """
+    coordinate_system = cartesius.CoordinateSystem()
+
+    # In case you don't want to keep all your data in memory, you can give the data as a
+    # generator function that will lazy-load your data. This works for all charts:
+    def data_generator():
+        for x in range(25):
+            yield x / 2., 2 * math.sin(x/4.)
+
+    barchart_data_generator = data_generator
+    barchart = charts.BarChart(data=barchart_data_generator, vertical=True, width=0.5)
+    coordinate_system.add(barchart)
+
+    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True),
+
+examples.append(test_barchart_with_generator)
 
 def test_function():
     """ Function math.sin from -4 to 5"""
