@@ -24,7 +24,7 @@ class BarChart(mod_main.CoordinateSystemElement):
     data = None
     width = None
 
-    def __init__(self, horizontal=None, vertical=None, data=None, width=None, color=None, fill_colors=None,
+    def __init__(self, data, horizontal=None, vertical=None, width=None, color=None, fill_colors=None,
                  transparency_mask=None):
         mod_main.CoordinateSystemElement.__init__(self, transparency_mask=transparency_mask)
 
@@ -224,44 +224,44 @@ class LineChart(mod_main.CoordinateSystemElement):
     color = None
     fill_color = None
 
-    items = None
+    data = None
 
-    def __init__(self, values, color=None, fill_color=False, transparency_mask=None):
+    def __init__(self, data, color=None, fill_color=False, transparency_mask=None):
         mod_main.CoordinateSystemElement.__init__(self, transparency_mask=transparency_mask)
 
-        assert values
+        assert data, 'Invalid data {0}'.format(data)
 
         self.color = self.get_color(color)
         self.fill_color = self.get_color(fill_color)
 
-        self.items = []
+        self.data = []
 
-        if hasattr(values, 'keys') and callable(getattr(values, 'keys')):
-            keys = values.keys()
+        if hasattr(data, 'keys') and callable(getattr(data, 'keys')):
+            keys = data.keys()
             keys.sort()
 
             for key in keys:
-                item = (key, values[key])
-                self.items.append(item)
+                item = (key, data[key])
+                self.data.append(item)
         else:
-            self.items = values
+            self.data = data
 
-        for item in self.items:
+        for item in self.data:
             assert len(item) == 2
 
         self.reload_bounds()
 
     def reload_bounds(self):
-        assert self.items
-        for key, value in self.items:
+        assert self.data
+        for key, value in self.data:
             self.bounds.update(point=(key, value))
 
     def process_image(self, draw_handler):
-        assert self.items
+        assert self.data
 
-        for i, point in enumerate(self.items):
+        for i, point in enumerate(self.data):
             if i > 0:
-                previous = self.items[i - 1]
+                previous = self.data[i - 1]
                 x1, y1 = previous[0], previous[1]
                 x2, y2 = point[0], point[1]
                 if self.fill_color:

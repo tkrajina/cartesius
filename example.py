@@ -259,14 +259,14 @@ def test_line_charts():
     # With dict:
     coordinate_system.add(
             charts.LineChart(
-                    values = {-2: 1, 0: -1, 3: 1.2, 7: 1.2},
+                    data = {-2: 1, 0: -1, 3: 1.2, 7: 1.2},
                     fill_color = (50, 50, 50),
                     transparency_mask = 50))
 
     # With pairs of tuples
     coordinate_system.add(
             charts.LineChart(
-                    values = ((0, 0), (1, -3), (4, 3), (5, -2), (7, 0)),
+                    data = ((0, 0), (1, -3), (4, 3), (5, -2), (7, 0)),
                     color = (255, 0, 0),
                     transparency_mask = 150))
 
