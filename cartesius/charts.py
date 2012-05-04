@@ -17,7 +17,7 @@ DEFAULT_COLORS = (
 
 def get_generator(data):
     """
-    In case of a big datased, no need to load the entire list/dict in memory, it can be given to
+    In case of a big dataset, no need to load the entire list/dict in memory, it can be given to
     cartesius as a generator function.
 
     In case data is callable and the result is a generator, then data is returned, oherwisea the
