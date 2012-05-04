@@ -33,7 +33,8 @@ def get_generator(data):
         if isinstance(data(), mod_types.GeneratorType):
             return data
 
-    assert data, 'Invalid or empty data: {0}'.format(data)
+    if not data:
+        raise Exception('Invalid or empty data: {0}'.format(data))
 
     def generator():
         for i in data:
@@ -60,9 +61,10 @@ class BarChart(mod_main.CoordinateSystemElement):
                  transparency_mask=None):
         mod_main.CoordinateSystemElement.__init__(self, transparency_mask=transparency_mask)
 
-        assert bool(horizontal) != bool(vertical), 'Bar chart must be be horizontal or vertical'
-
-        assert data, 'Data must be set'
+        if bool(horizontal) == bool(vertical):
+            raise Exception('Bar chart must be be horizontal or vertical')
+        if not data:
+            raise Exception('Data must be set')
 
         self.horizontal = horizontal
 
@@ -143,14 +145,16 @@ class PieChart(mod_main.CoordinateSystemElement):
             transparency_mask=None):
         mod_main.CoordinateSystemElement.__init__(self, transparency_mask=transparency_mask)
 
-        assert isinstance(data, (tuple, list)), 'Data must be a tuple, found: {0}'.format(data)
+        if not data:
+            raise Exception('Invalid data {0}'.format(data))
 
         self.data_generator = get_generator(data)
 
         self.color = self.get_color(color)
 
         if center:
-            assert len(center) == 2, 'Invalid center {0}'.format(center)
+            if len(center) != 2:
+                raise Exception('Invalid center {0}'.format(center))
             self.center = center
         else:
             self.center = (0, 0)
@@ -246,7 +250,8 @@ class LineChart(mod_main.CoordinateSystemElement):
     def __init__(self, data, color=None, fill_color=False, transparency_mask=None):
         mod_main.CoordinateSystemElement.__init__(self, transparency_mask=transparency_mask)
 
-        assert data, 'Invalid data {0}'.format(data)
+        if not data:
+            raise Exception('Invalid data {0}'.format(data))
 
         self.color = self.get_color(color)
         self.fill_color = self.get_color(fill_color)
@@ -287,7 +292,8 @@ class Function(mod_main.CoordinateSystemElement):
     def __init__(self, function, start=None, end=None, step=None, fill_color=False, color=None, transparency_mask=None):
         mod_main.CoordinateSystemElement.__init__(self, transparency_mask=transparency_mask)
 
-        assert function
+        if not function:
+            raise Exception('Invalid function: {0}'.format(function))
 
         self.function = function
         self.step = float(step if step else 0.1)
@@ -299,8 +305,10 @@ class Function(mod_main.CoordinateSystemElement):
 
         self.points = []
 
-        assert self.start < self.end
-        assert self.step > 0
+        if not self.start < self.end:
+            raise Exception('Invalid function start ({0}) and end ({1})'.format(self.start, self.end))
+        if not self.step > 0:
+            raise Exception('Invalid function step: {0}'.format(self.step))
 
         self.compute()
 

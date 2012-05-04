@@ -60,9 +60,11 @@ class Bounds:
         self.top = top
 
         if self.bottom != None and self.top != None:
-            assert self.bottom < self.top, 'Bottom bound ({0}) greater than top bound ({1})'.format(self.bottom, self.top)
+            if not self.bottom < self.top:
+                raise Exception('Bottom bound ({0}) greater than top bound ({1})'.format(self.bottom, self.top))
         if self.left != None and self.right != None:
-            assert self.left < self.right, 'Left bound ({0}) greater than right bound ({1})'.format(self.left, self.right)
+            if not self.left < self.right:
+                raise Exception('Left bound ({0}) greater than right bound ({1})'.format(self.left, self.right))
 
         self.image_width = image_width
         self.image_height = image_height
@@ -99,7 +101,8 @@ class Bounds:
 
     def update(self, bounds=None, x=None, y=None, point=None):
         if point != None:
-            assert len(point) == 2
+            if not len(point) == 2:
+                raise Exception('Invalid point: {0}'.format(point))
             x = point[0]
             y = point[1]
 
@@ -148,7 +151,8 @@ class CoordinateSystem:
                 self.bounds = bounds
                 self.resize_bounds = False
             else:
-                assert len(bounds) == 4, 'Bounds must be a 4 element tuple/list'
+                if not len(bounds) == 4:
+                    raise Exception('Bounds must be a 4 element tuple/list')
                 self.bounds = Bounds(left=bounds[0], right=bounds[1], bottom=bounds[2], top=bounds[3])
                 self.resize_bounds = False
         else:
@@ -167,8 +171,9 @@ class CoordinateSystem:
         but the same does not apply for detached axes.
         """
         import elements as mod_elements
-        assert element
-        assert isinstance(element, CoordinateSystemElement)
+
+        if not element or not isinstance(element, CoordinateSystemElement):
+            raise Exception('Invalid element: {0}'.format(element))
 
         if isinstance(element, mod_elements.Axis):
             if element.is_detached():
@@ -277,7 +282,8 @@ class CoordinateSystemElement:
         if not color:
             return None
 
-        assert len(color) >= 3
+        if not len(color) >= 3:
+            raise Exception('Invalid color: {0}'.format(color))
 
         return (color[0], color[1], color[2], self.transparency_mask)
 

@@ -19,7 +19,9 @@ def get_color(color):
 
         return (red, green, blue)
 
-    assert len(color) == 3, 'Invalid color {0}'.format(color)
+    if not len(color) == 3:
+        raise Exception('Invalid color {0}'.format(color))
+
     return color
 
 def brighten(color, n):

@@ -61,7 +61,8 @@ class Axis(mod_main.CoordinateSystemElement):
         """
         mod_main.CoordinateSystemElement.__init__(self, transparency_mask=transparency_mask)
 
-        assert bool(horizontal) != bool(vertical), 'Axis must be set to be horizontal or vertical'
+        if bool(horizontal) == bool(vertical):
+            raise Exception('Axis must be set to be horizontal or vertical')
 
         self.horizontal = horizontal
 
@@ -70,7 +71,10 @@ class Axis(mod_main.CoordinateSystemElement):
 
         if isinstance(labels, str) or isinstance(labels, unicode):
             groups = mod_re.findall('([0-9\.]+)(.*)', labels)
-            assert len(groups) == 1 and len(groups[0]) == 2, 'Invalid label string: {0}'.format(label)
+
+            if not len(groups) == 1 and len(groups[0]) == 2:
+                raise Exception('Invalid label string: {0}'.format(label))
+
             self.labels = float(groups[0][0])
             self.labels_suffix = groups[0][1]
         elif isinstance(labels, dict):
@@ -85,7 +89,8 @@ class Axis(mod_main.CoordinateSystemElement):
         else:
             self.label_position = label_position if label_position else mod_main.LEFT_CENTER
 
-        assert len(self.label_position) == 2
+        if not len(self.label_position) == 2:
+            raise Exception('Invalid label position: {0}'.format(self.label_position))
 
         self.hide_positive = hide_positive
         self.hide_negative = hide_negative
@@ -95,7 +100,8 @@ class Axis(mod_main.CoordinateSystemElement):
             self.hide_negative = True
 
         if detached_center:
-            assert len(detached_center) == 2
+            if not len(detached_center) == 2:
+                raise Exception('Invalid detached center: {0}'.format(detached_center))
             self.center = detached_center
         else:
             self.center = (0, 0)
@@ -249,9 +255,12 @@ class Point(mod_main.CoordinateSystemElement):
             color=None, transparency_mask=None):
         mod_main.CoordinateSystemElement.__init__(self, transparency_mask=transparency_mask)
 
-        assert position and len(position) == 2, 'Invalid position {0}'.format(position)
+        if not position or not len(position) == 2:
+            raise Exception('Invalid position {0}'.format(position))
+
         if label_position:
-            assert len(label_position) == 2, 'Invalid label position {0}'.format(label_position)
+            if not len(label_position) == 2:
+                raise Exception('Invalid label position {0}'.format(label_position))
         else:
             label_position = mod_main.CENTER_DOWN
 
@@ -279,7 +288,8 @@ class Grid(mod_main.CoordinateSystemElement):
     def __init__(self, horizontal, vertical, color=None, transparency_mask=None):
         mod_main.CoordinateSystemElement.__init__(self, transparency_mask=transparency_mask)
 
-        assert horizontal or vertical, 'Grid must have horizontal or vertical distance.'
+        if not horizontal and not vertical:
+            raise Exception('Grid must have horizontal or vertical distance.')
 
         self.horizontal = float(horizontal) if horizontal else None
         self.vertical = float(vertical) if vertical else None
@@ -322,10 +332,10 @@ class Line(mod_main.CoordinateSystemElement):
     def __init__(self, start, end, color=None, transparency_mask=None):
         mod_main.CoordinateSystemElement.__init__(self, transparency_mask=transparency_mask)
 
-        assert start
-        assert len(start) == 2
-        assert end
-        assert len(end) == 2
+        if not start or len(start) != 2:
+            raise Exception('Invalid start of line: {0}'.format(start))
+        if not end or len(end) != 2:
+            raise Exception('Invalid end of line: {0}'.format(end))
 
         self.start = start
         self.end = end
