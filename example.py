@@ -182,13 +182,21 @@ examples.append(test_barchart_horizontal)
 
 def test_barchart_with_generator():
     """ Bar charts with data given as generator function """
+    import cartesius.colors as colors
+
     coordinate_system = cartesius.CoordinateSystem()
+
+    bottom_collor = (0, 0, 255)
+    top_color = (255, 255, 255)
 
     # In case you don't want to keep all your data in memory, you can give the data as a
     # generator function that will lazy-load your data. This works for all charts:
     def data_generator():
         for x in range(25):
-            yield charts.data(x / 2., 2 * math.sin(x/4.))
+            key = x / 2.
+            value = 2 * math.sin(x/4.)
+            color = colors.get_color_between(bottom_collor, top_color, (value + 2) / 4.)
+            yield charts.data(key, value, fill_color=color)
 
     barchart_data_generator = data_generator
     barchart = charts.BarChart(data=barchart_data_generator, vertical=True, width=0.5)
