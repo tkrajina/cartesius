@@ -43,13 +43,13 @@ def test_piechart_1():
 
     # list or tuple of two-element tuples (value, label):
     piechart_data = (
-        (1, 'abc'),
-        (2, 'cde'),
-        (4, 'efg'),
-        (1, 'ijk'),
-        (5, 'lmn'),
-        (5, 'opq'),
-        (3, 'xyz'),
+        charts.data('abc', 1),
+        charts.data('cde', 2),
+        charts.data('efg', 4),
+        charts.data('ijk', 1),
+        charts.data('lmn', 5),
+        charts.data('opq', 5),
+        charts.data('xyz', 3),
     )
     piechart = charts.PieChart(data=piechart_data, color=(0, 0, 0))
     coordinate_system.add(piechart)
@@ -67,10 +67,10 @@ def test_piechart_2():
     coordinate_system = cartesius.CoordinateSystem()
 
     piechart_data = (
-        (1, 'abc'),
-        (2, 'cde'),
-        (5, 'efg'),
-        (3, 'ijk'),
+        charts.data('abc', 1),
+        charts.data('cde', 2),
+        charts.data('efg', 5),
+        charts.data('ijk', 3),
     )
     piechart = charts.PieChart(data=piechart_data, color=(0, 0, 0),
             fill_colors = (
@@ -95,13 +95,29 @@ def test_barchart_1():
     coordinate_system = cartesius.CoordinateSystem()
 
     barchart_data_1 = (
-        (-1, -.5), (0, .7), (1, 2), (2, 2.7), (3, 4), (4, 3.1), (5, 2.1), (6, 1), (7, -.3)
+            charts.data(-1, -.5),
+            charts.data(0, .7),
+            charts.data(1, 2),
+            charts.data(2, 2.7),
+            charts.data(3, 4),
+            charts.data(4, 3.1),
+            charts.data(5, 2.1),
+            charts.data(6, 1),
+            charts.data(7, -.3)
     )
     barchart_1 = charts.BarChart(vertical=True, data=barchart_data_1, width=0.95)
     coordinate_system.add(barchart_1)
 
     barchart_data_2 = (
-        (-1, -.25), (0, .35), (1, 1), (2, 1.35), (3, 2), (4, 1.65), (5, 1), (6, .5), (7, -.6)
+            charts.data(-1, -.25),
+            charts.data(0, .35),
+            charts.data(1, 1),
+            charts.data(2, 1.35),
+            charts.data(3, 2),
+            charts.data(4, 1.65),
+            charts.data(5, 1),
+            charts.data(6, .5),
+            charts.data(7, -.6)
     )
     barchart_2 = charts.BarChart(vertical=True, data=barchart_data_2, width=0.75, color=(0, 0, 0), fill_colors=((100, 100, 200),))
     coordinate_system.add(barchart_2)
@@ -115,8 +131,13 @@ def test_barchart_2():
     coordinate_system = cartesius.CoordinateSystem()
 
     barchart_data = (
-        (-5, -0, -.5), (0, 1, .7), (1, 3, 2), (3, 4, 4), (4, 5.5, 3.1), (6, 7, 2.1), (7, 9, 1),
-
+            charts.data(-5, -0, -.5),
+            charts.data(0, 1, size=.7),
+            charts.data(1, 3, size=2),
+            charts.data(3, 4, size=4),
+            charts.data(4, 5.5, size=3.1),
+            charts.data(6, 7, size=2.1),
+            charts.data(7, 9, size=1),
     )
     barchart = charts.BarChart(vertical=True, data=barchart_data, color=(0, 0, 0))
     coordinate_system.add(barchart)
@@ -130,13 +151,29 @@ def test_barchart_horizontal():
     coordinate_system = cartesius.CoordinateSystem()
 
     barchart_data_1 = (
-        (-1, -.5), (0, .7), (1, 2), (2, 2.7), (3, 4), (4, 3.1), (5, 2.1), (6, 1), (7, -.3)
+            charts.data(-1, -.5),
+            charts.data(0, .7),
+            charts.data(1, 2),
+            charts.data(2, 2.7),
+            charts.data(3, 4),
+            charts.data(4, 3.1),
+            charts.data(5, 2.1),
+            charts.data(6, 1),
+            charts.data(7, -.3)
     )
     barchart_1 = charts.BarChart(horizontal=True, data=barchart_data_1, width=0.95)
     coordinate_system.add(barchart_1)
 
     barchart_data_2 = (
-        (-1, -.25), (0, .35), (1, 1), (2, 1.35), (3, 2), (4, 1.65), (5, 1), (6, .5), (7, -.6)
+            charts.data(-1, -.25),
+            charts.data(0, .35),
+            charts.data(1, 1),
+            charts.data(2, 1.35),
+            charts.data(3, 2),
+            charts.data(4, 1.65),
+            charts.data(5, 1),
+            charts.data(6, .5),
+            charts.data(7, -.6)
     )
     barchart_2 = charts.BarChart(horizontal=True, data=barchart_data_2, width=0.75, color=(0, 0, 0), fill_colors=((100, 100, 200),))
     coordinate_system.add(barchart_2)
@@ -153,7 +190,7 @@ def test_barchart_with_generator():
     # generator function that will lazy-load your data. This works for all charts:
     def data_generator():
         for x in range(25):
-            yield x / 2., 2 * math.sin(x/4.)
+            yield charts.data(x / 2., 2 * math.sin(x/4.))
 
     barchart_data_generator = data_generator
     barchart = charts.BarChart(data=barchart_data_generator, vertical=True, width=0.5)
@@ -274,17 +311,22 @@ def test_line_charts():
     """ Line charts"""
     coordinate_system = cartesius.CoordinateSystem()
 
-    # With dict:
     coordinate_system.add(
             charts.LineChart(
-                    data = {-2: 1, 0: -1, 3: 1.2, 7: 1.2},
+                    data = (charts.data(-2, 1), 
+                            charts.data(0, -1), 
+                            charts.data(3, 1.2), 
+                            charts.data(7, 1.2)),
                     fill_color = (50, 50, 50),
                     transparency_mask = 50))
 
-    # With pairs of tuples
     coordinate_system.add(
             charts.LineChart(
-                    data = ((0, 0), (1, -3), (4, 3), (5, -2), (7, 0)),
+                    data = (charts.data(0, 0), 
+                            charts.data(1, -3), 
+                            charts.data(4, 3), 
+                            charts.data(5, -2), 
+                            charts.data(7, 0)),
                     color = (255, 0, 0),
                     transparency_mask = 150))
 

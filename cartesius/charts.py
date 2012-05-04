@@ -3,6 +3,7 @@
 """ Charts are normal CoordinateSystemElements """
 
 import math as mod_math
+import collections as mod_collections
 import types as mod_types
 
 import main as mod_main
@@ -15,9 +16,13 @@ DEFAULT_COLORS = (
         (242, 229, 229),
 )
 
+ChartData = mod_collections.namedtuple(
+        'ChartData',
+        ('key', 'value', 'size', 'label', 'label_position'))
+
 def get_generator(data):
     """
-    In case of a big dataset, no need to load the entire list/dict in memory, it can be given to
+    In case of a big dataset, no need to load the entire list in memory, it can be given to
     cartesius as a generator function.
 
     In case data is callable and the result is a generator, then data is returned, oherwisea the
@@ -33,6 +38,12 @@ def get_generator(data):
         for i in data:
             yield i
     return generator
+
+def data(key, value, size=None, label=None, label_position=None):
+    """
+    Use this function to prepare data for all charts.
+    """
+    return ChartData(key, value, size, label, label_position)
 
 class BarChart(mod_main.CoordinateSystemElement):
 
@@ -82,36 +93,30 @@ class BarChart(mod_main.CoordinateSystemElement):
     def reload_bounds(self):
         for item in self.data_generator():
             if self.width:
-                assert item and len(item) == 2, \
-                       'With width, data must countain (key, value) tuples, found {0}'.format(item)
                 if self.horizontal:
-                    self.bounds.update(y=item[0])
-                    self.bounds.update(y=item[0] + self.width)
-                    self.bounds.update(x=item[1])
+                    self.bounds.update(y=item.key)
+                    self.bounds.update(y=item.key + self.width)
+                    self.bounds.update(x=item.value)
                 else:
-                    self.bounds.update(x=item[0])
-                    self.bounds.update(x=item[0] + self.width)
-                    self.bounds.update(y=item[1])
+                    self.bounds.update(x=item.key)
+                    self.bounds.update(x=item.key + self.width)
+                    self.bounds.update(y=item.value)
             else:
-                assert item and len(item) == 3, \
-                       'Without width, data must contain (from, to, value) tuples, found {0}'.format(item)
                 if self.horizontal:
-                    self.bounds.update(y=item[0])
-                    self.bounds.update(y=item[1])
-                    self.bounds.update(x=item[2])
+                    self.bounds.update(y=item.key)
+                    self.bounds.update(y=item.value)
+                    self.bounds.update(x=item.size)
                 else:
-                    self.bounds.update(x=item[0])
-                    self.bounds.update(x=item[1])
-                    self.bounds.update(y=item[2])
+                    self.bounds.update(x=item.key)
+                    self.bounds.update(x=item.value)
+                    self.bounds.update(y=item.size)
 
     def process_image(self, draw_handler):
         for index, item in enumerate(self.data_generator()):
             if self.width:
-                assert item and len(item) == 2, 'With width given, data must countain (key, value) tuples, found {0}'.format(item)
-                start, end, value = item[0], item[0] + self.width, item[1]
+                start, end, value = item.key, item.key + self.width, item.value
             else:
-                assert item and len(item) == 3, 'Without with given, data must contain (from, to, value) tuples, found {0}'.format(item)
-                start, end, value = item[0], item[1], item[2]
+                start, end, value = item.key, item.value, item.size
 
             draw_handler.draw_polygon(
                 (self.get_point(start, 0), self.get_point(start, value), self.get_point(end, value), self.get_point(end, 0)),
@@ -211,15 +216,13 @@ class PieChart(mod_main.CoordinateSystemElement):
         sum_values = 0.
 
         for item in self.data_generator():
-            value = item[0]
-            sum_values += value
+            sum_values += item.value
 
         current_angle = 0
         for index, item in enumerate(self.data_generator()):
-            value = item[0]
-            if value > 0:
-                label = str(item[1])
-                delta = 360 * value / sum_values
+            if item.value > 0:
+                label = str(item.key)
+                delta = 360 * item.value / sum_values
 
                 start_angle = current_angle
                 end_angle = current_angle + delta
@@ -254,28 +257,15 @@ class LineChart(mod_main.CoordinateSystemElement):
         self.color = self.get_color(color)
         self.fill_color = self.get_color(fill_color)
 
-        prepared_data = []
-
-        if hasattr(data, 'keys') and callable(getattr(data, 'keys')):
-            keys = data.keys()
-            keys.sort()
-
-            for key in keys:
-                item = (key, data[key])
-                prepared_data.append(item)
-        else:
-            prepared_data = data
+        prepared_data = data
 
         self.data_generator = get_generator(prepared_data)
-
-        for item in self.data_generator():
-            assert len(item) == 2
 
         self.reload_bounds()
 
     def reload_bounds(self):
-        for key, value in self.data_generator():
-            self.bounds.update(point=(key, value))
+        for item in self.data_generator():
+            self.bounds.update(point=(item.key, item.value))
 
     def process_image(self, draw_handler):
         for i, point in enumerate(self.data_generator()):
