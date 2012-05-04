@@ -67,18 +67,12 @@ def test_piechart_2():
     coordinate_system = cartesius.CoordinateSystem()
 
     piechart_data = (
-        charts.data('abc', 1),
-        charts.data('cde', 2),
-        charts.data('efg', 5),
-        charts.data('ijk', 3),
+        charts.data('abc', 1, fill_color=(255, 200, 200)),
+        charts.data('cde', 2, fill_color=(200, 255, 200)),
+        charts.data('efg', 5, fill_color=(200, 200, 255)),
+        charts.data('ijk', 3, fill_color=(255, 255, 255)),
     )
-    piechart = charts.PieChart(data=piechart_data, color=(0, 0, 0),
-            fill_colors = (
-                (255, 200, 200),
-                (200, 255, 200),
-                (200, 200, 255),
-                (255, 255, 255),
-           ))
+    piechart = charts.PieChart(data=piechart_data, color=(0, 0, 0))
 
     coordinate_system.add(piechart)
 
@@ -108,18 +102,20 @@ def test_barchart_1():
     barchart_1 = charts.BarChart(vertical=True, data=barchart_data_1, width=0.95)
     coordinate_system.add(barchart_1)
 
+    custom_color = (100, 100, 200)
+
     barchart_data_2 = (
-            charts.data(-1, -.25),
-            charts.data(0, .35),
-            charts.data(1, 1),
-            charts.data(2, 1.35),
-            charts.data(3, 2),
-            charts.data(4, 1.65),
-            charts.data(5, 1),
-            charts.data(6, .5),
-            charts.data(7, -.6)
+            charts.data(-1, -.25, fill_color=custom_color),
+            charts.data(0, .35, fill_color=custom_color),
+            charts.data(1, 1, fill_color=custom_color),
+            charts.data(2, 1.35, fill_color=custom_color),
+            charts.data(3, 2, fill_color=custom_color),
+            charts.data(4, 1.65, fill_color=custom_color),
+            charts.data(5, 1, fill_color=custom_color),
+            charts.data(6, .5, fill_color=custom_color),
+            charts.data(7, -.6, fill_color=custom_color)
     )
-    barchart_2 = charts.BarChart(vertical=True, data=barchart_data_2, width=0.75, color=(0, 0, 0), fill_colors=((100, 100, 200),))
+    barchart_2 = charts.BarChart(vertical=True, data=barchart_data_2, width=0.75, color=(0, 0, 0))
     coordinate_system.add(barchart_2)
 
     return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True),
@@ -164,18 +160,20 @@ def test_barchart_horizontal():
     barchart_1 = charts.BarChart(horizontal=True, data=barchart_data_1, width=0.95)
     coordinate_system.add(barchart_1)
 
+    custom_color = (100, 100, 200)
+
     barchart_data_2 = (
-            charts.data(-1, -.25),
-            charts.data(0, .35),
-            charts.data(1, 1),
-            charts.data(2, 1.35),
-            charts.data(3, 2),
-            charts.data(4, 1.65),
-            charts.data(5, 1),
-            charts.data(6, .5),
-            charts.data(7, -.6)
+            charts.data(-1, -.25, fill_color=custom_color),
+            charts.data(0, .35, fill_color=custom_color),
+            charts.data(1, 1, fill_color=custom_color),
+            charts.data(2, 1.35, fill_color=custom_color),
+            charts.data(3, 2, fill_color=custom_color),
+            charts.data(4, 1.65, fill_color=custom_color),
+            charts.data(5, 1, fill_color=custom_color),
+            charts.data(6, .5, fill_color=custom_color),
+            charts.data(7, -.6, fill_color=custom_color)
     )
-    barchart_2 = charts.BarChart(horizontal=True, data=barchart_data_2, width=0.75, color=(0, 0, 0), fill_colors=((100, 100, 200),))
+    barchart_2 = charts.BarChart(horizontal=True, data=barchart_data_2, width=0.75, color=(0, 0, 0))
     coordinate_system.add(barchart_2)
 
     return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True),

@@ -7,6 +7,7 @@ import collections as mod_collections
 import types as mod_types
 
 import main as mod_main
+import colors as mod_colors
 
 # Default color palete from: http://www.colourlovers.com/pattern/2429885/Spring_flower_aerial
 DEFAULT_COLORS = (
@@ -18,7 +19,7 @@ DEFAULT_COLORS = (
 
 ChartData = mod_collections.namedtuple(
         'ChartData',
-        ('key', 'value', 'size', 'label', 'label_position'))
+        ('key', 'value', 'size', 'label', 'label_position', 'color', 'fill_color'))
 
 def get_generator(data):
     """
@@ -39,23 +40,23 @@ def get_generator(data):
             yield i
     return generator
 
-def data(key, value, size=None, label=None, label_position=None):
+def data(key, value, size=None, label=None, label_position=None, color=None, fill_color=None):
     """
     Use this function to prepare data for all charts.
     """
-    return ChartData(key, value, size, label, label_position)
+    return ChartData(key, value, size, label, label_position, mod_colors.get_color(color),
+                     mod_colors.get_color(fill_color))
 
 class BarChart(mod_main.CoordinateSystemElement):
 
     horizontal = None
 
     color = None
-    fill_colors = None
 
     data_generator = None
     width = None
 
-    def __init__(self, data, horizontal=None, vertical=None, width=None, color=None, fill_colors=None,
+    def __init__(self, data, horizontal=None, vertical=None, width=None, color=None, 
                  transparency_mask=None):
         mod_main.CoordinateSystemElement.__init__(self, transparency_mask=transparency_mask)
 
@@ -68,13 +69,6 @@ class BarChart(mod_main.CoordinateSystemElement):
         self.data_generator = get_generator(data)
         self.width = width
         self.color = self.get_color(color)
-
-        if fill_colors:
-            self.fill_colors = []
-            for fill_color in fill_colors:
-                self.fill_colors.append(self.get_color(fill_color))
-        else:
-            self.fill_colors = DEFAULT_COLORS
 
         self.reload_bounds()
 
@@ -118,9 +112,14 @@ class BarChart(mod_main.CoordinateSystemElement):
             else:
                 start, end, value = item.key, item.value, item.size
 
+            if item.fill_color:
+                fill_color = item.fill_color
+            else:
+                fill_color = DEFAULT_COLORS[index % len(DEFAULT_COLORS)]
+
             draw_handler.draw_polygon(
                 (self.get_point(start, 0), self.get_point(start, value), self.get_point(end, value), self.get_point(end, 0)),
-                fill_color = self.fill_colors[index % len(self.fill_colors)])
+                fill_color = fill_color)
 
             if self.color:
                 if self.horizontal:
@@ -135,13 +134,12 @@ class BarChart(mod_main.CoordinateSystemElement):
 class PieChart(mod_main.CoordinateSystemElement):
 
     color = None
-    fill_colors = None
 
     data_generator = None
     center = None
     radius = None
 
-    def __init__(self, data, color=None, fill_colors=None, center=None, radius=None,
+    def __init__(self, data, color=None, center=None, radius=None,
             transparency_mask=None):
         mod_main.CoordinateSystemElement.__init__(self, transparency_mask=transparency_mask)
 
@@ -150,13 +148,6 @@ class PieChart(mod_main.CoordinateSystemElement):
         self.data_generator = get_generator(data)
 
         self.color = self.get_color(color)
-
-        if fill_colors:
-            self.fill_colors = []
-            for fill_color in fill_colors:
-                self.fill_colors.append(self.get_color(fill_color))
-        else:
-            self.fill_colors = DEFAULT_COLORS
 
         if center:
             assert len(center) == 2, 'Invalid center {0}'.format(center)
@@ -227,7 +218,10 @@ class PieChart(mod_main.CoordinateSystemElement):
                 start_angle = current_angle
                 end_angle = current_angle + delta
 
-                fill_color = self.fill_colors[index % len(self.fill_colors)]
+                if item.fill_color:
+                    fill_color = item.fill_color
+                else:
+                    fill_color = DEFAULT_COLORS[index % len(DEFAULT_COLORS)]
 
                 draw_handler.draw_pieslice(
                         self.center[0],
