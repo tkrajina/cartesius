@@ -352,21 +352,21 @@ class Line(mod_main.CoordinateSystemElement):
 
 class Circle(mod_main.CoordinateSystemElement):
 
-    x = None
-    y = None
+    center = None
     radius = None
     color = None
     fill_color = None
 
-    def __init__(self, x, y, radius, color=None, fill_color=None, transparency_mask=None):
+    def __init__(self, center, radius, color=None, fill_color=None, transparency_mask=None):
         mod_main.CoordinateSystemElement.__init__(self, transparency_mask=transparency_mask)
 
-        assert x != None
-        assert y != None
-        assert radius > 0
+        if not center or len(center) != 2:
+            raise Exception('Invalid center: {0}'.format(center))
 
-        self.x = x
-        self.y = y
+        if not radius > 0:
+            raise Exception('Invalid radius: {0}'.format(radius))
+
+        self.center = center
         self.radius = radius
 
         self.color = self.get_color(color if color else DEFAULT_ELEMENT_COLOR)
@@ -375,15 +375,15 @@ class Circle(mod_main.CoordinateSystemElement):
         self.reload_bounds()
 
     def reload_bounds(self):
-        self.bounds.update(point=(self.x + self.radius, self.y))
-        self.bounds.update(point=(self.x - self.radius, self.y))
-        self.bounds.update(point=(self.x, self.y + self.radius))
-        self.bounds.update(point=(self.x, self.y - self.radius))
+        self.bounds.update(point=(self.center[0] + self.radius, self.center[1]))
+        self.bounds.update(point=(self.center[0] - self.radius, self.center[1]))
+        self.bounds.update(point=(self.center[0], self.center[1] + self.radius))
+        self.bounds.update(point=(self.center[0], self.center[1] - self.radius))
 
     def process_image(self, draw_handler):
         draw_handler.draw_circle(
-                self.x,
-                self.y,
+                self.center[0],
+                self.center[1],
                 self.radius,
                 fill_color = self.get_color_with_transparency(self.fill_color),
                 line_color = self.get_color_with_transparency(self.color))

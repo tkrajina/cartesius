@@ -24,10 +24,10 @@ def test_circles():
     coordinate_system = cartesius.CoordinateSystem()
 
     for i in range(50):
+        center = (random.randint(-20, 20), random.randint(0, 20))
         coordinate_system.add(
             elements.Circle(
-                x = random.randint(-20, 20),
-                y = random.randint(0, 20),
+                center,
                 radius = random.randint(1, 5),
                 transparency_mask = random.randint(0, 255),
                 fill_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)),
@@ -346,8 +346,10 @@ def test_circles_2():
     iterations = 20
     for i in range(1, iterations):
         x = i / 2.
+        y = math.sin(x)
+        center = (i / 1, math.sin(x))
         color = colors.get_color_between(from_color, to_color, i/float(iterations))
-        coordinate_system.add(elements.Circle(x, y=math.sin(x), radius=math.sqrt(x),
+        coordinate_system.add(elements.Circle(center, radius=math.sqrt(x),
                 transparency_mask=50, fill_color=color, color=(0, 0, 0)))
 
     return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
@@ -362,7 +364,9 @@ def test_circles_3():
 
     for i in range(1, 20):
         x = i / 2.
-        coordinate_system.add(elements.Circle(x, y=math.sin(x), radius=math.sqrt(x),
+        y = math.sin(x)
+        center = (i / 1, math.sin(x))
+        coordinate_system.add(elements.Circle(center, radius=math.sqrt(x),
                 transparency_mask = 50, fill_color = (i * 10, 2 * 10, i * 10), color=(0, 0, 0)))
 
     return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
@@ -377,7 +381,9 @@ def test_circles_4():
 
     for i in range(1, 20):
         x = i / 2.
-        coordinate_system.add(elements.Circle(x, y=math.sin(x), radius=math.sqrt(x),
+        y = math.sin(x)
+        center = (i / 1, math.sin(x))
+        coordinate_system.add(elements.Circle(center, radius=math.sqrt(x),
                 transparency_mask=50, fill_color=(i * 10, 2 * 10, i * 10), color=(0, 0, 0)))
 
     return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
@@ -392,7 +398,9 @@ def test_circles_5():
 
     for i in range(1, 20):
         x = i / 2.
-        coordinate_system.add(elements.Circle(x, y=math.sin(x), radius=math.sqrt(x),
+        y = math.sin(x)
+        center = (i / 1, math.sin(x))
+        coordinate_system.add(elements.Circle(center, radius=math.sqrt(x),
                 transparency_mask=50, fill_color=(i * 10, 2 * 10, i * 10), color=(0, 0, 0)))
 
     return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
