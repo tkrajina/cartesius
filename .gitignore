@@ -10,4 +10,5 @@ tags
 *.html
 build/*
 dist/*
+*.egg-*
 MANIFEST
