@@ -127,10 +127,10 @@ def test_barchart_2():
     coordinate_system = cartesius.CoordinateSystem()
 
     barchart_data = (
-            charts.data(-5, -0, -.5),
+            charts.data(-5, -0, -.5, label='Negative value'),
             charts.data(0, 1, size=.7),
             charts.data(1, 3, size=2),
-            charts.data(3, 4, size=4),
+            charts.data(3, 4, size=4, label='#1'),
             charts.data(4, 5.5, size=3.1),
             charts.data(6, 7, size=2.1),
             charts.data(7, 9, size=1),
@@ -147,15 +147,15 @@ def test_barchart_horizontal():
     coordinate_system = cartesius.CoordinateSystem()
 
     barchart_data_1 = (
-            charts.data(-1, -.5),
-            charts.data(0, .7),
-            charts.data(1, 2),
-            charts.data(2, 2.7),
-            charts.data(3, 4),
-            charts.data(4, 3.1),
-            charts.data(5, 2.1),
-            charts.data(6, 1),
-            charts.data(7, -.3)
+            charts.data(-1, -.5, label='a'),
+            charts.data(0, .7, label='b'),
+            charts.data(1, 2, label='c'),
+            charts.data(2, 2.7, label='d'),
+            charts.data(3, 4, label='Maximum value'),
+            charts.data(4, 3.1, label='f'),
+            charts.data(5, 2.1, label='g'),
+            charts.data(6, 1, label='h'),
+            charts.data(7, -.3, label='The end!')
     )
     barchart_1 = charts.BarChart(horizontal=True, data=barchart_data_1, width=0.95)
     coordinate_system.add(barchart_1)
@@ -319,8 +319,8 @@ def test_line_charts():
 
     coordinate_system.add(
             charts.LineChart(
-                    data = (charts.data(-2, 1), 
-                            charts.data(0, -1), 
+                    data = (charts.data(-2, 1, label='aaa'), 
+                            charts.data(0, -1, label='bbb'), 
                             charts.data(3, 1.2), 
                             charts.data(7, 1.2)),
                     fill_color = (50, 50, 50),
@@ -330,8 +330,8 @@ def test_line_charts():
             charts.LineChart(
                     data = (charts.data(0, 0), 
                             charts.data(1, -3), 
-                            charts.data(4, 3), 
-                            charts.data(5, -2), 
+                            charts.data(4, 3, label='aaa', label_position=cartesius.CENTER_DOWN), 
+                            charts.data(5, -2, label='custom label', label_position=cartesius.RIGHT_CENTER), 
                             charts.data(7, 0)),
                     color = (255, 0, 0),
                     transparency_mask = 150))

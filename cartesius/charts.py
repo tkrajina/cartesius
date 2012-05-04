@@ -123,6 +123,24 @@ class BarChart(mod_main.CoordinateSystemElement):
                 (self.get_point(start, 0), self.get_point(start, value), self.get_point(end, value), self.get_point(end, 0)),
                 fill_color = fill_color)
 
+            if item.label:
+                if self.horizontal:
+                    if item.label_position:
+                        label_position = item.label_position
+                    elif value > 0:
+                        label_position = mod_main.LEFT_CENTER
+                    else:
+                        label_position = mod_main.RIGHT_CENTER
+                    draw_handler.draw_text(0, (start + end) / 2., item.label, mod_main.DEFAULT_LABEL_COLOR, label_position)
+                else:
+                    if item.label_position:
+                        label_position = item.label_position
+                    elif value > 0:
+                        label_position = mod_main.CENTER_DOWN
+                    else:
+                        label_position = mod_main.CENTER_UP
+                    draw_handler.draw_text((start + end) / 2., 0, item.label, mod_main.DEFAULT_LABEL_COLOR, label_position)
+
             if self.color:
                 if self.horizontal:
                     draw_handler.draw_line(0, start, value, start, self.color)
@@ -132,6 +150,7 @@ class BarChart(mod_main.CoordinateSystemElement):
                     draw_handler.draw_line(start, 0, start, value, self.color)
                     draw_handler.draw_line(end, value, end, 0, self.color)
                     draw_handler.draw_line(start, value, end, value, self.color)
+
 
 class PieChart(mod_main.CoordinateSystemElement):
 
@@ -277,6 +296,16 @@ class LineChart(mod_main.CoordinateSystemElement):
                         fill_color = self.get_color_with_transparency(self.fill_color)
                    )
                 draw_handler.draw_line(x1, y1, x2, y2, self.get_color_with_transparency(self.color))
+
+            if point.label:
+                if point.label_position:
+                    label_position = point.label_position
+                else:
+                    label_position = mod_main.CENTER_UP
+
+                draw_handler.draw_text(point.key, point.value, point.label, mod_main.DEFAULT_LABEL_COLOR, label_position)
+                
+
             previous = point
 
 class Function(mod_main.CoordinateSystemElement):
