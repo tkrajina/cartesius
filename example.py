@@ -315,8 +315,27 @@ examples.append(test_filled_transparent_graphs_2)
 
 def test_line_charts():
     """ Line charts"""
+    import cartesius.colors as colors
+
     coordinate_system = cartesius.CoordinateSystem()
 
+    # linechart (that mimic function chart) with generator and colors computed on the fly:
+    def f():
+        from_color = (255, 255, 0)
+        to_color = (100, 100, 255)
+        i = -2
+        while i < 6:
+            value = 2 * math.sin(i)
+            color = colors.get_color_between(from_color, to_color, (value + 2)/4.)
+            yield charts.data(i, value, fill_color=color, color=(0, 0, 0))
+            i += .05
+
+    coordinate_system.add(
+            charts.LineChart(
+                    data = f,
+                    transparency_mask = 0))
+
+    # filled line chart with labels
     coordinate_system.add(
             charts.LineChart(
                     data = (charts.data(-2, 1, label='aaa'), 
@@ -326,6 +345,7 @@ def test_line_charts():
                     fill_color = (50, 50, 50),
                     transparency_mask = 50))
 
+    # normal line chart with labels:
     coordinate_system.add(
             charts.LineChart(
                     data = (charts.data(0, 0), 

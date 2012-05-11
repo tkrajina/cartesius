@@ -288,23 +288,25 @@ class LineChart(mod_main.CoordinateSystemElement):
     def process_image(self, draw_handler):
         for i, point in enumerate(self.data_generator()):
             if i > 0:
+                fill_color = point.fill_color if point.fill_color else self.fill_color
+                color = point.color if point.color else self.color
+                if not color:
+                    color = mod_main.DEFAULT_ELEMENT_COLOR
+
                 x1, y1 = previous[0], previous[1]
                 x2, y2 = point[0], point[1]
-                if self.fill_color:
+                if fill_color:
                     draw_handler.draw_polygon(
                         [(x1, 0), (x1, y1), (x2, y2), (x2, 0)],
-                        fill_color = self.get_color_with_transparency(self.fill_color)
+                        fill_color = self.get_color_with_transparency(fill_color)
                    )
-                draw_handler.draw_line(x1, y1, x2, y2, self.get_color_with_transparency(self.color))
+                draw_handler.draw_line(x1, y1, x2, y2, self.get_color_with_transparency(color))
 
             if point.label:
-                if point.label_position:
-                    label_position = point.label_position
-                else:
-                    label_position = mod_main.CENTER_UP
+                label_position = point.label_position if point.label_position else mod_main.CENTER_UP
+                label_color = point.color if point.color else mod_main.DEFAULT_LABEL_COLOR
 
-                draw_handler.draw_text(point.key, point.value, point.label, mod_main.DEFAULT_LABEL_COLOR, label_position)
-                
+                draw_handler.draw_text(point.key, point.value, point.label, label_color, label_position)
 
             previous = point
 
