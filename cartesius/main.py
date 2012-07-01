@@ -2,6 +2,7 @@
 
 import logging as mod_logging
 import os as mod_os
+import os.path as mod_path
 
 import Image as mod_image
 import ImageDraw as mod_imagedraw
@@ -11,7 +12,7 @@ import utils as mod_utils
 import colors as mod_colors
 
 # Get the package location:
-package_location = mod_utils.__file__[: mod_utils.__file__.rfind('/')]
+package_location = mod_utils.__file__[: mod_utils.__file__.rfind(mod_path.sep)]
 
 # use a truetype font included with cartesius:
 DEFAULT_FONT_NAME = 'Oxygen-Regular.ttf'
