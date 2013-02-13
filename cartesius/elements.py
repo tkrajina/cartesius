@@ -53,8 +53,8 @@ class Axis(mod_main.CoordinateSystemElement):
 
     center = None
 
-    def __init__(self, horizontal=False, vertical=False, color=None, labels=None, label_color=None,
-            label_position=None, points=None, transparency_mask=None, hide_positive=False,
+    def __init__(self, horizontal=False, vertical=False, color=None, labels=None, labels_decorator=None,
+            label_color=None, label_position=None, points=None, transparency_mask=None, hide_positive=False,
             hide_negative=False, hide=False, detached_center=None):
         """
         labels: May be an integer, or string like '100m' or dict like {1000:'one km', 500:'half km'}
@@ -65,6 +65,7 @@ class Axis(mod_main.CoordinateSystemElement):
             raise Exception('Axis must be set to be horizontal or vertical')
 
         self.horizontal = horizontal
+        self.labels_decorator = labels_decorator
 
         self.color = self.get_color(color if color else mod_main.DEFAULT_AXES_COLOR)
         self.label_color = self.get_color(label_color if label_color else mod_main.DEFAULT_LABEL_COLOR)
@@ -200,7 +201,11 @@ class Axis(mod_main.CoordinateSystemElement):
         if label:
             label = str(label)
         else:
-            label = str(i)
+            if self.labels_decorator:
+                label = str(self.labels_decorator(i))
+            else:
+                label = str(i)
+
             if self.labels_suffix:
                 label += self.labels_suffix
 
