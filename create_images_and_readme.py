@@ -672,36 +672,19 @@ if __name__ == '__main__':
                 if not line.strip().startswith('return'):
                     if line.startswith('    '):
                         line = line[4:]
-                        if line.strip().startswith('#'):
-                            result += '<span class="comment">{0}</span>'.format(line)
-                        else:
-                            result += '<span style="line">{0}</span>'.format(line)
+                        result += '    %s' % line
                     else:
-                        result += line
+                        result += '    %s' % line
 
         return result
 
-    html = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
+    readme = """# Cartesius
 
-<title>Cartesius examples</title>
-
-<style type="text/css">
-span.line {color:#898989}
-span.comment {color:#0000ff}
-</style>
-
-</head>
-<body>
-<h1>Cartesius</h1>
-<p>
 Cartesius is a small library for drawing 2d coordinate system images.
 More on <a href='http://github.com/tkrajina/cartesius'>http://github.com/tkrajina/cartesius</a>
-</p>
-<p>
+
 Note, all examples come in two versions: normal and antialiased. Antialiased can be created ba adding <tt>antialiasing = True</tt> in <tt>CoordinateSystem.draw()</tt> but are more CPU intensive to create.
-</p>
+
 """
 
     for i, function in enumerate(examples):
@@ -712,24 +695,19 @@ Note, all examples come in two versions: normal and antialiased. Antialiased can
         if not isinstance(images, tuple) and not isinstance(images, list):
             images = [images]
 
-        html += '<h2>{0}:</h2>'.format(description)
+        readme += '## {0}\n'.format(description)
 
-        html += '<p>'
+        readme += '\n'
         for j, image in enumerate(images):
             image_name = 'graph-{0}-{1}.png'.format(i, j)
             image.save(image_name)
             print 'written:', image_name
-            html += '<img src="{0}" style="border: 1px solid #f0f0f0;padding:5px;margin:5px;" /> '.format(image_name)
-        html += '</p>'
+            readme += '![%s](http://tkrajina.github.io/cartesius/%s) ' % (image_name, image_name)
+        readme += '\n'
 
-        html += '<p>Code:</p>'
-        html += '<pre style="font-size:0.8em;border-style:solid;border-color:gray;border-width:0px 0px 0px 1px;margin:2px 2px 10px 2px;padding:2px 2px 2px 10px;">'
-        html += 'import cartesius.main as cartesius\nimport cartesius.elements as elements\nimport cartesius.charts as charts\n\n'
-        html += clean_source_lines(function)
-        html += '</pre>'
+        readme += 'Code:\n\n'
+        readme += '    import cartesius.main as cartesius\n    import cartesius.elements as elements\n    import cartesius.charts as charts\n\n'
+        readme += clean_source_lines(function)
 
-    html += '</body>'
-
-    with open('index.html', 'w') as f:
-        f.write(html)
-
+    with open('README.md', 'w') as f:
+        f.write(readme)
