@@ -701,9 +701,8 @@ Note, all examples come in two versions: normal and antialiased. Antialiased can
             image_name = 'graph-{0}-{1}.png'.format(i, j)
             image.save(image_name)
             print 'written:', image_name
-            readme += '![%s](http://tkrajina.github.io/cartesius/%s) ' % (image_name, image_name)
-        readme += '\n'
-
+            readme += '![%s](http://tkrajina.github.io/cartesius/%s)&nbsp;' % (image_name, image_name)
+        readme += '\n\n'
         readme += 'Code:\n\n'
         readme += '    import cartesius.main as cartesius\n    import cartesius.elements as elements\n    import cartesius.charts as charts\n\n'
         readme += clean_source_lines(function)

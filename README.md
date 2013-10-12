@@ -6,7 +6,8 @@ Note, all examples come in two versions: normal and antialiased. Antialiased can
 
 ## 50 random circles
 
-![graph-0-0.png](http://tkrajina.github.io/cartesius/graph-0-0.png) ![graph-0-1.png](http://tkrajina.github.io/cartesius/graph-0-1.png) 
+![graph-0-0.png](http://tkrajina.github.io/cartesius/graph-0-0.png)&nbsp;![graph-0-1.png](http://tkrajina.github.io/cartesius/graph-0-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -27,7 +28,8 @@ Code:
     
 ## PieChart with default colors
 
-![graph-1-0.png](http://tkrajina.github.io/cartesius/graph-1-0.png) ![graph-1-1.png](http://tkrajina.github.io/cartesius/graph-1-1.png) 
+![graph-1-0.png](http://tkrajina.github.io/cartesius/graph-1-0.png)&nbsp;![graph-1-1.png](http://tkrajina.github.io/cartesius/graph-1-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -55,7 +57,8 @@ Code:
     
 ## PieChart with custom colors
 
-![graph-2-0.png](http://tkrajina.github.io/cartesius/graph-2-0.png) ![graph-2-1.png](http://tkrajina.github.io/cartesius/graph-2-1.png) 
+![graph-2-0.png](http://tkrajina.github.io/cartesius/graph-2-0.png)&nbsp;![graph-2-1.png](http://tkrajina.github.io/cartesius/graph-2-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -80,7 +83,8 @@ Code:
     
 ## Bar charts with same column width. One with default and the other with custom colors
 
-![graph-3-0.png](http://tkrajina.github.io/cartesius/graph-3-0.png) ![graph-3-1.png](http://tkrajina.github.io/cartesius/graph-3-1.png) 
+![graph-3-0.png](http://tkrajina.github.io/cartesius/graph-3-0.png)&nbsp;![graph-3-1.png](http://tkrajina.github.io/cartesius/graph-3-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -121,7 +125,8 @@ Code:
     
 ## BarChart with different column widths
 
-![graph-4-0.png](http://tkrajina.github.io/cartesius/graph-4-0.png) ![graph-4-1.png](http://tkrajina.github.io/cartesius/graph-4-1.png) 
+![graph-4-0.png](http://tkrajina.github.io/cartesius/graph-4-0.png)&nbsp;![graph-4-1.png](http://tkrajina.github.io/cartesius/graph-4-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -144,7 +149,8 @@ Code:
     
 ## Horizontal bar charts
 
-![graph-5-0.png](http://tkrajina.github.io/cartesius/graph-5-0.png) ![graph-5-1.png](http://tkrajina.github.io/cartesius/graph-5-1.png) 
+![graph-5-0.png](http://tkrajina.github.io/cartesius/graph-5-0.png)&nbsp;![graph-5-1.png](http://tkrajina.github.io/cartesius/graph-5-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -185,7 +191,8 @@ Code:
     
 ## Bar charts with data given as generator function
 
-![graph-6-0.png](http://tkrajina.github.io/cartesius/graph-6-0.png) ![graph-6-1.png](http://tkrajina.github.io/cartesius/graph-6-1.png) 
+![graph-6-0.png](http://tkrajina.github.io/cartesius/graph-6-0.png)&nbsp;![graph-6-1.png](http://tkrajina.github.io/cartesius/graph-6-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -214,7 +221,8 @@ Code:
     
 ## Function math.sin from -4 to 5
 
-![graph-7-0.png](http://tkrajina.github.io/cartesius/graph-7-0.png) ![graph-7-1.png](http://tkrajina.github.io/cartesius/graph-7-1.png) 
+![graph-7-0.png](http://tkrajina.github.io/cartesius/graph-7-0.png)&nbsp;![graph-7-1.png](http://tkrajina.github.io/cartesius/graph-7-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -228,7 +236,8 @@ Code:
     
 ## Same function, but with custom coordinate system bounds
 
-![graph-8-0.png](http://tkrajina.github.io/cartesius/graph-8-0.png) ![graph-8-1.png](http://tkrajina.github.io/cartesius/graph-8-1.png) 
+![graph-8-0.png](http://tkrajina.github.io/cartesius/graph-8-0.png)&nbsp;![graph-8-1.png](http://tkrajina.github.io/cartesius/graph-8-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -242,7 +251,8 @@ Code:
     
 ## Line function and normal function but with filled graph
 
-![graph-9-0.png](http://tkrajina.github.io/cartesius/graph-9-0.png) ![graph-9-1.png](http://tkrajina.github.io/cartesius/graph-9-1.png) 
+![graph-9-0.png](http://tkrajina.github.io/cartesius/graph-9-0.png)&nbsp;![graph-9-1.png](http://tkrajina.github.io/cartesius/graph-9-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -259,7 +269,8 @@ Code:
     
 ## Previous example with grid behind graphs
 
-![graph-10-0.png](http://tkrajina.github.io/cartesius/graph-10-0.png) ![graph-10-1.png](http://tkrajina.github.io/cartesius/graph-10-1.png) 
+![graph-10-0.png](http://tkrajina.github.io/cartesius/graph-10-0.png)&nbsp;![graph-10-1.png](http://tkrajina.github.io/cartesius/graph-10-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -279,7 +290,8 @@ Code:
     
 ## Two functions
 
-![graph-11-0.png](http://tkrajina.github.io/cartesius/graph-11-0.png) ![graph-11-1.png](http://tkrajina.github.io/cartesius/graph-11-1.png) 
+![graph-11-0.png](http://tkrajina.github.io/cartesius/graph-11-0.png)&nbsp;![graph-11-1.png](http://tkrajina.github.io/cartesius/graph-11-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -308,7 +320,8 @@ Code:
     
 ## Two functions with transparend grid over them
 
-![graph-12-0.png](http://tkrajina.github.io/cartesius/graph-12-0.png) ![graph-12-1.png](http://tkrajina.github.io/cartesius/graph-12-1.png) 
+![graph-12-0.png](http://tkrajina.github.io/cartesius/graph-12-0.png)&nbsp;![graph-12-1.png](http://tkrajina.github.io/cartesius/graph-12-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -339,7 +352,8 @@ Code:
     
 ## Line charts
 
-![graph-13-0.png](http://tkrajina.github.io/cartesius/graph-13-0.png) ![graph-13-1.png](http://tkrajina.github.io/cartesius/graph-13-1.png) 
+![graph-13-0.png](http://tkrajina.github.io/cartesius/graph-13-0.png)&nbsp;![graph-13-1.png](http://tkrajina.github.io/cartesius/graph-13-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -389,7 +403,8 @@ Code:
     
 ## Another example with circles
 
-![graph-14-0.png](http://tkrajina.github.io/cartesius/graph-14-0.png) ![graph-14-1.png](http://tkrajina.github.io/cartesius/graph-14-1.png) 
+![graph-14-0.png](http://tkrajina.github.io/cartesius/graph-14-0.png)&nbsp;![graph-14-1.png](http://tkrajina.github.io/cartesius/graph-14-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -416,7 +431,8 @@ Code:
     
 ## Circles with horizontal grid
 
-![graph-15-0.png](http://tkrajina.github.io/cartesius/graph-15-0.png) ![graph-15-1.png](http://tkrajina.github.io/cartesius/graph-15-1.png) 
+![graph-15-0.png](http://tkrajina.github.io/cartesius/graph-15-0.png)&nbsp;![graph-15-1.png](http://tkrajina.github.io/cartesius/graph-15-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -436,7 +452,8 @@ Code:
     
 ## Circles with horizontal grid every 2
 
-![graph-16-0.png](http://tkrajina.github.io/cartesius/graph-16-0.png) ![graph-16-1.png](http://tkrajina.github.io/cartesius/graph-16-1.png) 
+![graph-16-0.png](http://tkrajina.github.io/cartesius/graph-16-0.png)&nbsp;![graph-16-1.png](http://tkrajina.github.io/cartesius/graph-16-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -456,7 +473,8 @@ Code:
     
 ## Circles with vertical grid every 0.5
 
-![graph-17-0.png](http://tkrajina.github.io/cartesius/graph-17-0.png) ![graph-17-1.png](http://tkrajina.github.io/cartesius/graph-17-1.png) 
+![graph-17-0.png](http://tkrajina.github.io/cartesius/graph-17-0.png)&nbsp;![graph-17-1.png](http://tkrajina.github.io/cartesius/graph-17-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -476,7 +494,8 @@ Code:
     
 ## Axis with custom label positions and decorations:
 
-![graph-18-0.png](http://tkrajina.github.io/cartesius/graph-18-0.png) ![graph-18-1.png](http://tkrajina.github.io/cartesius/graph-18-1.png) 
+![graph-18-0.png](http://tkrajina.github.io/cartesius/graph-18-0.png)&nbsp;![graph-18-1.png](http://tkrajina.github.io/cartesius/graph-18-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -493,7 +512,8 @@ Code:
     
 ## Axis with custom labels II
 
-![graph-19-0.png](http://tkrajina.github.io/cartesius/graph-19-0.png) ![graph-19-1.png](http://tkrajina.github.io/cartesius/graph-19-1.png) 
+![graph-19-0.png](http://tkrajina.github.io/cartesius/graph-19-0.png)&nbsp;![graph-19-1.png](http://tkrajina.github.io/cartesius/graph-19-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -511,7 +531,8 @@ Code:
     
 ## Axis with custom colors
 
-![graph-20-0.png](http://tkrajina.github.io/cartesius/graph-20-0.png) ![graph-20-1.png](http://tkrajina.github.io/cartesius/graph-20-1.png) 
+![graph-20-0.png](http://tkrajina.github.io/cartesius/graph-20-0.png)&nbsp;![graph-20-1.png](http://tkrajina.github.io/cartesius/graph-20-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -528,7 +549,8 @@ Code:
     
 ## Two horizontal grids
 
-![graph-21-0.png](http://tkrajina.github.io/cartesius/graph-21-0.png) ![graph-21-1.png](http://tkrajina.github.io/cartesius/graph-21-1.png) 
+![graph-21-0.png](http://tkrajina.github.io/cartesius/graph-21-0.png)&nbsp;![graph-21-1.png](http://tkrajina.github.io/cartesius/graph-21-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -545,7 +567,8 @@ Code:
     
 ## Labels on different positions
 
-![graph-22-0.png](http://tkrajina.github.io/cartesius/graph-22-0.png) ![graph-22-1.png](http://tkrajina.github.io/cartesius/graph-22-1.png) ![graph-22-2.png](http://tkrajina.github.io/cartesius/graph-22-2.png) ![graph-22-3.png](http://tkrajina.github.io/cartesius/graph-22-3.png) ![graph-22-4.png](http://tkrajina.github.io/cartesius/graph-22-4.png) 
+![graph-22-0.png](http://tkrajina.github.io/cartesius/graph-22-0.png)&nbsp;![graph-22-1.png](http://tkrajina.github.io/cartesius/graph-22-1.png)&nbsp;![graph-22-2.png](http://tkrajina.github.io/cartesius/graph-22-2.png)&nbsp;![graph-22-3.png](http://tkrajina.github.io/cartesius/graph-22-3.png)&nbsp;![graph-22-4.png](http://tkrajina.github.io/cartesius/graph-22-4.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -574,7 +597,8 @@ Code:
     
 ## Test with hidden axis
 
-![graph-23-0.png](http://tkrajina.github.io/cartesius/graph-23-0.png) ![graph-23-1.png](http://tkrajina.github.io/cartesius/graph-23-1.png) ![graph-23-2.png](http://tkrajina.github.io/cartesius/graph-23-2.png) ![graph-23-3.png](http://tkrajina.github.io/cartesius/graph-23-3.png) 
+![graph-23-0.png](http://tkrajina.github.io/cartesius/graph-23-0.png)&nbsp;![graph-23-1.png](http://tkrajina.github.io/cartesius/graph-23-1.png)&nbsp;![graph-23-2.png](http://tkrajina.github.io/cartesius/graph-23-2.png)&nbsp;![graph-23-3.png](http://tkrajina.github.io/cartesius/graph-23-3.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -604,7 +628,8 @@ Code:
     
 ## Hide positive and/or negative parts of axes
 
-![graph-24-0.png](http://tkrajina.github.io/cartesius/graph-24-0.png) ![graph-24-1.png](http://tkrajina.github.io/cartesius/graph-24-1.png) ![graph-24-2.png](http://tkrajina.github.io/cartesius/graph-24-2.png) ![graph-24-3.png](http://tkrajina.github.io/cartesius/graph-24-3.png) 
+![graph-24-0.png](http://tkrajina.github.io/cartesius/graph-24-0.png)&nbsp;![graph-24-1.png](http://tkrajina.github.io/cartesius/graph-24-1.png)&nbsp;![graph-24-2.png](http://tkrajina.github.io/cartesius/graph-24-2.png)&nbsp;![graph-24-3.png](http://tkrajina.github.io/cartesius/graph-24-3.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -623,7 +648,8 @@ Code:
     
 ## Detached axes
 
-![graph-25-0.png](http://tkrajina.github.io/cartesius/graph-25-0.png) ![graph-25-1.png](http://tkrajina.github.io/cartesius/graph-25-1.png) 
+![graph-25-0.png](http://tkrajina.github.io/cartesius/graph-25-0.png)&nbsp;![graph-25-1.png](http://tkrajina.github.io/cartesius/graph-25-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -662,7 +688,8 @@ Code:
     
 ## Lines different colors
 
-![graph-26-0.png](http://tkrajina.github.io/cartesius/graph-26-0.png) ![graph-26-1.png](http://tkrajina.github.io/cartesius/graph-26-1.png) 
+![graph-26-0.png](http://tkrajina.github.io/cartesius/graph-26-0.png)&nbsp;![graph-26-1.png](http://tkrajina.github.io/cartesius/graph-26-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
@@ -677,7 +704,8 @@ Code:
     
 ## Test points of different styles with/without label and different label positions
 
-![graph-27-0.png](http://tkrajina.github.io/cartesius/graph-27-0.png) ![graph-27-1.png](http://tkrajina.github.io/cartesius/graph-27-1.png) 
+![graph-27-0.png](http://tkrajina.github.io/cartesius/graph-27-0.png)&nbsp;![graph-27-1.png](http://tkrajina.github.io/cartesius/graph-27-1.png)&nbsp;
+
 Code:
 
     import cartesius.main as cartesius
