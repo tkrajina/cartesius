@@ -708,5 +708,10 @@ Note, all examples come in two versions: normal and antialiased. Antialiased can
         readme += '    import cartesius.main as cartesius\n    import cartesius.elements as elements\n    import cartesius.charts as charts\n\n'
         readme += clean_source_lines(function)
 
+    readme += '\n'
+    readme += '## License\n'
+    readme += '\n'
+    readme += 'Geoelevations.rb is licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)\n'
+
     with open('README.md', 'w') as f:
         f.write(readme)

@@ -718,3 +718,7 @@ Code:
     coordinate_system.add(elements.Point((4, 1), style='o', label='D',
             label_position=cartesius.CENTER_DOWN))
     
+
+## License
+
+Geoelevations.rb is licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
