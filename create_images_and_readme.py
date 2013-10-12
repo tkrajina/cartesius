@@ -33,7 +33,7 @@ def test_circles():
                 fill_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)),
                 color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True),
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True),
 
 examples.append(test_circles)
 
@@ -58,7 +58,7 @@ def test_piechart_1():
     coordinate_system.add(elements.Axis(horizontal=True, hide=True))
     coordinate_system.add(elements.Axis(vertical=True, hide=True))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True),
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True),
 
 examples.append(test_piechart_1)
 
@@ -80,7 +80,7 @@ def test_piechart_2():
     coordinate_system.add(elements.Axis(horizontal=True, hide=True))
     coordinate_system.add(elements.Axis(vertical=True, hide=True))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True),
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True),
 
 examples.append(test_piechart_2)
 
@@ -118,7 +118,7 @@ def test_barchart_1():
     barchart_2 = charts.BarChart(vertical=True, data=barchart_data_2, width=0.75, color=(0, 0, 0))
     coordinate_system.add(barchart_2)
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True),
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True),
 
 examples.append(test_barchart_1)
 
@@ -138,7 +138,7 @@ def test_barchart_2():
     barchart = charts.BarChart(vertical=True, data=barchart_data, color=(0, 0, 0))
     coordinate_system.add(barchart)
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True),
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True),
 
 examples.append(test_barchart_2)
 
@@ -176,7 +176,7 @@ def test_barchart_horizontal():
     barchart_2 = charts.BarChart(horizontal=True, data=barchart_data_2, width=0.75, color=(0, 0, 0))
     coordinate_system.add(barchart_2)
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True),
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True),
 
 examples.append(test_barchart_horizontal)
 
@@ -202,7 +202,7 @@ def test_barchart_with_generator():
     barchart = charts.BarChart(data=barchart_data_generator, vertical=True, width=0.5)
     coordinate_system.add(barchart)
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True),
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True),
 
 examples.append(test_barchart_with_generator)
 
@@ -213,7 +213,7 @@ def test_function():
     f = lambda x : math.sin(x) * 2
     coordinate_system.add(charts.Function(f, start=-4, end=5, step=0.02, color=0x0000ff))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True)
 
 examples.append(test_function)
 
@@ -224,7 +224,7 @@ def test_function_with_custom_bounds():
     f = lambda x : math.sin(x) * 2
     coordinate_system.add(charts.Function(f, start=-4, end=5, step=0.02, color=(0, 0, 255)))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True)
 
 examples.append(test_function_with_custom_bounds)
 
@@ -238,7 +238,7 @@ def test_filled_function():
     g = lambda x : math.sin(x) * 2
     coordinate_system.add(charts.Function(g, start=1, end=4, step=0.02, fill_color=(200, 255, 200)))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True)
 
 examples.append(test_filled_function)
 
@@ -255,7 +255,7 @@ def test_filled_function():
     g = lambda x : math.sin(x) * 2
     coordinate_system.add(charts.Function(g, start=1, end=4, step=0.02, fill_color=(200, 255, 200)))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True)
 
 examples.append(test_filled_function)
 
@@ -281,7 +281,7 @@ def test_filled_transparent_graphs():
                     fill_color = (200, 255, 200),
                     transparency_mask = 100))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True)
 
 examples.append(test_filled_transparent_graphs)
 
@@ -309,7 +309,7 @@ def test_filled_transparent_graphs_2():
 
     coordinate_system.add(elements.Grid(1, 1, transparency_mask=140))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True)
 
 examples.append(test_filled_transparent_graphs_2)
 
@@ -356,7 +356,7 @@ def test_line_charts():
                     color = (255, 0, 0),
                     transparency_mask = 150))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True)
 
 examples.append(test_line_charts)
 
@@ -380,7 +380,7 @@ def test_circles_2():
         coordinate_system.add(elements.Circle(center, radius=math.sqrt(x),
                 transparency_mask=50, fill_color=color, color=(0, 0, 0)))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True)
 
 examples.append(test_circles_2)
 
@@ -397,7 +397,7 @@ def test_circles_3():
         coordinate_system.add(elements.Circle(center, radius=math.sqrt(x),
                 transparency_mask = 50, fill_color = (i * 10, 2 * 10, i * 10), color=(0, 0, 0)))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True)
 
 examples.append(test_circles_3)
 
@@ -414,7 +414,7 @@ def test_circles_4():
         coordinate_system.add(elements.Circle(center, radius=math.sqrt(x),
                 transparency_mask=50, fill_color=(i * 10, 2 * 10, i * 10), color=(0, 0, 0)))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True)
 
 examples.append(test_circles_4)
 
@@ -431,7 +431,7 @@ def test_circles_5():
         coordinate_system.add(elements.Circle(center, radius=math.sqrt(x),
                 transparency_mask=50, fill_color=(i * 10, 2 * 10, i * 10), color=(0, 0, 0)))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True)
 
 examples.append(test_circles_5)
 
@@ -445,7 +445,7 @@ def test_axis_with_custom_labels():
     f = lambda x : math.sin(x) * 2
     coordinate_system.add(charts.Function(f, start=-4, end=5, step=0.02, color=(0, 0, 255)))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True)
 
 examples.append(test_axis_with_custom_labels)
 
@@ -460,7 +460,7 @@ def test_axis_with_custom_labels_2():
     coordinate_system.add(elements.Axis(vertical=True, labels={1000: 'one km', 500: 'half km'},
             points = 100))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True)
 
 examples.append(test_axis_with_custom_labels_2)
 
@@ -474,7 +474,7 @@ def test_axis_custom_colors():
     f = lambda x : x * math.sin(x * x)
     coordinate_system.add(charts.Function(f, start=-4, end=5, step=0.02, color=(0, 0, 255)))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True)
 
 examples.append(test_axis_custom_colors)
 
@@ -488,7 +488,7 @@ def test_with_two_horizontal_grids():
     f = lambda x : math.sin(x) * 2
     coordinate_system.add(charts.Function(f, start=-4, end=5, step=0.02, color=(0, 0, 255)))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True)
 
 examples.append(test_with_two_horizontal_grids)
 
@@ -593,7 +593,7 @@ def test_detached_axes():
     coordinate_system.add(elements.Axis(vertical=True, points=2, labels=2,
             detached_center=detached_axes_center, hide_positive=True))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True)
 
 examples.append(test_detached_axes)
 
@@ -605,7 +605,7 @@ def test_lines():
     coordinate_system.add(elements.Line((.5, -.5), (-.5, .5), color=(0, 255, 0)))
     coordinate_system.add(elements.Line((0, 0), (7, 3), color=(0, 0, 255)))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True)
 
 examples.append(test_lines)
 
@@ -645,7 +645,7 @@ def test_points():
     coordinate_system.add(elements.Point((4, 1), style='o', label='D',
             label_position=cartesius.CENTER_DOWN))
 
-    return coordinate_system.draw(400, 250), coordinate_system.draw(400, 250, antialiasing=True)
+    return coordinate_system.draw(300, 200), coordinate_system.draw(300, 200, antialiasing=True)
 
 examples.append(test_points)
 
