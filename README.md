@@ -1,7 +1,6 @@
 # Cartesius
 
-Cartesius is a small library for drawing 2d coordinate system images.
-More on <a href='http://github.com/tkrajina/cartesius'>http://github.com/tkrajina/cartesius</a>
+Cartesius is a library for drawing 2d coordinate system images.
 
 Note, all examples come in two versions: normal and antialiased. Antialiased can be created ba adding <tt>antialiasing = True</tt> in <tt>CoordinateSystem.draw()</tt> but are more CPU intensive to create.
 
