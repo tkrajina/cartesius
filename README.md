@@ -2,9 +2,16 @@
 
 Cartesius is a library for drawing 2d coordinate system images.
 
-Note, all examples come in two versions: normal and antialiased. Antialiased can be created ba adding <tt>antialiasing = True</tt> in <tt>CoordinateSystem.draw()</tt> but are more CPU intensive to create.
+## Why cartesius?
 
-## 50 random circles
+Many other similar modules dependes on external C/C++ libraries which are not available everywhere (for example on Google AppEngine).
+Cartesius is a lightweight solution with minimum dependencies (only PIL).
+
+## Examples
+
+All examples come in two versions: normal and antialiased. Antialiased can be created ba adding <tt>antialiasing=True</tt> in <tt>CoordinateSystem.draw()</tt> but are more CPU intensive to create.
+
+### 50 random circles
 
 ![graph-0-0.png](http://tkrajina.github.io/cartesius/graph-0-0.png)&nbsp;![graph-0-1.png](http://tkrajina.github.io/cartesius/graph-0-1.png)&nbsp;
 
@@ -26,7 +33,7 @@ Code:
                 fill_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)),
                 color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))))
     
-## PieChart with default colors
+### PieChart with default colors
 
 ![graph-1-0.png](http://tkrajina.github.io/cartesius/graph-1-0.png)&nbsp;![graph-1-1.png](http://tkrajina.github.io/cartesius/graph-1-1.png)&nbsp;
 
@@ -55,7 +62,7 @@ Code:
     coordinate_system.add(elements.Axis(horizontal=True, hide=True))
     coordinate_system.add(elements.Axis(vertical=True, hide=True))
     
-## PieChart with custom colors
+### PieChart with custom colors
 
 ![graph-2-0.png](http://tkrajina.github.io/cartesius/graph-2-0.png)&nbsp;![graph-2-1.png](http://tkrajina.github.io/cartesius/graph-2-1.png)&nbsp;
 
@@ -81,7 +88,7 @@ Code:
     coordinate_system.add(elements.Axis(horizontal=True, hide=True))
     coordinate_system.add(elements.Axis(vertical=True, hide=True))
     
-## Bar charts with same column width. One with default and the other with custom colors
+### Bar charts with same column width. One with default and the other with custom colors
 
 ![graph-3-0.png](http://tkrajina.github.io/cartesius/graph-3-0.png)&nbsp;![graph-3-1.png](http://tkrajina.github.io/cartesius/graph-3-1.png)&nbsp;
 
@@ -123,7 +130,7 @@ Code:
     barchart_2 = charts.BarChart(vertical=True, data=barchart_data_2, width=0.75, color=(0, 0, 0))
     coordinate_system.add(barchart_2)
     
-## BarChart with different column widths
+### BarChart with different column widths
 
 ![graph-4-0.png](http://tkrajina.github.io/cartesius/graph-4-0.png)&nbsp;![graph-4-1.png](http://tkrajina.github.io/cartesius/graph-4-1.png)&nbsp;
 
@@ -147,7 +154,7 @@ Code:
     barchart = charts.BarChart(vertical=True, data=barchart_data, color=(0, 0, 0))
     coordinate_system.add(barchart)
     
-## Horizontal bar charts
+### Horizontal bar charts
 
 ![graph-5-0.png](http://tkrajina.github.io/cartesius/graph-5-0.png)&nbsp;![graph-5-1.png](http://tkrajina.github.io/cartesius/graph-5-1.png)&nbsp;
 
@@ -189,7 +196,7 @@ Code:
     barchart_2 = charts.BarChart(horizontal=True, data=barchart_data_2, width=0.75, color=(0, 0, 0))
     coordinate_system.add(barchart_2)
     
-## Bar charts with data given as generator function
+### Bar charts with data given as generator function
 
 ![graph-6-0.png](http://tkrajina.github.io/cartesius/graph-6-0.png)&nbsp;![graph-6-1.png](http://tkrajina.github.io/cartesius/graph-6-1.png)&nbsp;
 
@@ -219,7 +226,7 @@ Code:
     barchart = charts.BarChart(data=barchart_data_generator, vertical=True, width=0.5)
     coordinate_system.add(barchart)
     
-## Function math.sin from -4 to 5
+### Function math.sin from -4 to 5
 
 ![graph-7-0.png](http://tkrajina.github.io/cartesius/graph-7-0.png)&nbsp;![graph-7-1.png](http://tkrajina.github.io/cartesius/graph-7-1.png)&nbsp;
 
@@ -234,7 +241,7 @@ Code:
     f = lambda x : math.sin(x) * 2
     coordinate_system.add(charts.Function(f, start=-4, end=5, step=0.02, color=0x0000ff))
     
-## Same function, but with custom coordinate system bounds
+### Same function, but with custom coordinate system bounds
 
 ![graph-8-0.png](http://tkrajina.github.io/cartesius/graph-8-0.png)&nbsp;![graph-8-1.png](http://tkrajina.github.io/cartesius/graph-8-1.png)&nbsp;
 
@@ -249,7 +256,7 @@ Code:
     f = lambda x : math.sin(x) * 2
     coordinate_system.add(charts.Function(f, start=-4, end=5, step=0.02, color=(0, 0, 255)))
     
-## Line function and normal function but with filled graph
+### Line function and normal function but with filled graph
 
 ![graph-9-0.png](http://tkrajina.github.io/cartesius/graph-9-0.png)&nbsp;![graph-9-1.png](http://tkrajina.github.io/cartesius/graph-9-1.png)&nbsp;
 
@@ -267,7 +274,7 @@ Code:
     g = lambda x : math.sin(x) * 2
     coordinate_system.add(charts.Function(g, start=1, end=4, step=0.02, fill_color=(200, 255, 200)))
     
-## Previous example with grid behind graphs
+### Previous example with grid behind graphs
 
 ![graph-10-0.png](http://tkrajina.github.io/cartesius/graph-10-0.png)&nbsp;![graph-10-1.png](http://tkrajina.github.io/cartesius/graph-10-1.png)&nbsp;
 
@@ -288,7 +295,7 @@ Code:
     g = lambda x : math.sin(x) * 2
     coordinate_system.add(charts.Function(g, start=1, end=4, step=0.02, fill_color=(200, 255, 200)))
     
-## Two functions
+### Two functions
 
 ![graph-11-0.png](http://tkrajina.github.io/cartesius/graph-11-0.png)&nbsp;![graph-11-1.png](http://tkrajina.github.io/cartesius/graph-11-1.png)&nbsp;
 
@@ -318,7 +325,7 @@ Code:
                     fill_color = (200, 255, 200),
                     transparency_mask = 100))
     
-## Two functions with transparend grid over them
+### Two functions with transparend grid over them
 
 ![graph-12-0.png](http://tkrajina.github.io/cartesius/graph-12-0.png)&nbsp;![graph-12-1.png](http://tkrajina.github.io/cartesius/graph-12-1.png)&nbsp;
 
@@ -350,7 +357,7 @@ Code:
     
     coordinate_system.add(elements.Grid(1, 1, transparency_mask=140))
     
-## Line charts
+### Line charts
 
 ![graph-13-0.png](http://tkrajina.github.io/cartesius/graph-13-0.png)&nbsp;![graph-13-1.png](http://tkrajina.github.io/cartesius/graph-13-1.png)&nbsp;
 
@@ -401,7 +408,7 @@ Code:
                     color = (255, 0, 0),
                     transparency_mask = 150))
     
-## Another example with circles
+### Another example with circles
 
 ![graph-14-0.png](http://tkrajina.github.io/cartesius/graph-14-0.png)&nbsp;![graph-14-1.png](http://tkrajina.github.io/cartesius/graph-14-1.png)&nbsp;
 
@@ -429,7 +436,7 @@ Code:
         coordinate_system.add(elements.Circle(center, radius=math.sqrt(x),
                 transparency_mask=50, fill_color=color, color=(0, 0, 0)))
     
-## Circles with horizontal grid
+### Circles with horizontal grid
 
 ![graph-15-0.png](http://tkrajina.github.io/cartesius/graph-15-0.png)&nbsp;![graph-15-1.png](http://tkrajina.github.io/cartesius/graph-15-1.png)&nbsp;
 
@@ -450,7 +457,7 @@ Code:
         coordinate_system.add(elements.Circle(center, radius=math.sqrt(x),
                 transparency_mask = 50, fill_color = (i * 10, 2 * 10, i * 10), color=(0, 0, 0)))
     
-## Circles with horizontal grid every 2
+### Circles with horizontal grid every 2
 
 ![graph-16-0.png](http://tkrajina.github.io/cartesius/graph-16-0.png)&nbsp;![graph-16-1.png](http://tkrajina.github.io/cartesius/graph-16-1.png)&nbsp;
 
@@ -471,7 +478,7 @@ Code:
         coordinate_system.add(elements.Circle(center, radius=math.sqrt(x),
                 transparency_mask=50, fill_color=(i * 10, 2 * 10, i * 10), color=(0, 0, 0)))
     
-## Circles with vertical grid every 0.5
+### Circles with vertical grid every 0.5
 
 ![graph-17-0.png](http://tkrajina.github.io/cartesius/graph-17-0.png)&nbsp;![graph-17-1.png](http://tkrajina.github.io/cartesius/graph-17-1.png)&nbsp;
 
@@ -492,7 +499,7 @@ Code:
         coordinate_system.add(elements.Circle(center, radius=math.sqrt(x),
                 transparency_mask=50, fill_color=(i * 10, 2 * 10, i * 10), color=(0, 0, 0)))
     
-## Axis with custom label positions and decorations:
+### Axis with custom label positions and decorations:
 
 ![graph-18-0.png](http://tkrajina.github.io/cartesius/graph-18-0.png)&nbsp;![graph-18-1.png](http://tkrajina.github.io/cartesius/graph-18-1.png)&nbsp;
 
@@ -510,7 +517,7 @@ Code:
     f = lambda x : math.sin(x) * 2
     coordinate_system.add(charts.Function(f, start=-4, end=5, step=0.02, color=(0, 0, 255)))
     
-## Axis with custom labels II
+### Axis with custom labels II
 
 ![graph-19-0.png](http://tkrajina.github.io/cartesius/graph-19-0.png)&nbsp;![graph-19-1.png](http://tkrajina.github.io/cartesius/graph-19-1.png)&nbsp;
 
@@ -529,7 +536,7 @@ Code:
     coordinate_system.add(elements.Axis(vertical=True, labels={1000: 'one km', 500: 'half km'},
             points = 100))
     
-## Axis with custom colors
+### Axis with custom colors
 
 ![graph-20-0.png](http://tkrajina.github.io/cartesius/graph-20-0.png)&nbsp;![graph-20-1.png](http://tkrajina.github.io/cartesius/graph-20-1.png)&nbsp;
 
@@ -547,7 +554,7 @@ Code:
     f = lambda x : x * math.sin(x * x)
     coordinate_system.add(charts.Function(f, start=-4, end=5, step=0.02, color=(0, 0, 255)))
     
-## Two horizontal grids
+### Two horizontal grids
 
 ![graph-21-0.png](http://tkrajina.github.io/cartesius/graph-21-0.png)&nbsp;![graph-21-1.png](http://tkrajina.github.io/cartesius/graph-21-1.png)&nbsp;
 
@@ -565,7 +572,7 @@ Code:
     f = lambda x : math.sin(x) * 2
     coordinate_system.add(charts.Function(f, start=-4, end=5, step=0.02, color=(0, 0, 255)))
     
-## Labels on different positions
+### Labels on different positions
 
 ![graph-22-0.png](http://tkrajina.github.io/cartesius/graph-22-0.png)&nbsp;![graph-22-1.png](http://tkrajina.github.io/cartesius/graph-22-1.png)&nbsp;![graph-22-2.png](http://tkrajina.github.io/cartesius/graph-22-2.png)&nbsp;![graph-22-3.png](http://tkrajina.github.io/cartesius/graph-22-3.png)&nbsp;![graph-22-4.png](http://tkrajina.github.io/cartesius/graph-22-4.png)&nbsp;
 
@@ -595,7 +602,7 @@ Code:
     cs_5.add(elements.Axis(horizontal=True, points=1, labels=1, label_position=cartesius.RIGHT_DOWN,))
     cs_5.add(elements.Axis(vertical=True, points=1, labels=1, label_position=cartesius.RIGHT_DOWN,))
     
-## Test with hidden axis
+### Test with hidden axis
 
 ![graph-23-0.png](http://tkrajina.github.io/cartesius/graph-23-0.png)&nbsp;![graph-23-1.png](http://tkrajina.github.io/cartesius/graph-23-1.png)&nbsp;![graph-23-2.png](http://tkrajina.github.io/cartesius/graph-23-2.png)&nbsp;![graph-23-3.png](http://tkrajina.github.io/cartesius/graph-23-3.png)&nbsp;
 
@@ -626,7 +633,7 @@ Code:
             step = 0.02,
             color = (0, 0, 255)))
     
-## Hide positive and/or negative parts of axes
+### Hide positive and/or negative parts of axes
 
 ![graph-24-0.png](http://tkrajina.github.io/cartesius/graph-24-0.png)&nbsp;![graph-24-1.png](http://tkrajina.github.io/cartesius/graph-24-1.png)&nbsp;![graph-24-2.png](http://tkrajina.github.io/cartesius/graph-24-2.png)&nbsp;![graph-24-3.png](http://tkrajina.github.io/cartesius/graph-24-3.png)&nbsp;
 
@@ -646,7 +653,7 @@ Code:
     cs_2.add(elements.Axis(horizontal=True, hide_negative=True))
     cs_2.add(elements.Axis(vertical=True, hide_negative=True))
     
-## Detached axes
+### Detached axes
 
 ![graph-25-0.png](http://tkrajina.github.io/cartesius/graph-25-0.png)&nbsp;![graph-25-1.png](http://tkrajina.github.io/cartesius/graph-25-1.png)&nbsp;
 
@@ -686,7 +693,7 @@ Code:
     coordinate_system.add(elements.Axis(vertical=True, points=2, labels=2,
             detached_center=detached_axes_center, hide_positive=True))
     
-## Lines different colors
+### Lines different colors
 
 ![graph-26-0.png](http://tkrajina.github.io/cartesius/graph-26-0.png)&nbsp;![graph-26-1.png](http://tkrajina.github.io/cartesius/graph-26-1.png)&nbsp;
 
@@ -702,7 +709,7 @@ Code:
     coordinate_system.add(elements.Line((.5, -.5), (-.5, .5), color=(0, 255, 0)))
     coordinate_system.add(elements.Line((0, 0), (7, 3), color=(0, 0, 255)))
     
-## Test points of different styles with/without label and different label positions
+### Test points of different styles with/without label and different label positions
 
 ![graph-27-0.png](http://tkrajina.github.io/cartesius/graph-27-0.png)&nbsp;![graph-27-1.png](http://tkrajina.github.io/cartesius/graph-27-1.png)&nbsp;
 

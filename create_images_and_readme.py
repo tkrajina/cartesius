@@ -682,7 +682,14 @@ if __name__ == '__main__':
 
 Cartesius is a library for drawing 2d coordinate system images.
 
-Note, all examples come in two versions: normal and antialiased. Antialiased can be created ba adding <tt>antialiasing = True</tt> in <tt>CoordinateSystem.draw()</tt> but are more CPU intensive to create.
+## Why cartesius?
+
+Many other similar modules dependes on external C/C++ libraries which are not available everywhere (for example on Google AppEngine).
+Cartesius is a lightweight solution with minimum dependencies (only PIL).
+
+## Examples
+
+All examples come in two versions: normal and antialiased. Antialiased can be created ba adding <tt>antialiasing=True</tt> in <tt>CoordinateSystem.draw()</tt> but are more CPU intensive to create.
 
 """
 
@@ -694,7 +701,7 @@ Note, all examples come in two versions: normal and antialiased. Antialiased can
         if not isinstance(images, tuple) and not isinstance(images, list):
             images = [images]
 
-        readme += '## {0}\n'.format(description)
+        readme += '### {0}\n'.format(description)
 
         readme += '\n'
         for j, image in enumerate(images):
