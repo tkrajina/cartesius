@@ -4,12 +4,12 @@ import logging as mod_logging
 import os as mod_os
 import os.path as mod_path
 
-import Image as mod_image
-import ImageDraw as mod_imagedraw
-import ImageFont as mod_imagefont
+from PIL import Image as mod_image
+from PIL import ImageDraw as mod_imagedraw
+from PIL import ImageFont as mod_imagefont
 
-import utils as mod_utils
-import colors as mod_colors
+from . import utils as mod_utils
+from . import colors as mod_colors
 
 # Get the package location:
 package_location = mod_utils.__file__[: mod_utils.__file__.rfind(mod_path.sep)]
@@ -143,7 +143,7 @@ class CoordinateSystem:
 
     def __init__(self, bounds=None):
         """ If custom bounds are given, they won't be resized according to new elements. """
-        import elements as mod_elements
+        from . import elements as mod_elements
         self.elements = []
 
         # Set default bounds
@@ -171,7 +171,7 @@ class CoordinateSystem:
         Note that if you add n default axis, it will remove a previous existing horizontal/vertical axis,
         but the same does not apply for detached axes.
         """
-        import elements as mod_elements
+        from . import elements as mod_elements
 
         if not element or not isinstance(element, CoordinateSystemElement):
             raise Exception('Invalid element: {0}'.format(element))

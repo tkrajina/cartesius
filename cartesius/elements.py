@@ -3,7 +3,7 @@
 import re as mod_re
 import math as mod_math
 
-import main as mod_main
+from . import main as mod_main
 
 """
 # Element class template (use this for new elements):
@@ -70,7 +70,7 @@ class Axis(mod_main.CoordinateSystemElement):
         self.color = self.get_color(color if color else mod_main.DEFAULT_AXES_COLOR)
         self.label_color = self.get_color(label_color if label_color else mod_main.DEFAULT_LABEL_COLOR)
 
-        if isinstance(labels, str) or isinstance(labels, unicode):
+        if isinstance(labels, str):
             groups = mod_re.findall('([0-9\.]+)(.*)', labels)
 
             if not len(groups) == 1 and len(groups[0]) == 2:

@@ -6,8 +6,8 @@ import math as mod_math
 import collections as mod_collections
 import types as mod_types
 
-import main as mod_main
-import colors as mod_colors
+from . import main as mod_main
+from . import colors as mod_colors
 
 # Default color palete from: http://www.colourlovers.com/pattern/2429885/Spring_flower_aerial
 DEFAULT_COLORS = (
