@@ -11,10 +11,10 @@ def get_color(color):
         temp = color
         blue = temp % 256
 
-        temp = temp / 256
+        temp = int(temp / 256)
         green = temp % 256
 
-        temp = temp / 256
+        temp = int(temp / 256)
         red = temp % 256
 
         return (red, green, blue)
